@@ -44,6 +44,7 @@
             <EditText android:id="@+id/username_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:inputType="text"
                 android:hint="@string/username"/>
         </android.support.design.widget.TextInputLayout>
@@ -57,6 +58,7 @@
             <EditText android:id="@+id/password_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:inputType="textPassword"
                 android:hint="@string/password"/>
         </android.support.design.widget.TextInputLayout>
@@ -70,6 +72,7 @@
             <EditText android:id="@+id/repeat_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:inputType="textPassword"
                 android:hint="@string/repeat_password"/>
         </android.support.design.widget.TextInputLayout>
@@ -110,6 +113,7 @@
             <EditText android:id="@+id/name_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:inputType="text"
                 android:hint="@string/name"/>
         </android.support.design.widget.TextInputLayout>
@@ -123,6 +127,7 @@
             <EditText android:id="@+id/nif_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:hint="@string/nif"/>
         </android.support.design.widget.TextInputLayout>
@@ -163,6 +168,7 @@
             <EditText android:id="@+id/type_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:inputType="text"
                 android:hint="@string/type"/>
         </android.support.design.widget.TextInputLayout>
@@ -176,6 +182,7 @@
             <EditText android:id="@+id/number_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:hint="@string/number"/>
         </android.support.design.widget.TextInputLayout>
@@ -189,6 +196,7 @@
             <EditText android:id="@+id/validity_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
                 android:inputType="date"
                 android:hint="@string/validity_date"/>
         </android.support.design.widget.TextInputLayout>
