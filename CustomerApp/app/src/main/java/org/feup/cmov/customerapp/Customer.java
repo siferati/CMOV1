@@ -1,19 +1,27 @@
 package org.feup.cmov.customerapp;
 
 public class Customer {
+    private String username;
+    private String password;
     private String name;
-    private int nifNumber;
+    private String nifNumber;
     private CreditCard creditCard;
 
     public class CreditCard {
         public String type;
-        public int number;
+        public String number;
         public String validityDate;
     }
 
-    public void registerUser(String name, int nifNumber, String ccType, int ccNumber, String ccValidityDate) {
+    public void registerUser(String username, String password,
+                             String name, String nifNumber,
+                             String ccType, String ccNumber, String ccValidityDate) {
+        this.username = username;
+        this.password = password;
+
         this.name = name;
         this.nifNumber = nifNumber;
+
         this.creditCard.type = ccType;
         this.creditCard.number = ccNumber;
         this.creditCard.validityDate = ccValidityDate;
@@ -25,7 +33,7 @@ public class Customer {
         return name;
     }
 
-    public int getNifNumber() {
+    public String getNifNumber() {
         return nifNumber;
     }
 
