@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">CustomerApp</string>
+
+    <string name="app_logo">App Logo</string>
+
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="not_registered">No account yet? <b>Create one</b></string>
+
+    <string name="user_info">User Information</string>
+    <string name="name">Name</string>
+    <string name="nif">NIF</string>
+
+    <string name="login_cred">Login Credentials</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="type">Type</string>
+    <string name="number">Number</string>
+    <string name="validity_date">Validity Date</string>
+    <string name="register">Register</string>
+</resources>
