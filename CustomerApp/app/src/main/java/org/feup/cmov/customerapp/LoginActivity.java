@@ -35,13 +35,14 @@ public class LoginActivity extends AppCompatActivity {
         if (!validateLoginCredentials(usernameText, passwordText)) {
             Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
             loginButton.setEnabled(true);
+        } else {
+
+            String username = usernameText.getText().toString();
+            String password = passwordText.getText().toString();
+
+
+            // Add user to SERVER
         }
-
-        String username = usernameText.toString();
-        String password = passwordText.toString();
-
-
-        // Add user to SERVER
 
     }
 

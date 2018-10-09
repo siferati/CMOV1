@@ -7,10 +7,14 @@ public class Customer {
     private String nifNumber;
     private CreditCard creditCard;
 
+    public Customer() {}
+
     public class CreditCard {
         public String type;
         public String number;
         public String validityDate;
+
+        public CreditCard() {}
     }
 
     public void registerUser(String username, String password,
@@ -21,6 +25,8 @@ public class Customer {
 
         this.name = name;
         this.nifNumber = nifNumber;
+
+        this.creditCard = new CreditCard();
 
         this.creditCard.type = ccType;
         this.creditCard.number = ccNumber;

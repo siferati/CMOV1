@@ -18,6 +18,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         Button registerButton = findViewById(R.id.btn_register);
         registerButton.setOnClickListener((View v)->register());
+
+        user = new Customer();
     }
 
     public void register() {
@@ -38,17 +40,18 @@ public class RegisterActivity extends AppCompatActivity {
         if (!validateRegisterCredentials(usernameText, passwordText, repeatPasswordText, nameText, nifText, typeText, numberText, validityDateText)) {
             Toast.makeText(getBaseContext(), "Register failed", Toast.LENGTH_LONG).show();
             registerButton.setEnabled(true);
+        } else {
+
+            String username = usernameText.getText().toString();
+            String password = passwordText.getText().toString();
+            String name = nameText.getText().toString();
+            String nif = nifText.getText().toString();
+            String type = typeText.getText().toString();
+            String number = numberText.getText().toString();
+            String validityDate = validityDateText.getText().toString();
+
+            user.registerUser(username, password, name, nif, type, number, validityDate);
         }
-
-        String username = usernameText.toString();
-        String password = passwordText.toString();
-        String name = nameText.toString();
-        String nif = nifText.toString();
-        String type = typeText.toString();
-        String number = numberText.toString();
-        String validityDate = validityDateText.toString();
-
-        user.registerUser(username, password, name, nif, type, number, validityDate);
     }
 
     public boolean validateRegisterCredentials(EditText username, EditText pass, EditText rep_pass,
@@ -63,10 +66,10 @@ public class RegisterActivity extends AppCompatActivity {
             username.setError(null);
         }
 
-        if(TextUtils.isEmpty(pass.getText()) || pass.toString().length() < 4 ) {
+        if(TextUtils.isEmpty(pass.getText()) || pass.getText().toString().length() < 4 ) {
             pass.setError("at least 4 characters");
             valid = false;
-        } else if(!pass.toString().equals(rep_pass.toString())) {
+        } else if(!pass.getText().toString().equals(rep_pass.getText().toString())) {
             pass.setError("passwords don't match");
             rep_pass.setError("passwords don't match");
             valid = false;
