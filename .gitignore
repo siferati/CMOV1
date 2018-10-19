@@ -1,3 +1,8 @@
+# Custom
+
+server/db/*
+!server/db/db.sqlite
+
 
 # Created by https://www.gitignore.io/api/node,androidstudio
 

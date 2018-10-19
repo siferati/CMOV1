@@ -1,6 +1,68 @@
+/*
+.mode columns
+.headers on
+.nullvalue NULL
+PRAGMA FOREIGN_KEYS = ON;
+*/
+
 CREATE TABLE Users (
 	id INTEGER PRIMARY KEY,
-	name TEXT  NOT NULL
+	name TEXT NOT NULL,
+	username TEXT NOT NULL UNIQUE,
+	password TEXT NOT NULL,
+	nif TEXT NOT NULL,
+	creditCardId INTEGER NOT NULL REFERENCES CreditCard(id)
 );
 
-INSERT INTO Users (id, name) VALUES (1, "teste");
+CREATE TABLE CreditCard (
+	id INTEGER PRIMARY KEY,
+	type TEXT NOT NULL,
+	number TEXT NOT NULL UNIQUE,
+	validity DATE NOT NULL
+);
+
+CREATE TABLE Show (
+	id INTEGER PRIMARY KEY,
+	date DATETIME NOT NULL
+);
+
+CREATE TABLE Ticket (
+	id INTEGER PRIMARY KEY,
+	seatNumber INTEGER NOT NULL UNIQUE,
+	price DOUBLE NOT NULL,
+	showId INTEGER NOT NULL REFERENCES Show(id),
+	userId INTEGER REFERENCES User(id)
+);
+
+CREATE TABLE Order (
+	id INTEGER PRIMARY KEY,
+	date DATETIME NOT NULL,
+	userId INTEGER NOT NULL REFERENCES User(id),
+);
+
+CREATE TABLE Voucher (
+	id INTEGER PRIMARY KEY,
+	available BOOLEAN NOT NULL DEFAULT TRUE,
+	userId INTEGER NOT NULL REFERENCES User(id),
+	orderId INTEGER REFERNCES Order(id)
+);
+
+CREATE TABLE Product (
+	id INTEGER PRIMARY KEY,
+	name TEXT NOT NULL,
+	price DOUBLE NOT NULL
+);
+
+CREATE TABLE Promotion (
+	voucherId NOT NULL REFERENCES Voucher(id),
+	productId REFERENCES Product(id),
+	discount DOUBLE NOT NULL,
+	PRIMARY KEY (voucherId, productId)
+);
+
+CREATE TABLE ProductOrders (
+	productId NOT NULL REFERENCES Product(id),
+	orderId REFERENCES Order(id),
+	quantity INTEGER NOT NULL,
+	PRIMARY KEY (productId, orderId)
+);
