@@ -3,7 +3,7 @@ const sqlite3 = require('sqlite3').verbose()
 
 const app = express()
 const port = 8080
-const db = new sqlite3.Database('db/db.db')
+const db = new sqlite3.Database('db/db.sqlite3')
 
 app.get('/', (req, res) => {
 
