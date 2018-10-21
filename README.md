@@ -15,18 +15,8 @@
 
 ### RESTful Web Services
 
-| Status | Response  |
-| ------ | --------- |
-| 200    | `json`                          |
-|        | `   {`                          |
-|        | ` "id": 10,`                    |
-|        | ` "username": "alanpartridge",` |
-|        | ` more code...`                 |
-|        | `}`                             |
-| 400    |                                 |
-
 | Verb  | Endpoint | Req. Body | Res. Body | Description |
 | :---: | :------: | :-------- | :-------- | :--------- |
-| GET   | `/users/:id` | <code>{}</code> | <code>{<br>&nbsp;&nbsp;id,<br>&nbsp;&nbsp;name,<br>&nbsp;&nbsp;username,<br>&nbsp;&nbsp;password,<br>&nbsp;&nbsp;nif,<br>&nbsp;&nbsp;creditCardId,<br>}</code> |Get user by id. |
-| POST | `/users` | <code>{<br>&nbsp;&nbsp;name,<br>&nbsp;&nbsp;username,<br>&nbsp;&nbsp;password,<br>&nbsp;&nbsp;nif<br>}</code> | <code>{<br>&nbsp;&nbsp;id<br>}</code> | Create a new user. |
-| PUT | `/users/:id` | <code>{<br>&nbsp;&nbsp;name,<br>&nbsp;&nbsp;password,<br>&nbsp;&nbsp;nif<br>}</code> | <code>{}</code> | Update user by id.
+| GET   | `/users/:id` | <pre><code>{}</code></pre> | <pre><code>{<br>&nbsp;&nbsp;id,<br>&nbsp;&nbsp;name,<br>&nbsp;&nbsp;username,<br>&nbsp;&nbsp;password,<br>&nbsp;&nbsp;nif,<br>&nbsp;&nbsp;creditCardId,<br>}</code></pre> |Get user by id. |
+| POST | `/users` | <pre><code>{<br>&nbsp;&nbsp;name,<br>&nbsp;&nbsp;username,<br>&nbsp;&nbsp;password,<br>&nbsp;&nbsp;nif<br>}</code></pre> | <pre><code>{<br>&nbsp;&nbsp;id<br>}</code></pre> | Create a new user. |
+| PUT | `/users/:id` | <pre><code>{<br>&nbsp;&nbsp;name,<br>&nbsp;&nbsp;password,<br>&nbsp;&nbsp;nif<br>}</code></pre> | <pre><code>{}</code></pre> | Update user by id.
