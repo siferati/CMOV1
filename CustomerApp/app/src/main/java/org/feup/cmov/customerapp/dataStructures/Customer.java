@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp;
+package org.feup.cmov.customerapp.dataStructures;
 
 public class Customer {
     private String username;
@@ -7,30 +7,21 @@ public class Customer {
     private String nifNumber;
     private CreditCard creditCard;
 
-    public Customer() {}
-
-    public class CreditCard {
-        public String type;
-        public String number;
-        public String validityDate;
-
-        public CreditCard() {}
+    public Customer() {
+        creditCard = new CreditCard();
     }
 
     public void registerUser(String username, String password,
                              String name, String nifNumber,
-                             String ccType, String ccNumber, String ccValidityDate) {
+                             CreditCard creditCard) {
         this.username = username;
         this.password = password;
 
         this.name = name;
         this.nifNumber = nifNumber;
 
-        this.creditCard = new CreditCard();
+        this.creditCard = creditCard;
 
-        this.creditCard.type = ccType;
-        this.creditCard.number = ccNumber;
-        this.creditCard.validityDate = ccValidityDate;
 
         // TODO: register user on SERVER
     }

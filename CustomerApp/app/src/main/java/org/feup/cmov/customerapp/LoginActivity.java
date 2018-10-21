@@ -13,32 +13,35 @@ import android.widget.Toast;
 public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
 
+    private EditText text_username;
+    private EditText text_password;
+    private Button btn_login;
+    private TextView text_signup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Button loginButton = findViewById(R.id.btn_login);
-        TextView signupLink = findViewById(R.id.link_signup);
+        this.text_username = findViewById(R.id.input_username);
+        this.text_password = findViewById(R.id.input_password);
+        this.btn_login = findViewById(R.id.btn_login);
+        this.text_signup = findViewById(R.id.link_signup);
 
-        loginButton.setOnClickListener((View v)->login());
-        signupLink.setOnClickListener((View v)->signup());
+        btn_login.setOnClickListener((View v)->login());
+        text_signup.setOnClickListener((View v)->signup());
     }
 
     public void login() {
-        EditText usernameText = findViewById(R.id.input_username);
-        EditText passwordText = findViewById(R.id.input_password);
+        btn_login.setEnabled(false);
 
-        Button loginButton = findViewById(R.id.btn_login);
-        loginButton.setEnabled(false);
-
-        if (!validateLoginCredentials(usernameText, passwordText)) {
+        if (!validateLoginCredentials()) {
             Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-            loginButton.setEnabled(true);
+            btn_login.setEnabled(true);
         } else {
 
-            String username = usernameText.getText().toString();
-            String password = passwordText.getText().toString();
+            String username = text_username.getText().toString();
+            String password = text_password.getText().toString();
 
 
             // Add user to SERVER
@@ -46,21 +49,21 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public boolean validateLoginCredentials(EditText username, EditText password) {
+    public boolean validateLoginCredentials() {
         boolean valid = true;
 
-        if(TextUtils.isEmpty(username.getText())) {
-            username.setError("enter a valid username");
+        if(TextUtils.isEmpty(text_username.getText())) {
+            text_username.setError("enter a valid username");
             valid = false;
         } else {
-            username.setError(null);
+            text_username.setError(null);
         }
 
-        if(TextUtils.isEmpty(password.getText())) {
-            password.setError("enter a valid password");
+        if(TextUtils.isEmpty(text_password.getText())) {
+            text_password.setError("enter a valid password");
             valid = false;
         } else {
-            password.setError(null);
+            text_password.setError(null);
         }
 
         return valid;

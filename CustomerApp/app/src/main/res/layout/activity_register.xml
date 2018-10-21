@@ -1,215 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-    <LinearLayout
-        android:orientation="vertical"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:paddingRight="24dp"
+    android:paddingLeft="24dp">
+
+    <!-- Username Label -->
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
-
-        <LinearLayout
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp">
+        <EditText android:id="@+id/username_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:hint="@string/username"/>
+    </android.support.design.widget.TextInputLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dip"
-                android:layout_marginTop="16dp"
-                android:background="@color/primary_darker" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="-12.5dp"
-                android:text="@string/login_cred"
-                android:textSize="16dp"
-                android:textAllCaps="true"
-                android:background="@color/background_color"
-                android:textColor="@color/primary_darker"
-                android:paddingStart="2dp"
-                android:paddingEnd="2dp"/>
-        </LinearLayout>
-
-        <!-- Username Label -->
-        <android.support.design.widget.TextInputLayout
+    <!-- Password Label -->
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp">
+        <EditText android:id="@+id/password_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/username_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:hint="@string/username"/>
-        </android.support.design.widget.TextInputLayout>
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:hint="@string/password"/>
+    </android.support.design.widget.TextInputLayout>
 
-        <!-- Password Label -->
-        <android.support.design.widget.TextInputLayout
+    <!-- Repeat Password Label -->
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp">
+        <EditText android:id="@+id/repeat_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/password_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword"
-                android:hint="@string/password"/>
-        </android.support.design.widget.TextInputLayout>
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:hint="@string/repeat_password"/>
+    </android.support.design.widget.TextInputLayout>
 
-        <!-- Repeat Password Label -->
-        <android.support.design.widget.TextInputLayout
+    <!-- Name Label -->
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp">
+        <EditText android:id="@+id/name_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/repeat_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword"
-                android:hint="@string/repeat_password"/>
-        </android.support.design.widget.TextInputLayout>
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:hint="@string/name"/>
+    </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+    <!-- NIF Label -->
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp">
+        <EditText android:id="@+id/nif_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:hint="@string/nif"/>
+    </android.support.design.widget.TextInputLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dip"
-                android:layout_marginTop="16dp"
-                android:background="@color/primary_darker" />
+    <!-- Credit Card Popup -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="-12.5dp"
-                android:text="@string/user_info"
-                android:textAllCaps="true"
-                android:textSize="16dp"
-                android:background="@color/background_color"
-                android:textColor="@color/primary_darker"
-                android:paddingStart="2dp"
-                android:paddingEnd="2dp"/>
-        </LinearLayout>
-
-        <!-- Name Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btn_credit_card"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/name_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:hint="@string/name"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <!-- NIF Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/nif_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:hint="@string/nif"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dip"
-                android:layout_marginTop="16dp"
-                android:background="@color/primary_darker" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="-12.5dp"
-                android:text="@string/credit_card"
-                android:textSize="16dp"
-                android:textAllCaps="true"
-                android:background="@color/background_color"
-                android:textColor="@color/primary_darker"
-                android:paddingStart="2dp"
-                android:paddingEnd="2dp"/>
-        </LinearLayout>
-
-        <!-- Type Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/type_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:hint="@string/type"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <!-- Number Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/number_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:inputType="number"
-                android:hint="@string/number"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <!-- Validity Date Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-            <EditText android:id="@+id/validity_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="date"
-                android:hint="@string/validity_date"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_register"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:padding="12dp"
+            android:layout_weight="1"
+            android:text="@string/credit_card"
             android:textColor="@color/white"
-            android:text="@string/register"/>
-
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:theme="@style/Alt.Button"
+            />
+        <CheckBox
+            android:layout_marginEnd="4dp"
+            android:id="@+id/check_credit_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="false" />
     </LinearLayout>
-</ScrollView>
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/register"
+        android:textColor="@color/white"
+        android:padding="12dp"/>
+
+</LinearLayout>

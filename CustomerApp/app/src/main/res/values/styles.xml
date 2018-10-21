@@ -6,10 +6,13 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
 
-        <item name="colorControlNormal">@color/iron</item>
-        <item name="colorControlActivated">@color/monsoon</item>
-
         <item name="colorButtonNormal">@color/primary_darker</item>
+
+        <item name="android:dialogTheme">@style/CustomDialog</item>
+    </style>
+
+    <style name="CustomDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">false</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -31,6 +34,10 @@
         <item name="colorAccent">@color/white</item>
         <item name="android:textColorPrimary">@color/iron</item>
         <item name="android:background">@color/primary</item>
+    </style>
+
+    <style name="Alt.Button" parent="AppTheme">
+        <item name="colorAccent">@color/monsoon</item>
     </style>
 
 </resources>

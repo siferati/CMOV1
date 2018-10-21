@@ -1,116 +1,116 @@
 package org.feup.cmov.customerapp;
 
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.feup.cmov.customerapp.dataStructures.CreditCard;
+import org.feup.cmov.customerapp.dataStructures.Customer;
+
 public class RegisterActivity extends AppCompatActivity {
+    private EditText text_username;
+    private EditText text_password;
+    private EditText text_rep_password;
+    private EditText text_name;
+    private EditText text_nif;
+    private CheckBox check_credit_card;
+
+    private Button btn_credit_card;
+    private Button btn_register;
     Customer user;
+    private CreditCard card;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        Button registerButton = findViewById(R.id.btn_register);
-        registerButton.setOnClickListener((View v)->register());
+        text_username = findViewById(R.id.username_register);
+        text_password = findViewById(R.id.password_register);
+        text_rep_password = findViewById(R.id.repeat_password);
+        text_name = findViewById(R.id.name_register);
+        text_nif = findViewById(R.id.nif_register);
+        check_credit_card = findViewById(R.id.check_credit_card);
+
+        btn_credit_card = findViewById(R.id.btn_credit_card);
+        btn_register = findViewById(R.id.btn_register);
+
+        btn_register.setOnClickListener((View v)->register());
+        btn_credit_card.setOnClickListener((View v)->creditCardDialog());
 
         user = new Customer();
+        card = new CreditCard();
     }
 
     public void register() {
-        EditText usernameText = findViewById(R.id.username_register);
-        EditText passwordText = findViewById(R.id.password_register);
-        EditText repeatPasswordText = findViewById(R.id.repeat_password);
+        btn_register.setEnabled(false);
 
-        EditText nameText = findViewById(R.id.name_register);
-        EditText nifText = findViewById(R.id.nif_register);
-
-        EditText typeText = findViewById(R.id.type_register);
-        EditText numberText = findViewById(R.id.number_register);
-        EditText validityDateText = findViewById(R.id.validity_register);
-
-        Button registerButton = findViewById(R.id.btn_register);
-        registerButton.setEnabled(false);
-
-        if (!validateRegisterCredentials(usernameText, passwordText, repeatPasswordText, nameText, nifText, typeText, numberText, validityDateText)) {
+        if (!validateRegisterCredentials()) {
             Toast.makeText(getBaseContext(), "Register failed", Toast.LENGTH_LONG).show();
-            registerButton.setEnabled(true);
+            btn_register.setEnabled(true);
         } else {
 
-            String username = usernameText.getText().toString();
-            String password = passwordText.getText().toString();
-            String name = nameText.getText().toString();
-            String nif = nifText.getText().toString();
-            String type = typeText.getText().toString();
-            String number = numberText.getText().toString();
-            String validityDate = validityDateText.getText().toString();
+            String username = text_username.getText().toString();
+            String password = text_password.getText().toString();
+            String name = text_name.getText().toString();
+            String nif = text_nif.getText().toString();
 
-            user.registerUser(username, password, name, nif, type, number, validityDate);
+            //user.registerUser(username, password, name, nif, type, number, validityDate);
         }
     }
 
-    public boolean validateRegisterCredentials(EditText username, EditText pass, EditText rep_pass,
-                                               EditText name, EditText nif,
-                                               EditText type, EditText number, EditText validity) {
+    public void creditCardDialog() {
+        CreditCardFragment dialog = CreditCardFragment.constructor(card);       // create dialog instance
+        dialog.show(getSupportFragmentManager(),"get_card");    // show dialog
+    }
+
+    public boolean validateRegisterCredentials() {
         boolean valid = true;
 
-        if(TextUtils.isEmpty(username.getText())) {
-            username.setError("enter a valid username");
+        if(TextUtils.isEmpty(text_username.getText())) {
+            text_username.setError("Enter a valid username");
             valid = false;
         } else {
-            username.setError(null);
+            text_username.setError(null);
         }
 
-        if(TextUtils.isEmpty(pass.getText()) || pass.getText().toString().length() < 4 ) {
-            pass.setError("at least 4 characters");
+        if(TextUtils.isEmpty(text_password.getText()) || text_password.getText().toString().length() < 4 ) {
+            text_password.setError("At least 4 characters");
             valid = false;
-        } else if(!pass.getText().toString().equals(rep_pass.getText().toString())) {
-            pass.setError("passwords don't match");
-            rep_pass.setError("passwords don't match");
+        } else if(!text_password.getText().toString().equals(text_password.getText().toString())) {
+            text_password.setError("Passwords don't match");
+            text_rep_password.setError("Passwords don't match");
             valid = false;
         } else {
-            pass.setError(null);
-            rep_pass.setError(null);
+            text_password.setError(null);
+            text_rep_password.setError(null);
         }
 
-        if(TextUtils.isEmpty(name.getText())) {
-            name.setError("enter a valid name");
+        if(TextUtils.isEmpty(text_name.getText())) {
+            text_name.setError("Enter a valid name");
             valid = false;
         } else {
-            name.setError(null);
+            text_name.setError(null);
         }
 
-        if(TextUtils.isEmpty(nif.getText())) {
-            nif.setError("enter a valid NIF");
+        if(TextUtils.isEmpty(text_nif.getText())) {
+            text_nif.setError("Enter a valid NIF");
             valid = false;
         } else {
-            nif.setError(null);
+            text_nif.setError(null);
         }
 
-        if(TextUtils.isEmpty(type.getText())) {
-            type.setError("enter a valid type");
+        if(!check_credit_card.isChecked()) {
+            check_credit_card.setError("Invalid Credit Card");
             valid = false;
         } else {
-            type.setError(null);
-        }
-
-        if(TextUtils.isEmpty(number.getText())) {
-            number.setError("enter a valid number");
-            valid = false;
-        } else {
-            number.setError(null);
-        }
-
-        if(TextUtils.isEmpty(validity.getText())) {
-            validity.setError("enter a valid validity date");
-            valid = false;
-        } else {
-            validity.setError(null);
+            check_credit_card.setError(null);
         }
 
         return valid;
