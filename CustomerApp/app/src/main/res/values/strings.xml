@@ -22,19 +22,4 @@
     <string name="number">Card Number</string>
     <string name="validity_date">Expiration Date</string>
     <string name="save">Done</string>
-
-    <string-array name="type_cards_array">
-        <item>Master Card</item>
-        <item>VISA</item>
-        <item>American Express</item>
-    </string-array>
-
-    <string-array name="months_array">
-        <item>Master Card</item>
-        <item>VISA</item>
-        <item>American Express</item>
-    </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
