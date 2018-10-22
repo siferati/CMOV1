@@ -6,37 +6,72 @@ const bcrypt = require('bcrypt');
 const app = express();
 const db = new sqlite3.Database('db/db.sqlite3');
 
+// turn on foreign keys support
+db.run('PRAGMA foreign_keys = ON', (err) => {if (err) console.error(err);});
+
 app.use(bodyParser.json());
-
-// TODO delete this
-app.get('/', (req, res) => {
-
-	db.all('SELECT * FROM Users', (err, rows) => {
-		res.send(rows);
-	});
-});
 
 
 //#region Users
+
+/**
+ * Login.
+ */
+app.post('/login', (req, res) => {
+	const {
+		username,
+		password
+	} = req.body;
+	
+	db.get(
+		`SELECT password AS hash
+		FROM Users
+		WHERE username = ?`,
+		[username],
+		(err, row) => {
+			if (err) {
+				console.error(err);
+				return res.sendStatus(500);
+			} else if (!row) {
+				return res.status(400).send('Username doesn\'t exist.');
+			}
+
+			bcrypt.compare(password, row.hash, (err, same) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
+				} else if (!same) {
+					return res.status(400).send('Wrong password.');
+				}
+
+				res.sendStatus(200);
+			});
+		}
+	);
+});
+
 
 /**
  * Get user by id.
  */
 app.get('/users/:id', (req, res) => {
 	const id = req.params.id;
-	const sql = `
-			SELECT name, username, nif, creditCardId
-			FROM Users
-			WHERE id = ?
-	`;
-	db.get(sql, id, (err, row) => {
-		if (err) {
-			console.error(err);
-			return res.status(500).send('Internal Server Error.');
-		}
+	
 
-		res.send(row);
-	});
+	db.get(
+		`SELECT name, username, nif
+		FROM Users
+		WHERE id = ?`,
+		id,
+		(err, row) => {
+			if (err) {
+				console.error(err);
+				return res.sendStatus(500);
+			}
+
+			res.send(row);
+		}
+	);
 });
 
 
@@ -135,37 +170,94 @@ app.put('/users/:id', (req, res) => {
 
 
 /**
- * Login.
+ * Get user's credit card.
  */
-app.post('/login', (req, res) => {
-	const {
-		username,
-		password
-	} = req.body;
-	
+app.get('/users/:id/creditcard/', (req, res) => {
+	const id = req.params.id;
+
 	db.get(
-		`SELECT password AS hash
-		FROM Users
-		WHERE username = ?`,
-		[username],
+		`SELECT id, type, number, validity
+		FROM CreditCards
+		WHERE userId = ?`,
+		id,
 		(err, row) => {
 			if (err) {
 				console.error(err);
 				return res.sendStatus(500);
-			} else if (!row) {
-				return res.status(400).send('Username doesn\'t exist.');
 			}
 
-			bcrypt.compare(password, row.hash, (err, same) => {
-				if (err) {
-					console.error(err);
-					return res.sendStatus(500);
-				} else if (!same) {
-					return res.status(400).send('Wrong password.');
-				}
+			res.send(row);
+		}
+	);
+});
 
-				res.sendStatus(200);
-			});
+
+/**
+ * Create new user's credit card.
+ */
+app.post('/users/:id/creditcard', (req, res) => {
+	const id = req.params.id;
+	const {
+		type,
+		number,
+		validity
+	} = req.body;
+
+	db.get(
+		`SELECT id
+		FROM CreditCards
+		WHERE number = ?
+		OR userId = ?`,
+		[number, id],
+		(err, row) => {
+			if (err) {
+				console.error(err);
+				return res.sendStatus(500);
+			} else if (row) {
+				return res.status(400).send('Credit card already registered.');
+			}
+
+			db.run(
+				`INSERT INTO CreditCards (type, number, validity, userId)
+				VALUES (?, ?, ?, ?)`,
+				[type, number, validity, id],
+				function (err) {
+					if (err) {
+						console.error(err);
+						return res.sendStatus(500);
+					}
+
+					res.send({id: this.lastID});
+				}
+			);
+		}
+	);
+});
+
+
+/**
+ * Update user's credit card.
+ */
+app.put('/users/:id/creditcard', (req, res) => {
+	const id = req.params.id;
+	const {
+		type,
+		number,
+		validity
+	} = req.body;
+
+	db.run(
+		`UPDATE CreditCards
+		SET type = coalesce(?, type), number = coalesce(?, number), validity = coalesce(?, validity)
+		WHERE userId = ?`,
+		[type, number, validity, id],
+		(err) => {
+			if (err) {
+				console.error(err);
+				return res.sendStatus(500);
+			}
+
+			res.sendStatus(200);
 		}
 	);
 });
