@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.feup.cmov.customerapp.dataStructures.CardType;
 import org.feup.cmov.customerapp.dataStructures.CreditCard;
@@ -65,9 +66,8 @@ public class CreditCardDialog extends Dialog {
     }
 
     private void saveCreditCard() {
-        CreditCard c = null;
-
-        try {
+        if (validateCreditCard()) {
+            CreditCard c;
             String type = this.card_type.getSelectedItem().toString();
 
             if (type.equals(CardType.MASTER_CARD.toString())) {
@@ -80,13 +80,41 @@ public class CreditCardDialog extends Dialog {
             c.setNumber(this.card_number.getText().toString());
             c.setMonthValidity((Integer) this.date_month.getSelectedItem());
             c.setYearValidity((Integer) this.date_year.getSelectedItem());
-        } catch (ClassCastException e) {
-            Log.d("error", "casting credit card");
+
+            // TODO: check if credit card data is valid before setting "credit card" check as true
+            dialogListener.handleDialogClose(c);
+            dismiss();
+        }
+    }
+
+    private boolean validateCreditCard() {
+        boolean valid = true;
+
+        if(TextUtils.isEmpty(this.card_number.getText())) {
+            this.card_number.setError("Enter a valid card number");
+            valid = false;
+        } else {
+            this.card_number.setError(null);
         }
 
-        // TODO: check if credit card data is valid before setting "credit card" check as true
-        dialogListener.handleDialogClose(c);
-        dismiss();
+        int this_month = Calendar.getInstance().get(Calendar.MONTH);
+        int selected_month = (Integer) this.date_month.getSelectedItem();
+
+        int this_year = Calendar.getInstance().get(Calendar.YEAR);
+        int selected_year = (Integer) this.date_year.getSelectedItem();
+
+        if (this_year == selected_year) {
+            if (this_month > selected_month) {
+                valid = false;
+                Toast.makeText(this.context, "Enter a valid date", Toast.LENGTH_LONG).show();
+            } else {
+                valid = true;
+            }
+        } else {
+            valid = true;
+        }
+
+        return valid;
     }
 
     private ArrayAdapter<String> populateTypeSpinner(int type_id) {
@@ -106,9 +134,9 @@ public class CreditCardDialog extends Dialog {
 
     private ArrayAdapter<Integer> populateMonthSpinner(int months_id) {
         ArrayList<Integer> months = new ArrayList<>();
+        int limit_month = 12;
 
-        int limitMonth = 12;
-        for (int i = 1; i <= limitMonth; i++) {
+        for (int i = 1; i <= limit_month; i++) {
             months.add(i);
         }
         ArrayAdapter<Integer> months_adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, months);
@@ -121,9 +149,10 @@ public class CreditCardDialog extends Dialog {
 
     private ArrayAdapter<Integer> populateYearsSpinner(int years_id) {
         ArrayList<Integer> years = new ArrayList<>();
-        int thisYear = Calendar.getInstance().get(Calendar.YEAR);
-        int limitYear = thisYear + 50;
-        for (int i = thisYear; i <= limitYear; i++) {
+        int this_year = Calendar.getInstance().get(Calendar.YEAR);
+        int limit_year = this_year + 50;
+
+        for (int i = this_year; i <= limit_year; i++) {
             years.add(i);
         }
         ArrayAdapter<Integer> years_adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, years);
@@ -135,9 +164,8 @@ public class CreditCardDialog extends Dialog {
     }
 
     private void setCardData(ArrayAdapter<String> type_adapter, ArrayAdapter<Integer> year_adapter, ArrayAdapter<Integer> month_adapter) {
-        int spinnerPosition = type_adapter.getPosition(card.getType().toString());      // TODO: get this shit done right
+        int spinnerPosition = type_adapter.getPosition(card.getType().toString());
         card_type.setSelection(spinnerPosition);
-
         card_number.setText(card.getNumber());
 
         int month_pos = month_adapter.getPosition(card.getMonthValidity());

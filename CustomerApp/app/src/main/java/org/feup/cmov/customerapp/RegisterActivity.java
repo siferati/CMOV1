@@ -3,7 +3,6 @@ package org.feup.cmov.customerapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.feup.cmov.customerapp.dataStructures.CreditCard;
-import org.feup.cmov.customerapp.dataStructures.Customer;
+import org.feup.cmov.customerapp.database.Register;
 
 public class RegisterActivity extends AppCompatActivity implements CreditCardDialog.MyDialogCloseListener {
     private EditText text_username;
@@ -23,7 +22,6 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
 
     private Button btn_credit_card;
     private Button btn_register;
-    Customer user;
     private CreditCard card;
 
     @Override
@@ -43,15 +41,12 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
 
         btn_register.setOnClickListener((View v)->register());
         btn_credit_card.setOnClickListener((View v)->creditCardDialog());
-
-        user = new Customer();
     }
 
     public void register() {
         btn_register.setEnabled(false);
 
         if (!validateRegisterCredentials()) {
-            Toast.makeText(getBaseContext(), "Register failed", Toast.LENGTH_LONG).show();
             btn_register.setEnabled(true);
         } else {
 
@@ -60,13 +55,38 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
             String name = text_name.getText().toString();
             String nif = text_nif.getText().toString();
 
-            //user.registerUser(username, password, name, nif, type, number, validityDate);
+            Register register = new Register(this, username, password, name, nif);
+            Thread thr = new Thread(register);
+            thr.start();
         }
     }
 
+    public void handleResponse(int code, String response) {
+        if (code == 200) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getBaseContext(), "Register success", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            // add credit card
+        } else {
+            btn_register.setEnabled(true);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getBaseContext(), response, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+    }
+
+
     public void creditCardDialog() {
         CreditCardFragment dialog = CreditCardFragment.constructor(card);       // create dialog instance
-        dialog.show(getSupportFragmentManager(),"get_card");    // show dialog
+        dialog.show(getSupportFragmentManager(),"get_card");               // show dialog
     }
 
     public boolean validateRegisterCredentials() {
@@ -119,12 +139,10 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
     public void handleDialogClose(CreditCard card) {
         if (card == null) {
             this.card = null;
-            Log.d("log", "is null");
         } else {
             this.card = card;
             this.check_credit_card.setChecked(true);
-            Log.d("log", "is not null");
-
+            // btn_credit_card.setEnabled(false);
         }
     }
 }

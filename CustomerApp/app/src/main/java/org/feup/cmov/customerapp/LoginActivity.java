@@ -53,14 +53,14 @@ public class LoginActivity extends AppCompatActivity {
         boolean valid = true;
 
         if(TextUtils.isEmpty(text_username.getText())) {
-            text_username.setError("enter a valid username");
+            text_username.setError("Enter a valid username");
             valid = false;
         } else {
             text_username.setError(null);
         }
 
         if(TextUtils.isEmpty(text_password.getText())) {
-            text_password.setError("enter a valid password");
+            text_password.setError("Enter a valid password");
             valid = false;
         } else {
             text_password.setError(null);
