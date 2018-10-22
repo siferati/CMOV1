@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
+const uuidv4 = require('uuid/v4');
 
 const app = express();
 const db = new sqlite3.Database('db/db.sqlite3');
@@ -106,17 +107,18 @@ app.post('/users', (req, res) => {
 					return res.sendStatus(500);
 				}
 
+				const id = uuidv4();
 				db.run(
-					`INSERT INTO Users (name, username, password, nif)
-					VALUES (?, ?, ?, ?)`,
-					[name, username, hash, nif],
+					`INSERT INTO Users (id, name, username, password, nif)
+					VALUES (?, ?, ?, ?, ?)`,
+					[id, name, username, hash, nif],
 					function (err) {
 						if (err) {
 							console.error(err);
 							return res.sendStatus(500);
 						}
 
-						res.send({id: this.lastID});
+						res.send({id: id});
 					}
 				);
 			});

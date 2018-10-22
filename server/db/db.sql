@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS ProductOrders;
 PRAGMA FOREIGN_KEYS = ON;
 
 CREATE TABLE Users (
-	id INTEGER PRIMARY KEY,
+	id TEXT PRIMARY KEY,
 	name TEXT NOT NULL,
 	username TEXT NOT NULL UNIQUE,
 	password TEXT NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE ProductOrders (
 
 /* --- TEST DATA --- */
 
-INSERT INTO Users (name, username, password, nif) VALUES ("tiago", "tirafesi", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "987654321");
-INSERT INTO Users (name, username, password, nif) VALUES ("claudia", "arwen7stars", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "876543210");
-INSERT INTO CreditCards (type, number, validity, userId) VALUES ("mastercard", "123456789", "2020-03-21", 1);
-INSERT INTO CreditCards (type, number, validity, userId) VALUES ("mastercard", "012345678", "2020-03-21", 2);
+INSERT INTO Users (id, name, username, password, nif) VALUES ("one", "tiago", "tirafesi", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "987654321");
+INSERT INTO Users (id, name, username, password, nif) VALUES ("two", "claudia", "arwen7stars", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "876543210");
+INSERT INTO CreditCards (type, number, validity, userId) VALUES ("mastercard", "123456789", "2020-03-21", "one");
+INSERT INTO CreditCards (type, number, validity, userId) VALUES ("mastercard", "012345678", "2020-03-21", "two");
