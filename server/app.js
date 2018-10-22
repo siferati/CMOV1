@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcrypt');
 
 const app = express();
 const db = new sqlite3.Database('db/db.sqlite3');
@@ -18,10 +19,13 @@ app.get('/', (req, res) => {
 
 //#region Users
 
+/**
+ * Get user by id.
+ */
 app.get('/users/:id', (req, res) => {
 	const id = req.params.id;
 	const sql = `
-			SELECT *
+			SELECT name, username, nif, creditCardId
 			FROM Users
 			WHERE id = ?
 	`;
@@ -35,6 +39,10 @@ app.get('/users/:id', (req, res) => {
 	});
 });
 
+
+/**
+ * Create a new user.
+ */
 app.post('/users', (req, res) => {
 	const {
 		name,
@@ -57,22 +65,34 @@ app.post('/users', (req, res) => {
 				return res.status(400).send('Username and/or NIF already exist.');
 			}
 
-			db.run(
-				`INSERT INTO Users (name, username, password, nif)
-				VALUES (?, ?, ?, ?)`,
-				[name, username, password, nif],
-				function (err) {
-					if (err) {
-						console.error(err);
-						return res.sendStatus(500);
-					}
-					res.send({id: this.lastID});
+			bcrypt.hash(password, 10, (err, hash) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
 				}
-			);
+
+				db.run(
+					`INSERT INTO Users (name, username, password, nif)
+					VALUES (?, ?, ?, ?)`,
+					[name, username, hash, nif],
+					function (err) {
+						if (err) {
+							console.error(err);
+							return res.sendStatus(500);
+						}
+
+						res.send({id: this.lastID});
+					}
+				);
+			});
 		}
 	);
 });
 
+
+/**
+ * Update user by id.
+ */
 app.put('/users/:id', (req, res) => {
 	const id = req.params.id;
 	const {
@@ -81,17 +101,71 @@ app.put('/users/:id', (req, res) => {
 		nif
 	} = req.body;
 
-	db.run(
-		`UPDATE Users
-		SET name = coalesce(?, name), password = coalesce(?, password), nif = coalesce(?, nif)
-		WHERE id = ?`,
-		[name, password, nif, id],
-		(err) => {
+	// in case password is null
+	function update(hash) {
+		db.run(
+			`UPDATE Users
+			SET name = coalesce(?, name), password = coalesce(?, password), nif = coalesce(?, nif)
+			WHERE id = ?`,
+			[name, hash, nif, id],
+			(err) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
+				}
+
+				res.sendStatus(200);
+			}
+		);
+	}
+
+	if (password) {
+		bcrypt.hash(password, 10, (err, hash) => {
 			if (err) {
 				console.error(err);
 				return res.sendStatus(500);
 			}
-			res.send();
+			
+			update(hash);
+		});
+	} else {
+		update(null);
+	}
+});
+
+
+/**
+ * Login.
+ */
+app.post('/login', (req, res) => {
+	const {
+		username,
+		password
+	} = req.body;
+	
+	db.get(
+		`SELECT password AS hash
+		FROM Users
+		WHERE username = ?`,
+		[username],
+		(err, row) => {
+			if (err) {
+				console.error(err);
+				return res.sendStatus(500);
+			} else if (!row) {
+				return res.status(400).send('Username doesn\'t exist.');
+			}
+
+			bcrypt.compare(password, row.hash, (err, same) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
+				} else if (!same) {
+					return res.status(400).send('Wrong password.');
+				}
+
+				res.sendStatus(200);
+			});
 		}
 	);
 });

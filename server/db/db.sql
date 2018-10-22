@@ -80,5 +80,5 @@ CREATE TABLE ProductOrders (
 
 INSERT INTO CreditCards (type, number, validity) VALUES ("mastercard", "123456789", "2020-03-21");
 INSERT INTO CreditCards (type, number, validity) VALUES ("mastercard", "012345678", "2020-03-21");
-INSERT INTO Users (name, username, password, nif, creditCardId) VALUES ("tiago", "tirafesi", "123456", "987654321", 1);
-INSERT INTO Users (name, username, password, nif, creditCardId) VALUES ("claudia", "arwen7stars", "123456", "876543210", 2);
+INSERT INTO Users (name, username, password, nif, creditCardId) VALUES ("tiago", "tirafesi", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "987654321", 1);
+INSERT INTO Users (name, username, password, nif, creditCardId) VALUES ("claudia", "arwen7stars", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "876543210", 2);
