@@ -8,7 +8,11 @@ public class CreditCard implements Serializable {
     private int monthValidity;
     private int yearValidity;
 
-    public CreditCard() {}
+    public CreditCard() { }
+
+    public CreditCard(CardType type) {
+        this.type = type;
+    }
 
     public CardType getType() {
         return type;

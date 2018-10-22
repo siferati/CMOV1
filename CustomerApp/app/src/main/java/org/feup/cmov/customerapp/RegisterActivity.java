@@ -1,9 +1,9 @@
 package org.feup.cmov.customerapp;
 
-import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 import org.feup.cmov.customerapp.dataStructures.CreditCard;
 import org.feup.cmov.customerapp.dataStructures.Customer;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements CreditCardDialog.MyDialogCloseListener {
     private EditText text_username;
     private EditText text_password;
     private EditText text_rep_password;
@@ -45,7 +45,6 @@ public class RegisterActivity extends AppCompatActivity {
         btn_credit_card.setOnClickListener((View v)->creditCardDialog());
 
         user = new Customer();
-        card = new CreditCard();
     }
 
     public void register() {
@@ -114,5 +113,18 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    @Override
+    public void handleDialogClose(CreditCard card) {
+        if (card == null) {
+            this.card = null;
+            Log.d("log", "is null");
+        } else {
+            this.card = card;
+            this.check_credit_card.setChecked(true);
+            Log.d("log", "is not null");
+
+        }
     }
 }

@@ -6,13 +6,22 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
 
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/monsoon</item>
+
         <item name="colorButtonNormal">@color/primary_darker</item>
 
-        <item name="android:dialogTheme">@style/CustomDialog</item>
+        <item name="android:dialogTheme">@style/DialogStyle</item>
     </style>
 
-    <style name="CustomDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+    <style name="DialogStyle" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">false</item>
+        <item name="android:windowTitleStyle">@style/TitleDialogStyle</item>
+    </style>
+
+    <style name="TitleDialogStyle">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">

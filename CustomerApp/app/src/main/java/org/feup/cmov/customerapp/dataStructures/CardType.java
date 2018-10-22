@@ -13,6 +13,16 @@ public enum CardType implements Serializable {
         this.cardID = id;
     }
 
+    CardType(String type) {
+        if (type.equals("Master Card")) {
+            this.cardID = 1;
+        } else if (type.equals("Visa")) {
+            this.cardID = 2;
+        } else {
+            this.cardID = 3;
+        }
+    }
+
     @Override
     public String toString() {
         if (cardID == 1) {
