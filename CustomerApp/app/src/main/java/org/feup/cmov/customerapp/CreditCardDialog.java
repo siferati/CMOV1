@@ -93,6 +93,7 @@ public class CreditCardDialog extends Dialog {
         if(TextUtils.isEmpty(this.card_number.getText())) {
             this.card_number.setError("Enter a valid card number");
             valid = false;
+            return valid;
         } else {
             this.card_number.setError(null);
         }
@@ -107,6 +108,7 @@ public class CreditCardDialog extends Dialog {
             if (this_month > selected_month) {
                 valid = false;
                 Toast.makeText(this.context, "Enter a valid date", Toast.LENGTH_LONG).show();
+                return valid;
             } else {
                 valid = true;
             }

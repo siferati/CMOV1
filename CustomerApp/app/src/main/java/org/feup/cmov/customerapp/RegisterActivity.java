@@ -3,6 +3,7 @@ package org.feup.cmov.customerapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -47,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
         btn_register.setEnabled(false);
 
         if (!validateRegisterCredentials()) {
+            Toast.makeText(RegisterActivity.this, "Register failed", Toast.LENGTH_LONG).show();
             btn_register.setEnabled(true);
         } else {
 
@@ -63,26 +65,20 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
 
     public void handleResponse(int code, String response) {
         if (code == 200) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getBaseContext(), "Register success", Toast.LENGTH_LONG).show();
-                }
-            });
+            showToast(response);
 
             // add credit card
         } else {
+            showToast(response);
             btn_register.setEnabled(true);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getBaseContext(), response, Toast.LENGTH_LONG).show();
-                }
-            });
         }
 
     }
 
+    public void showToast(final String toast)
+    {
+        runOnUiThread(() -> Toast.makeText(RegisterActivity.this, toast, Toast.LENGTH_SHORT).show());
+    }
 
     public void creditCardDialog() {
         CreditCardFragment dialog = CreditCardFragment.constructor(card);       // create dialog instance
@@ -142,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
         } else {
             this.card = card;
             this.check_credit_card.setChecked(true);
-            // btn_credit_card.setEnabled(false);
+            //btn_credit_card.setEnabled(false);
         }
     }
 }
