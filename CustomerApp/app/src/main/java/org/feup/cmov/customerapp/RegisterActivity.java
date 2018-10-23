@@ -1,5 +1,6 @@
 package org.feup.cmov.customerapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,7 +12,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.feup.cmov.customerapp.dataStructures.CreditCard;
+import org.feup.cmov.customerapp.dataStructures.User;
+import org.feup.cmov.customerapp.database.AddCreditCard;
 import org.feup.cmov.customerapp.database.Register;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity implements CreditCardDialog.MyDialogCloseListener {
     private EditText text_username;
@@ -57,6 +62,8 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
             String name = text_name.getText().toString();
             String nif = text_nif.getText().toString();
 
+            User.setUser(name, username, password, nif, card);
+
             Register register = new Register(this, username, password, name, nif);
             Thread thr = new Thread(register);
             thr.start();
@@ -65,14 +72,36 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
 
     public void handleResponse(int code, String response) {
         if (code == 200) {
-            showToast(response);
+            JSONObject resp = null;
+            String result_id = null;
 
-            // add credit card
+            try {
+                resp = new JSONObject(response);
+                result_id = resp.get("id").toString();
+            } catch(JSONException e) {
+                e.getStackTrace();
+            }
+
+            User.setId(result_id);
+
+            AddCreditCard addCreditCard = new AddCreditCard(this, User.getId(), this.card);
+            Thread thr = new Thread(addCreditCard);
+            thr.start();
         } else {
             showToast(response);
             btn_register.setEnabled(true);
         }
+    }
 
+    public void handleResponseCC(int code, String response) {
+        if (code == 200) {
+            showToast("Register success");
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        } else {
+            showToast(response);
+            btn_register.setEnabled(true);
+        }
     }
 
     public void showToast(final String toast)

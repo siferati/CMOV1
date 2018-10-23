@@ -1,26 +1,39 @@
 package org.feup.cmov.customerapp.database;
 
 import android.util.Log;
+
 import org.feup.cmov.customerapp.RegisterActivity;
+import org.feup.cmov.customerapp.dataStructures.CreditCard;
 import org.json.JSONObject;
+
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 
-public class Register extends ServerConnection implements Runnable {
+public class AddCreditCard extends ServerConnection implements Runnable {
     private RegisterActivity activity;
-    private String username;
-    private String password;
-    private String name;
-    private String nifNumber;
+    private String userID;
+    private String type;
+    private String number;
+    private String validity_date;
 
-    public Register(RegisterActivity activity, String username, String password, String name, String nifNumber) {
+    public AddCreditCard(RegisterActivity activity, String userID, CreditCard creditCard) {
         super();
         this.activity = activity;
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.nifNumber = nifNumber;
+        this.userID = userID;
+        this.type = creditCard.getType().toString();
+        this.number = creditCard.getNumber();
+        this.validity_date = formatDate(creditCard.getMonthValidity(), creditCard.getYearValidity());
+    }
+
+    public String formatDate(int month, int year) {
+        DecimalFormat formatter = new DecimalFormat("00");
+        String monthStr = formatter.format(month);
+
+        String date = year + "-" + monthStr + "-01";
+
+        return date;
     }
 
     @Override
@@ -28,7 +41,7 @@ public class Register extends ServerConnection implements Runnable {
         URL url;
         HttpURLConnection urlConnection = null;
         try {
-            url = new URL("http://" + address + ":" + port + "/users");
+            url = new URL("http://" + address + ":" + port + "/users/" + userID + "/creditcard");
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoOutput(true);
             urlConnection.setRequestMethod("POST");
@@ -39,10 +52,9 @@ public class Register extends ServerConnection implements Runnable {
 
             //Create JSONObject here
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("name", this.name);
-            jsonParam.put("username", this.username);
-            jsonParam.put("password", this.password);
-            jsonParam.put("nif", this.nifNumber);
+            jsonParam.put("type", this.type);
+            jsonParam.put("number", this.number);
+            jsonParam.put("validity", this.validity_date);
             OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
             out.write(jsonParam.toString());
             out.close();
@@ -56,16 +68,15 @@ public class Register extends ServerConnection implements Runnable {
                 response = readStream(urlConnection.getErrorStream());
                 Log.d("connection", response);
             }
-            activity.handleResponse(responseCode, response);
+            activity.handleResponseCC(responseCode, response);
         }
         catch (Exception e) {
-            activity.handleResponse(0, e.getMessage());
+            activity.handleResponseCC(0, e.getMessage());
         }
         finally {
             if(urlConnection != null)
                 urlConnection.disconnect();
         }
     }
-
 
 }
