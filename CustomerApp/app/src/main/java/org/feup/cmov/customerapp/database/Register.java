@@ -59,7 +59,7 @@ public class Register extends ServerConnection implements Runnable {
             activity.handleResponse(responseCode, response);
         }
         catch (Exception e) {
-            activity.handleResponse(0, e.getMessage());
+            //activity.handleResponse(0, e.getMessage());
         }
         finally {
             if(urlConnection != null)

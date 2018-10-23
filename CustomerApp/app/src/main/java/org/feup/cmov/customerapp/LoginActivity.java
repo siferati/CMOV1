@@ -10,8 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.feup.cmov.customerapp.database.Login;
+
 public class LoginActivity extends AppCompatActivity {
-    private static final int REQUEST_SIGNUP = 0;
+    //private static final int REQUEST_SIGNUP = 0;
 
     private EditText text_username;
     private EditText text_password;
@@ -39,14 +41,28 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
             btn_login.setEnabled(true);
         } else {
-
             String username = text_username.getText().toString();
             String password = text_password.getText().toString();
 
-
-            // Add user to SERVER
+            Login login = new Login(this, username, password);
+            Thread thr = new Thread(login);
+            thr.start();
         }
 
+    }
+
+    public void handleResponse(int code, String response) {
+        if (code == 200) {
+            showToast("LOGIN SUCCESS");
+        } else {
+            showToast(response);
+            btn_login.setEnabled(true);
+        }
+    }
+
+    public void showToast(final String toast)
+    {
+        runOnUiThread(() -> Toast.makeText(LoginActivity.this, toast, Toast.LENGTH_SHORT).show());
     }
 
     public boolean validateLoginCredentials() {
