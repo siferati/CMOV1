@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp;
+package org.feup.cmov.customerapp.login;
 
 import android.app.Dialog;
 import android.os.Bundle;

@@ -2,7 +2,7 @@ package org.feup.cmov.customerapp.database;
 
 import android.util.Log;
 
-import org.feup.cmov.customerapp.RegisterActivity;
+import org.feup.cmov.customerapp.login.RegisterActivity;
 import org.feup.cmov.customerapp.dataStructures.CreditCard;
 import org.json.JSONObject;
 
@@ -71,7 +71,8 @@ public class AddCreditCard extends ServerConnection implements Runnable {
             activity.handleResponseCC(responseCode, response);
         }
         catch (Exception e) {
-            //activity.handleResponseCC(0, e.getMessage());
+            /*String errorMessage = "Error connecting";
+            activity.handleResponse(0, errorMessage);*/
         }
         finally {
             if(urlConnection != null)

@@ -2,7 +2,7 @@ package org.feup.cmov.customerapp.database;
 
 import android.util.Log;
 
-import org.feup.cmov.customerapp.LoginActivity;
+import org.feup.cmov.customerapp.login.LoginActivity;
 import org.json.JSONObject;
 
 import java.io.OutputStreamWriter;
@@ -55,7 +55,8 @@ public class Login extends ServerConnection implements Runnable {
             activity.handleResponse(responseCode, response);
         }
         catch (Exception e) {
-            //activity.handleResponse(0, e.getMessage());
+            /*String errorMessage = "Error connecting";
+            activity.handleResponse(0, errorMessage);*/
         }
         finally {
             if(urlConnection != null)

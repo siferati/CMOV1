@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp;
+package org.feup.cmov.customerapp.login;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.CardType;
 import org.feup.cmov.customerapp.dataStructures.CreditCard;
 
@@ -93,7 +94,6 @@ public class CreditCardDialog extends Dialog {
         if(TextUtils.isEmpty(this.card_number.getText())) {
             this.card_number.setError("Enter a valid card number");
             valid = false;
-            return valid;
         } else {
             this.card_number.setError(null);
         }
@@ -108,12 +108,7 @@ public class CreditCardDialog extends Dialog {
             if (this_month > selected_month) {
                 valid = false;
                 Toast.makeText(this.context, "Enter a valid date", Toast.LENGTH_LONG).show();
-                return valid;
-            } else {
-                valid = true;
             }
-        } else {
-            valid = true;
         }
 
         return valid;

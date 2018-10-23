@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp;
+package org.feup.cmov.customerapp.login;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.CreditCard;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.AddCreditCard;
@@ -105,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
 
     public void showToast(final String toast)
     {
-        runOnUiThread(() -> Toast.makeText(RegisterActivity.this, toast, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(RegisterActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
     public void creditCardDialog() {

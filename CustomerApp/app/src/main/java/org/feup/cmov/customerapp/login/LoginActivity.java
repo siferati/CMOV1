@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp;
+package org.feup.cmov.customerapp.login;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.feup.cmov.customerapp.MainActivity;
+import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.database.Login;
 
 public class LoginActivity extends AppCompatActivity {
@@ -53,7 +55,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public void handleResponse(int code, String response) {
         if (code == 200) {
-            showToast("LOGIN SUCCESS");
+            showToast("Login Success");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         } else {
             showToast(response);
             btn_login.setEnabled(true);
@@ -62,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void showToast(final String toast)
     {
-        runOnUiThread(() -> Toast.makeText(LoginActivity.this, toast, Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(LoginActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
     public boolean validateLoginCredentials() {

@@ -22,4 +22,18 @@
     <string name="number">Card Number</string>
     <string name="validity_date">Expiration Date</string>
     <string name="save">Done</string>
+
+    <!-- USER OPTIONS LAYOUT -->
+    <string name="shows_icon">&#xf145;</string>
+    <string name="shows">Shows</string>
+
+    <string name="cafeteria_icon">&#xf0f4;</string>
+    <string name="cafeteria">Cafeteria</string>
+
+    <string name="history_icon">&#xf1da;</string>
+    <string name="history">Transactions</string>
+
+    <string name="settings_icon">&#xf085;</string>
+    <string name="settings">Settings</string>
+
 </resources>
