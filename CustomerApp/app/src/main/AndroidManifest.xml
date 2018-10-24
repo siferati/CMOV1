@@ -34,9 +34,27 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="User Options">
+            android:label="User Options" />
 
-        </activity>
+        <activity
+            android:name=".Shows"
+            android:label="Shows"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".Cafeteria"
+            android:label="Cafeteria"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".Transactions"
+            android:label="Transactions"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".Settings"
+            android:label="Settings"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

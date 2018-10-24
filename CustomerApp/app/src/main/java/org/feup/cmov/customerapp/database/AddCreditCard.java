@@ -40,9 +40,13 @@ public class AddCreditCard extends ServerConnection implements Runnable {
     public void run() {
         URL url;
         HttpURLConnection urlConnection = null;
+        int responseCode = -1;
+
         try {
             url = new URL("http://" + address + ":" + port + "/users/" + userID + "/creditcard");
             urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(2000);
+
             urlConnection.setDoOutput(true);
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type", "application/json");
@@ -59,7 +63,7 @@ public class AddCreditCard extends ServerConnection implements Runnable {
             out.write(jsonParam.toString());
             out.close();
 
-            int responseCode = urlConnection.getResponseCode();
+            responseCode = urlConnection.getResponseCode();
             String response;
             if (responseCode == 200) {
                 response = readStream(urlConnection.getInputStream());
@@ -71,8 +75,10 @@ public class AddCreditCard extends ServerConnection implements Runnable {
             activity.handleResponseCC(responseCode, response);
         }
         catch (Exception e) {
-            /*String errorMessage = "Error connecting";
-            activity.handleResponse(0, errorMessage);*/
+            if (responseCode == -1) {
+                String errorMessage = "Error connecting";
+                activity.handleResponse(0, errorMessage);
+            }
         }
         finally {
             if(urlConnection != null)

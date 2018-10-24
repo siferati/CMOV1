@@ -60,13 +60,17 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             showToast(response);
-            btn_login.setEnabled(true);
+            enableLoginBtn(true);
         }
     }
 
     public void showToast(final String toast)
     {
         runOnUiThread(() -> Toast.makeText(LoginActivity.this, toast, Toast.LENGTH_LONG).show());
+    }
+
+    public void enableLoginBtn(boolean enabled) {
+        runOnUiThread(() -> btn_login.setEnabled(enabled));
     }
 
     public boolean validateLoginCredentials() {

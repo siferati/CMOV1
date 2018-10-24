@@ -35,18 +35,22 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        text_username = findViewById(R.id.username_register);
-        text_password = findViewById(R.id.password_register);
-        text_rep_password = findViewById(R.id.repeat_password);
-        text_name = findViewById(R.id.name_register);
-        text_nif = findViewById(R.id.nif_register);
-        check_credit_card = findViewById(R.id.check_credit_card);
+        this.findViews();
 
-        btn_credit_card = findViewById(R.id.btn_credit_card);
-        btn_register = findViewById(R.id.btn_register);
+        this.btn_register.setOnClickListener((View v)->register());
+        this.btn_credit_card.setOnClickListener((View v)->creditCardDialog());
+    }
 
-        btn_register.setOnClickListener((View v)->register());
-        btn_credit_card.setOnClickListener((View v)->creditCardDialog());
+    public void findViews() {
+        this.text_username = findViewById(R.id.username_register);
+        this.text_password = findViewById(R.id.password_register);
+        this.text_rep_password = findViewById(R.id.repeat_password);
+        this.text_name = findViewById(R.id.name_register);
+        this.text_nif = findViewById(R.id.nif_register);
+        this.check_credit_card = findViewById(R.id.check_credit_card);
+
+        this.btn_credit_card = findViewById(R.id.btn_credit_card);
+        this.btn_register = findViewById(R.id.btn_register);
     }
 
     public void register() {
@@ -89,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
             thr.start();
         } else {
             showToast(response);
-            btn_register.setEnabled(true);
+            enableRegisterBtn(true);
         }
     }
 
@@ -107,6 +111,10 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
     public void showToast(final String toast)
     {
         runOnUiThread(() -> Toast.makeText(RegisterActivity.this, toast, Toast.LENGTH_LONG).show());
+    }
+
+    public void enableRegisterBtn(boolean enabled) {
+        runOnUiThread(() -> btn_register.setEnabled(enabled));
     }
 
     public void creditCardDialog() {
