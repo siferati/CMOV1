@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="User Options" />
+            android:label="Casa da Música" />
 
         <activity
             android:name=".Shows"

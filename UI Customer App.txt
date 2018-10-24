@@ -1,0 +1,57 @@
+Operations allowed by the Customer App:
+
+- allows user to consult the next few shows happening in the theater;
+
+- buy tickets for the next shows, using the company remote server and an internet connection;
+
+- select and validate tickets at the entrance gates (present tickets to the validation app);
+
+- make an order to the cafeteria
+
+- consult past transactions
+
+Opções para o utilizador na página principal:
+---------------------------------------------
+
+. Shows
+
+. Cafeteria
+
+. Transactions
+
+. Logout / {username} Account
+
+Interface para Shows:
+---------------------
+
+. Buy tickets
+Allows to see next shows and buy one or more tickets for each show:
+First see a list of all shows ordered by date with a string describing the event, its price and a button to buy tickets for the show.
+
+When the user clicks on said button, he goes to a new activity where the user can add tickets to the show (and for each ticket the user can choose a seat number). Each ticket can be removed by clicking on a minus. Then, after seeing the total price for buying one or more tickets, the user can confirm his purchase.
+
+Don't forget that each ticket bought generates a voucher for free popcorn or coffee randomly generated and whenever the costumer buys more than a multiple of 100 euros, he get another voucher of 5% discount. Inform user about getting this vouchers after a purchase with a dialog.
+
+The dialog can be like this:
+
+Title: Vouchers
+You got 2 free popcorn vouchers
+You got 3 free coffee vouchers
+You got 1 voucher of 5% discount
+
+. Validate tickets
+Allows to select a maximum of 4 bought tickets and validate them
+
+Interface para Cafeteria:
+-------------------------
+
+Usar tabs!!! Como na app Lunch List: de um lado temos a listagem dos produtos a comprar e no outros temos o shopping cart.
+
+Listagem de produtos a comprar com nome, preço e um botão "Add" que adiciona um produto. Talvez uma imagem também para ficar mais bonito.
+Shopping cart mostra uma listagem dos produtos comprados (nome, preço e quantidade) dando para remover produtos do Cart.
+Também aparece o preço total da compra e um botão para confirmar.
+
+Depois de confirmar, escolhe-se os vouchers a usar.
+
+
+
