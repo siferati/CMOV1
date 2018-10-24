@@ -1,25 +1,20 @@
 Operations allowed by the Customer App:
 
 - allows user to consult the next few shows happening in the theater;
-
 - buy tickets for the next shows, using the company remote server and an internet connection;
-
 - select and validate tickets at the entrance gates (present tickets to the validation app);
-
 - make an order to the cafeteria
-
 - consult past transactions
 
 Opções para o utilizador na página principal:
 ---------------------------------------------
 
 . Shows
-
 . Cafeteria
-
 . Transactions
+. Logout / Settings
+. (Opcional) Vouchers
 
-. Logout / {username} Account
 
 Interface para Shows:
 ---------------------
@@ -53,5 +48,8 @@ Também aparece o preço total da compra e um botão para confirmar.
 
 Depois de confirmar, escolhe-se os vouchers a usar.
 
+-----------------------------------------------------------------------------------------------------------------------------
 
-
+TODO:
+. Add spinner to register/login when waiting for response from server
+. Validate card number properly
