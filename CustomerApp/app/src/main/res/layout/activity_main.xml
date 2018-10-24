@@ -84,6 +84,32 @@
 
             <TextView
                 style="@style/IconStyle"
+                android:id="@+id/vouchers_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="@string/vouchers_icon"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                style="@style/TitleStyle"
+                android:id="@+id/vouchers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="@string/vouchers"/>
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/IconStyle"
                 android:id="@+id/history_icon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +125,15 @@
                 android:textAlignment="center"
                 android:text="@string/history"/>
         </LinearLayout>
+    </LinearLayout>
 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="0dp"
@@ -125,5 +159,32 @@
                 android:textAlignment="center"
                 android:text="@string/settings"/>
         </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/IconStyle"
+                android:id="@+id/logout_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="@string/logout_icon"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                style="@style/TitleStyle"
+                android:id="@+id/logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="@string/logout"/>
+        </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

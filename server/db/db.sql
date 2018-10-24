@@ -33,12 +33,13 @@ CREATE TABLE CreditCards (
 
 CREATE TABLE Shows (
 	id INTEGER PRIMARY KEY,
+	name TEXT NOT NULL,
 	date DATETIME NOT NULL
 );
 
 CREATE TABLE Tickets (
 	id INTEGER PRIMARY KEY,
-	seatNumber INTEGER NOT NULL UNIQUE,
+	seatNumber INTEGER NOT NULL,
 	price DOUBLE NOT NULL,
 	showId INTEGER NOT NULL REFERENCES Shows(id),
 	userId INTEGER REFERENCES Users(id)
@@ -79,8 +80,34 @@ CREATE TABLE ProductOrders (
 
 
 /* --- TEST DATA --- */
+/* --- USERS --- */
 
 INSERT INTO Users (id, name, username, password, nif) VALUES ("one", "tiago", "tirafesi", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "987654321");
 INSERT INTO Users (id, name, username, password, nif) VALUES ("two", "claudia", "arwen7stars", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "876543210");
-INSERT INTO CreditCards (type, number, validity, userId) VALUES ("mastercard", "123456789", "2020-03-21", "one");
-INSERT INTO CreditCards (type, number, validity, userId) VALUES ("mastercard", "012345678", "2020-03-21", "two");
+INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", "123456789", "2020-03-21", "one");
+INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", "012345678", "2020-03-21", "two");
+
+/* --- SHOWS --- */
+
+INSERT INTO Shows (name, date) VALUES ("Dead Combo", "2019-10-25");
+INSERT INTO Shows (name, date) VALUES ("Jojo Mayer & Nerve", "2019-10-26");
+INSERT INTO Shows (name, date) VALUES ("Anna von Hausswolff", "2019-11-04");
+INSERT INTO Shows (name, date) VALUES ("Júlio Resende", "2019-11-13");
+INSERT INTO Shows (name, date) VALUES ("Festival Termómetro", "2019-11-16");
+
+/* --- TICKETS --- */
+
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 10.00, 1);
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (2, 15.00, 1);
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (3, 20.00, 1);
+
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 17.00, 2);
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (2, 20.00, 2);
+
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 5.00, 3);
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (2, 7.50, 3);
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (3, 10.00, 3);
+
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 20.00, 4);
+
+INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 10.00, 5);

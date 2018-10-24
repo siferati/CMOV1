@@ -16,11 +16,17 @@ public class MainActivity extends AppCompatActivity {
     TextView cafeteria_icon;
     TextView cafeteria_text;
 
+    TextView vouchers_icon;
+    TextView vouchers_text;
+
     TextView history_icon;
     TextView history_text;
 
     TextView settings_icon;
     TextView settings_text;
+
+    TextView logout_icon;
+    TextView logout_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +45,17 @@ public class MainActivity extends AppCompatActivity {
         this.cafeteria_icon = findViewById(R.id.cafeteria_icon);
         this.cafeteria_text = findViewById(R.id.cafeteria);
 
+        this.vouchers_icon = findViewById(R.id.vouchers_icon);
+        this.vouchers_text = findViewById(R.id.vouchers);
+
         this.history_icon = findViewById(R.id.history_icon);
         this.history_text = findViewById(R.id.history);
 
         this.settings_icon = findViewById(R.id.settings_icon);
         this.settings_text = findViewById(R.id.settings);
+
+        this.logout_icon = findViewById(R.id.logout_icon);
+        this.logout_text = findViewById(R.id.logout);
     }
 
     private void setIcons() {
@@ -51,8 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
         this.shows_icon.setTypeface(iconFont);
         this.cafeteria_icon.setTypeface(iconFont);
+        this.vouchers_icon.setTypeface(iconFont);
         this.history_icon.setTypeface(iconFont);
         this.settings_icon.setTypeface(iconFont);
+        this.logout_icon.setTypeface(iconFont);
     }
 
     private void setOnClickListeners() {

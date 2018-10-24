@@ -264,6 +264,25 @@ app.put('/users/:id/creditcard', (req, res) => {
 	);
 });
 
+/**
+ * Get shows.
+ */
+app.get('/shows', (req, res) => {
+
+	db.all(
+		`SELECT name, date
+		FROM Shows`,
+		(err, rows) => {
+			if (err) {
+				console.error(err);
+				return res.sendStatus(500);
+			}
+			
+			res.send(rows);
+		}
+	);
+});
+
 //#endregion
 
 function cleanup () {
