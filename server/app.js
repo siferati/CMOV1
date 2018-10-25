@@ -271,7 +271,8 @@ app.get('/shows', (req, res) => {
 
 	db.all(
 		`SELECT name, date
-		FROM Shows`,
+		FROM Shows
+		ORDER BY date DESC`,
 		(err, rows) => {
 			if (err) {
 				console.error(err);

@@ -35,7 +35,8 @@
     </style>
 
     <style name="TitleStyle">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="DialogStyle" parent="@style/Theme.AppCompat.Light.Dialog">
