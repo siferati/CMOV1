@@ -1,9 +1,13 @@
 package org.feup.cmov.customerapp.login;
 
 import android.content.Intent;
+import android.security.KeyPairGeneratorSpec;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,6 +21,20 @@ import org.feup.cmov.customerapp.database.AddCreditCard;
 import org.feup.cmov.customerapp.database.Register;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.interfaces.RSAPrivateKey;
+
+import javax.security.auth.x500.X500Principal;
 
 public class RegisterActivity extends AppCompatActivity implements CreditCardDialog.MyDialogCloseListener {
     private EditText text_username;
@@ -65,6 +83,26 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
             String password = text_password.getText().toString();
             String name = text_name.getText().toString();
             String nif = text_nif.getText().toString();
+
+            // generate rsa key pair
+            try {
+
+                KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
+                        KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore");
+
+                keyPairGenerator.initialize(
+                        new KeyPairGeneratorSpec.Builder(this)
+                                .setAlias("key")
+                                .build());
+
+                KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+                Log.d("private key", (new String(((RSAPrivateKey) keyPair.getPrivate()).getEncoded())));
+            }
+            catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
+                e.printStackTrace();
+            }
+
 
             User.setUser(name, username, password, nif, card);
 
