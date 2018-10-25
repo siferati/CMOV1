@@ -35,26 +35,28 @@
         <activity
             android:name=".MainActivity"
             android:label="Casa da Música" />
-
         <activity
-            android:name=".ShowsActivity"
+            android:name=".userOptions.ShowsActivity"
             android:label="Shows"
             android:parentActivityName=".MainActivity" />
-
         <activity
-            android:name=".CafeteriaActivity"
+            android:name=".userOptions.CafeteriaActivity"
             android:label="Cafeteria"
             android:parentActivityName=".MainActivity" />
-
         <activity
-            android:name=".TransactionsActivity"
+            android:name=".userOptions.TransactionsActivity"
             android:label="Transactions"
             android:parentActivityName=".MainActivity" />
-
         <activity
-            android:name=".SettingsActivity"
+            android:name=".userOptions.SettingsActivity"
             android:label="Settings"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".userOptions.VouchersActivity"
+            android:label="Vouchers"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
     </application>
 
 </manifest>

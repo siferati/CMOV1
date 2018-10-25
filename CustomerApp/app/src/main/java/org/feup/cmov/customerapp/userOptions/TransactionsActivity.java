@@ -1,7 +1,9 @@
-package org.feup.cmov.customerapp;
+package org.feup.cmov.customerapp.userOptions;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import org.feup.cmov.customerapp.R;
 
 public class TransactionsActivity extends AppCompatActivity {
 

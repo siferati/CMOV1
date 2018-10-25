@@ -2,6 +2,7 @@ package org.feup.cmov.customerapp.dataStructures;
 
 public final class User {
     public static String id;
+    public static boolean loggedIn = false;
 
     private static String name;
     private static String username;
@@ -63,5 +64,13 @@ public final class User {
 
     public static void setCreditCard(CreditCard creditCard) {
         User.creditCard = creditCard;
+    }
+
+    public static boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public static void setLoggedIn(boolean loggedIn) {
+        User.loggedIn = loggedIn;
     }
 }

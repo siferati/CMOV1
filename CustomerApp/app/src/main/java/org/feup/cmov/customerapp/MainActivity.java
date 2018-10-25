@@ -6,7 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.feup.cmov.customerapp.dataStructures.User;
+import org.feup.cmov.customerapp.login.LoginActivity;
+import org.feup.cmov.customerapp.userOptions.CafeteriaActivity;
+import org.feup.cmov.customerapp.userOptions.SettingsActivity;
+import org.feup.cmov.customerapp.userOptions.ShowsActivity;
+import org.feup.cmov.customerapp.userOptions.TransactionsActivity;
+import org.feup.cmov.customerapp.userOptions.VouchersActivity;
 import org.feup.cmov.customerapp.utils.FontManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,11 +84,17 @@ public class MainActivity extends AppCompatActivity {
         this.cafeteria_icon.setOnClickListener((View v)->init_cafeteria());
         this.cafeteria_text.setOnClickListener((View v)->init_cafeteria());
 
+        this.vouchers_icon.setOnClickListener((View v)->init_vouchers());
+        this.vouchers_text.setOnClickListener((View v)->init_vouchers());
+
         this.history_icon.setOnClickListener((View v)->init_history());
         this.history_text.setOnClickListener((View v)->init_history());
 
         this.settings_icon.setOnClickListener((View v)->init_settings());
         this.settings_text.setOnClickListener((View v)->init_settings());
+
+        this.logout_icon.setOnClickListener((View v)->init_logout());
+        this.logout_text.setOnClickListener((View v)->init_logout());
     }
 
     private void init_shows() {
@@ -93,6 +107,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void init_vouchers() {
+        Intent intent = new Intent(this, VouchersActivity.class);
+        startActivity(intent);
+    }
+
     private void init_history() {
         Intent intent = new Intent(this, TransactionsActivity.class);
         startActivity(intent);
@@ -100,6 +119,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void init_settings() {
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void init_logout() {
+        User.setUser(null, null, null, null, null);
+        User.setLoggedIn(false);
+
+        Toast.makeText(this, "Logout success", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 }

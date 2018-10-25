@@ -1,10 +1,9 @@
-package org.feup.cmov.customerapp;
+package org.feup.cmov.customerapp.userOptions;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.database.GetShows;
-import org.feup.cmov.customerapp.database.Login;
 
 import java.util.ArrayList;
 import java.util.List;

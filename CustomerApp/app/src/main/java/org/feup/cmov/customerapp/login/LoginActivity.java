@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import org.feup.cmov.customerapp.MainActivity;
 import org.feup.cmov.customerapp.R;
+import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.Login;
 
 public class LoginActivity extends AppCompatActivity {
@@ -55,6 +56,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void handleResponse(int code, String response) {
         if (code == 200) {
+            User.setLoggedIn(true);
+
             showToast("Login Success");
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
