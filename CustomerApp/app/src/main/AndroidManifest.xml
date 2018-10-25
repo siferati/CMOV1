@@ -37,22 +37,22 @@
             android:label="Casa da Música" />
 
         <activity
-            android:name=".Shows"
+            android:name=".ShowsActivity"
             android:label="Shows"
             android:parentActivityName=".MainActivity" />
 
         <activity
-            android:name=".Cafeteria"
+            android:name=".CafeteriaActivity"
             android:label="Cafeteria"
             android:parentActivityName=".MainActivity" />
 
         <activity
-            android:name=".Transactions"
+            android:name=".TransactionsActivity"
             android:label="Transactions"
             android:parentActivityName=".MainActivity" />
 
         <activity
-            android:name=".Settings"
+            android:name=".SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".MainActivity"></activity>
     </application>

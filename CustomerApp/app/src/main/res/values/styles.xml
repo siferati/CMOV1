@@ -16,7 +16,7 @@
         <!-- overrides colorAccent as the activated or checked state for Checkboxes and RadioButtons -->
         <item name="colorControlActivated">@color/monsoon</item>
         <!-- controls the ripple coloring -->
-        <item name="colorControlHighlight">@color/primary</item>
+        <item name="colorControlHighlight">@color/iron</item>
 
         <item name="colorButtonNormal">@color/primary_darker</item>
 
@@ -26,6 +26,11 @@
 
     <style name="IconStyle">
         <item name="android:textSize">50sp</item>
+        <item name="android:textColor">@color/primary_darker</item>
+    </style>
+
+    <style name="BigIconStyle">
+        <item name="android:textSize">100sp</item>
         <item name="android:textColor">@color/primary_darker</item>
     </style>
 
@@ -59,7 +64,7 @@
 
         <item name="colorControlNormal">@color/iron</item>
         <item name="colorControlActivated">@color/white</item>
-        <item name="colorControlHighlight">@color/primary</item>
+        <item name="colorControlHighlight">@color/iron</item>
 
         <item name="android:textColorHint">@color/iron</item>
 

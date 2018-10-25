@@ -84,22 +84,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init_shows() {
-        Intent intent = new Intent(this, Shows.class);
+        Intent intent = new Intent(this, ShowsActivity.class);
         startActivity(intent);
     }
 
     private void init_cafeteria() {
-        Intent intent = new Intent(this, Cafeteria.class);
+        Intent intent = new Intent(this, CafeteriaActivity.class);
         startActivity(intent);
     }
 
     private void init_history() {
-        Intent intent = new Intent(this, Transactions.class);
+        Intent intent = new Intent(this, TransactionsActivity.class);
         startActivity(intent);
     }
 
     private void init_settings() {
-        Intent intent = new Intent(this, Settings.class);
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 }
