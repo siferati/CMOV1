@@ -33,6 +33,7 @@ import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.interfaces.RSAPrivateKey;
+import java.util.Calendar;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -86,18 +87,26 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
 
             // generate rsa key pair
             try {
+                Calendar start = Calendar.getInstance();
+                Calendar end = Calendar.getInstance();
+                end.add(Calendar.YEAR, 1);
 
                 KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
                         KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore");
 
                 keyPairGenerator.initialize(
                         new KeyPairGeneratorSpec.Builder(this)
+                                .setKeySize(512)
                                 .setAlias("key")
+                                .setSubject(new X500Principal("CN=feup"))
+                                .setSerialNumber(BigInteger.ONE)
+                                .setStartDate(start.getTime())
+                                .setEndDate(end.getTime())
                                 .build());
 
                 KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-                Log.d("private key", (new String(((RSAPrivateKey) keyPair.getPrivate()).getEncoded())));
+                Log.d("private key", "" + ((RSAPrivateKey)keyPair.getPrivate()).getPrivateExponent());
             }
             catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
                 e.printStackTrace();
