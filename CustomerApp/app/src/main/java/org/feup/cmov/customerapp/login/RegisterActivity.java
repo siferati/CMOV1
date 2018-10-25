@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
 
                 KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-                Log.d("private key", "" + ((RSAPrivateKey)keyPair.getPrivate()).getPrivateExponent());
+                // TODO continue
             }
             catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
                 e.printStackTrace();
