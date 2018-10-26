@@ -43,7 +43,7 @@ public class GetShows extends ServerConnection implements Runnable {
                 Log.d("http", response);
 
                 shows = jsonToArray(response);
-                activity.getShows(shows);
+                activity.setShows(shows);
             } else {
                 response = readStream(urlConnection.getErrorStream());
                 Log.d("http", response);

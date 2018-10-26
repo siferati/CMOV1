@@ -15,6 +15,8 @@ import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.database.GetShows;
+import org.feup.cmov.customerapp.shows.ShowAdapter;
+import org.feup.cmov.customerapp.shows.TicketAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,6 @@ import java.util.List;
 public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
     List<Show> shows = new ArrayList<>();
     public ArrayAdapter<Show> showsAdapter;
-
     List<Ticket> tickets = new ArrayList<>();
     ArrayAdapter<Ticket> ticketsAdapter;
 
@@ -44,7 +45,7 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
 
     public void setShowsList() {
         ListView list_shows = findViewById(R.id.list_shows);
-        showsAdapter = new ShowAdapter();
+        showsAdapter = new ShowAdapter(this, shows);
         list_shows.setAdapter(showsAdapter);
         //list_shows.setOnItemClickListener(this);
 
@@ -53,7 +54,7 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
 
     public void setTicketsList() {
         ListView list_tickets = findViewById(R.id.list_tickets);
-        ticketsAdapter = new TicketAdapter();
+        ticketsAdapter = new TicketAdapter(this, tickets);
         list_tickets.setAdapter(ticketsAdapter);
 
         tab2 = findViewById(R.id.tickets);
@@ -68,7 +69,7 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         tabs.addOnTabSelectedListener(this);
     }
 
-    public void getShows(List<Show> shows) {
+    public void setShows(List<Show> shows) {
         this.shows = shows;
 
         setShowsList();
@@ -109,46 +110,5 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-    }
-
-    class ShowAdapter extends ArrayAdapter<Show> {
-        ShowAdapter() {
-            super(ShowsActivity.this, R.layout.row_show, shows);
-        }
-
-        @Override
-        public @NonNull
-        View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            View row = convertView;
-            if (row == null) {
-                LayoutInflater inflater = getLayoutInflater();
-                row = inflater.inflate(R.layout.row_show, parent, false);    // get our custom layout
-            }
-            Show s = shows.get(position);
-            ((TextView)row.findViewById(R.id.name)).setText(s.getName());      // fill show name
-            ((TextView)row.findViewById(R.id.date)).setText(s.getDate());      // fill show address
-
-            return (row);
-        }
-    }
-
-    class TicketAdapter extends ArrayAdapter<Ticket> {
-        TicketAdapter() {
-            super(ShowsActivity.this, R.layout.row_ticket, tickets);
-        }
-
-        @Override
-        public @NonNull
-        View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            View row = convertView;
-            if (row == null) {
-                LayoutInflater inflater = getLayoutInflater();
-                row = inflater.inflate(R.layout.row_ticket, parent, false);    // get our custom layout
-            }
-            Ticket s = tickets.get(position);
-            ((TextView)row.findViewById(R.id.name)).setText(s.getName());      // fill ticket name
-
-            return (row);
-        }
     }
 }
