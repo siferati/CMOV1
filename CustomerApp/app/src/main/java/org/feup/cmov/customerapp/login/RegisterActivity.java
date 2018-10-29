@@ -19,20 +19,27 @@ import org.feup.cmov.customerapp.dataStructures.CreditCard;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.AddCreditCard;
 import org.feup.cmov.customerapp.database.Register;
+import org.feup.cmov.customerapp.utils.MyCrypto;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateException;
 import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Calendar;
 
 import javax.security.auth.x500.X500Principal;
@@ -85,37 +92,22 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
             String name = text_name.getText().toString();
             String nif = text_nif.getText().toString();
 
-            // generate rsa key pair
+            User.setUser(name, username, password, nif, card);
+
+            // generate RSA key pair
+            String keyN = "";
+            String keyE = "";
             try {
-                Calendar start = Calendar.getInstance();
-                Calendar end = Calendar.getInstance();
-                end.add(Calendar.YEAR, 1);
 
-                KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
-                        KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore");
+                RSAPublicKey publicKey = (RSAPublicKey) MyCrypto.generateRSAKeypair(this, username);
+                keyN = publicKey.getModulus().toString(16);
+                keyE = publicKey.getPublicExponent().toString(16);
 
-                keyPairGenerator.initialize(
-                        new KeyPairGeneratorSpec.Builder(this)
-                                .setKeySize(512)
-                                .setAlias("key")
-                                .setSubject(new X500Principal("CN=feup"))
-                                .setSerialNumber(BigInteger.ONE)
-                                .setStartDate(start.getTime())
-                                .setEndDate(end.getTime())
-                                .build());
-
-                KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
-                // TODO continue
-            }
-            catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
+            } catch (NoSuchProviderException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | IOException | KeyStoreException | CertificateException | UnrecoverableEntryException e) {
                 e.printStackTrace();
             }
 
-
-            User.setUser(name, username, password, nif, card);
-
-            Register register = new Register(this, username, password, name, nif);
+            Register register = new Register(this, username, password, name, nif, keyN, keyE);
             Thread thr = new Thread(register);
             thr.start();
         }

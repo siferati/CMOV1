@@ -20,7 +20,10 @@ CREATE TABLE Users (
 	name TEXT NOT NULL,
 	username TEXT NOT NULL UNIQUE,
 	password TEXT NOT NULL,
-	nif TEXT NOT NULL UNIQUE
+	nif TEXT NOT NULL UNIQUE,
+	keyN TEXT NOT NULL,
+	keyE TEXT NOT NULL,
+	UNIQUE(keyN, keyE)
 );
 
 CREATE TABLE CreditCards (
@@ -42,7 +45,8 @@ CREATE TABLE Tickets (
 	seatNumber INTEGER NOT NULL,
 	price DOUBLE NOT NULL,
 	showId INTEGER NOT NULL REFERENCES Shows(id),
-	userId INTEGER REFERENCES Users(id)
+	userId INTEGER REFERENCES Users(id),
+	UNIQUE(seatNumber, showId)
 );
 
 CREATE TABLE Orders (
@@ -82,8 +86,8 @@ CREATE TABLE ProductOrders (
 /* --- TEST DATA --- */
 /* --- USERS --- */
 
-INSERT INTO Users (id, name, username, password, nif) VALUES ("one", "tiago", "tirafesi", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "987654321");
-INSERT INTO Users (id, name, username, password, nif) VALUES ("two", "claudia", "arwen7stars", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "876543210");
+INSERT INTO Users (id, name, username, password, nif, keyN, keyE) VALUES ("one", "tiago", "tirafesi", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "987654321", "n1", "e1");
+INSERT INTO Users (id, name, username, password, nif, keyN, keyE) VALUES ("two", "claudia", "arwen7stars", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "876543210", "n2", "e2");
 INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", "123456789", "2020-03-21", "one");
 INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", "012345678", "2020-03-21", "two");
 
