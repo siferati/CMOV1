@@ -14,10 +14,6 @@ app.use(bodyParser.json());
 const db = new sqlite3.cached.Database('db/db.sqlite3');
 db.run('PRAGMA foreign_keys = ON', (err) => {if (err) console.error(err);});
 
-app.get('/users/debug', (req, res) => {
-	db.all('SELECT * FROM Users', (err, rows) => {res.send(rows);});
-});
-
 /* --- User --- */
 app.post('/login', user.login);
 app.get('/users/:id', user.get);

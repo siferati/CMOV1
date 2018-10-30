@@ -2,7 +2,6 @@ package org.feup.cmov.customerapp.database;
 
 import android.util.Log;
 import org.feup.cmov.customerapp.login.RegisterActivity;
-import org.feup.cmov.customerapp.utils.MyCrypto;
 import org.json.JSONObject;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;

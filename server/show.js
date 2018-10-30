@@ -4,6 +4,7 @@ const db = new sqlite3.cached.Database('db/db.sqlite3');
 
 module.exports = {
 
+	/* TODO pagination */
 	all: (req, res) => {
 
 		db.all(

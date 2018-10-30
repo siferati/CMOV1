@@ -14,16 +14,6 @@ import org.feup.cmov.customerapp.MainActivity;
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.Login;
-import org.feup.cmov.customerapp.utils.MyCrypto;
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
 
 public class LoginActivity extends AppCompatActivity {
     //private static final int REQUEST_SIGNUP = 0;

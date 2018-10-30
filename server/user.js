@@ -1,7 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid/v4');
-const crypto = require('./crypto.js');
 
 const db = new sqlite3.cached.Database('db/db.sqlite3');
 
@@ -10,42 +9,35 @@ module.exports = {
 	login: (req, res) => {
 
 		const {
-			id,
 			username,
-			password,
-			signature
+			password
 		} = req.body;
-		
-		crypto.verify(id, req.body, signature, (valid) => {
 
-			console.log('valid: ' + valid);
-
-			db.get(
-				`SELECT password AS hash
-				FROM Users
-				WHERE username = ?`,
-				[username],
-				(err, row) => {
+		db.get(
+			`SELECT password AS hash
+			FROM Users
+			WHERE username = ?`,
+			[username],
+			(err, row) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
+				} else if (!row) {
+					return res.status(400).send('Username doesn\'t exist.');
+				}
+	
+				bcrypt.compare(password, row.hash, (err, same) => {
 					if (err) {
 						console.error(err);
 						return res.sendStatus(500);
-					} else if (!row) {
-						return res.status(400).send('Username doesn\'t exist.');
+					} else if (!same) {
+						return res.status(400).send('Wrong password.');
 					}
-		
-					bcrypt.compare(password, row.hash, (err, same) => {
-						if (err) {
-							console.error(err);
-							return res.sendStatus(500);
-						} else if (!same) {
-							return res.status(400).send('Wrong password.');
-						}
-		
-						res.sendStatus(200);
-					});
-				}
-			);
-		});
+	
+					res.sendStatus(200);
+				});
+			}
+		);
 	},
 
 	get: (req, res) => {

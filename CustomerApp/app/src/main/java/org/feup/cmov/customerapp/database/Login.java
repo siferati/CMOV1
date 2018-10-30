@@ -3,7 +3,6 @@ package org.feup.cmov.customerapp.database;
 import android.util.Log;
 
 import org.feup.cmov.customerapp.login.LoginActivity;
-import org.feup.cmov.customerapp.utils.MyCrypto;
 import org.json.JSONObject;
 
 import java.io.OutputStreamWriter;
@@ -38,17 +37,12 @@ public class Login extends ServerConnection implements Runnable {
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setUseCaches(false);
 
-            urlConnection.connect();
-
             //Create JSONObject here
             JSONObject jsonParam = new JSONObject();
             jsonParam.put("username", this.username);
             jsonParam.put("password", this.password);
 
-            // TODO del
-            jsonParam.put("id", "c9a87532-b58b-4ff6-a25f-d0d4f9f9055d");
-            MyCrypto.signRequest(username, jsonParam);
-            Log.d("teste", jsonParam.toString());
+            urlConnection.connect();
 
             OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
             out.write(jsonParam.toString());
@@ -67,6 +61,7 @@ public class Login extends ServerConnection implements Runnable {
         }
         catch (Exception e) {
             if (responseCode == -1) {
+                e.printStackTrace();
                 String errorMessage = "Error connecting";
                 activity.handleResponse(0, errorMessage);
             }

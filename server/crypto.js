@@ -1,4 +1,4 @@
-const nodeRSA = require('node-rsa');
+const rsa = require('node-rsa');
 const sqlite3 = require('sqlite3').verbose();
 
 const db = new sqlite3.cached.Database('db/db.sqlite3');
@@ -6,12 +6,14 @@ const db = new sqlite3.cached.Database('db/db.sqlite3');
 module.exports = {
 
 	/**
-	 * Verify signature.
+	 * Verifies given signature.
 	 * 
 	 * @param id ID of user that sent the message.
 	 * @param message The signed message.
 	 * @param signature Signature.
-	 * @param callback (boolean) => {}. True if signature is valid, False otherwise.
+	 * @param callback (err, boolean) => {}.
+	 * 						err: In case an error happens.
+	 * 						boolean: True if signature is valid, False otherwise.
 	 */
 	verify: (id, message, signature, callback) => {
 
@@ -21,20 +23,19 @@ module.exports = {
 			WHERE id = ?`,
 			id,
 			(err, row) => {
-				if (err) {
-					console.error(err);
-					return callback(false);
-				} else if (!row) {
-					return callback(false);
+				if (err || !row) {
+					return callback(err, undefined);
 				}
 
-				const key = new nodeRSA();
+				// create public key from db values
+				const key = new rsa();
 				key.importKey({
 					n: Buffer.from(row.keyN, 'hex'),
-					e: Buffer.from(row.keyE, 'hex')
+					e: parseInt(row.keyE, 16)
 				}, 'components-public');
 
-				return callback(key.verify(message, signature, 'utf8', 'base64'));
+				// verify signature
+				callback(err, key.verify(message, signature, 'utf8', 'base64'));
 			}
 		);		
 	}

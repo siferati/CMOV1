@@ -2,15 +2,11 @@ package org.feup.cmov.customerapp.utils;
 
 import android.content.Context;
 import android.security.KeyPairGeneratorSpec;
-import android.security.keystore.KeyProperties;
 import android.util.Base64;
-import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -26,12 +22,10 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
-import java.security.interfaces.RSAPrivateKey;
 import java.util.Calendar;
 
 import javax.security.auth.x500.X500Principal;
 
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * Contains utilities for cryptographic stuff.
@@ -40,7 +34,8 @@ public final class MyCrypto {
 
 
     /**
-     * Generates a RSA key pair
+     * Generates a RSA key pair of given alias.
+     * If a key with given alias already exists, returns that instead.
      *
      * @param context May be used to pop up some UI to ask the user to unlock or initialize the Android KeyStore facility.
      * @param alias Key alias.
@@ -57,13 +52,11 @@ public final class MyCrypto {
             return ((KeyStore.PrivateKeyEntry) entry).getCertificate().getPublicKey();
         }
 
+        // setup
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         end.add(Calendar.YEAR, 1);
-
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
-                KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore");
-
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", "AndroidKeyStore");
         keyPairGenerator.initialize(
                 new KeyPairGeneratorSpec.Builder(context)
                         .setKeySize(512)
@@ -74,42 +67,39 @@ public final class MyCrypto {
                         .setEndDate(end.getTime())
                         .build());
 
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
-        Log.d("teste1", "" + ((RSAPrivateKey) keyPair.getPrivate()).getModulus());
-
-        return keyPair.getPublic();
+        // generate key pair and return the public key
+        return keyPairGenerator.generateKeyPair().getPublic();
     }
 
 
     /**
-     * Sign a request before sending it.
+     * Creates a signature using the given key for the given message.
      *
-     * @param alias Name of the private key stored in the keystore.
-     * @param req Message to sign.
+     * @param alias Alias of the private key to sign with.
+     * @param msg Message to sign.
+     *
+     * @return Base64 string signature.
      */
-    public static void signRequest(String alias, JSONObject req) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableEntryException, InvalidKeyException, SignatureException, JSONException {
+    public static String signMessage(String alias, JSONObject msg) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableEntryException, InvalidKeyException, SignatureException {
 
         // get private key
         KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
         keyStore.load(null);
         KeyStore.Entry entry = keyStore.getEntry(alias, null);
+        if (entry == null) {
+            return "";
+        }
         PrivateKey privateKey = ((KeyStore.PrivateKeyEntry) entry).getPrivateKey();
 
-        Log.d("teste2", "" + ((RSAPrivateKey) privateKey).getModulus());
-
         // sign message
-        byte[] message = req.toString().getBytes("UTF-8");
-        Signature s = Signature.getInstance("SHA256withRSA");
-        s.initSign(privateKey);
-        s.update(message);
-        byte[] signature = s.sign();
+        byte[] bMsg = msg.toString().getBytes("UTF-8");
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(privateKey);
+        signature.update(bMsg);
+        byte[] bSignature = signature.sign();
 
-        Log.d("teste3", Base64.encodeToString(signature , Base64.DEFAULT));
-
-        req.put("signature", Base64.encodeToString(signature , Base64.DEFAULT));
-
-        Log.d("teste4", req.toString());
+        // encode signature to base64 string and return it
+        return Base64.encodeToString(bSignature , Base64.DEFAULT | Base64.NO_WRAP);
     }
 
 }
