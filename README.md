@@ -25,4 +25,4 @@
 | POST | /users/:id/creditcard | { type, number, validity } | { id } | Create new user's credit card. |
 | PUT | /users/:id/creditcard | { type, number, validity } | { } | Update user's credit card. |
 | GET | /shows?page=\<PAGE\>&limit=\<LIMIT\> | { } | { id, name, description, date, price } | Get the next airing shows. |
-| POST | /shows/:id/tickets | {userId, quantity } | { tickets: [ { id, name, date, seatNumber, price }, ... ] } | Buy tickets for a show. **(signed)** |
+| POST | /shows/:id/tickets | { userId, quantity } | { tickets: [ { id, name, date, seatNumber, price }, ... ] } | Buy tickets for a show. **(signed)** |
