@@ -14,7 +14,7 @@ module.exports = {
 		}
 
 		db.all(
-			`SELECT id, name, description, date
+			`SELECT id, name, description, date, price
 			FROM Shows
 			ORDER BY date ASC
 			LIMIT ?, ?`,

@@ -38,16 +38,15 @@ CREATE TABLE Shows (
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
 	description TEXT,
-	date DATETIME NOT NULL
+	date DATETIME NOT NULL,
+	price DOUBLE NOT NULL
 );
 
 CREATE TABLE Tickets (
-	id INTEGER PRIMARY KEY,
+	id TEXT PRIMARY KEY,
 	seatNumber INTEGER NOT NULL,
-	price DOUBLE NOT NULL,
 	showId INTEGER NOT NULL REFERENCES Shows(id),
-	userId INTEGER REFERENCES Users(id),
-	UNIQUE(seatNumber, showId)
+	userId INTEGER NOT NULL REFERENCES Users(id)
 );
 
 CREATE TABLE Orders (
@@ -94,25 +93,8 @@ INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", 
 
 /* --- SHOWS --- */
 
-INSERT INTO Shows (name, description, date) VALUES ("Dead Combo", "A deadly combo is gonna happen", "2019-10-25");
-INSERT INTO Shows (name, description, date) VALUES ("Jojo Mayer & Nerve", "Is that a jojo's reference!?", "2019-10-26");
-INSERT INTO Shows (name, description, date) VALUES ("Anna von Hausswolff", "Reminds me of VanHelsing, the vampire slayer", "2019-11-04");
-INSERT INTO Shows (name, description, date) VALUES ("Júlio Resende", "Also know as Julio Cesar of Rome", "2019-11-13");
-INSERT INTO Shows (name, description, date) VALUES ("Festival Termómetro", "It's gonna be hoooot!", "2019-11-16");
-
-/* --- TICKETS --- */
-
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 10.00, 1);
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (2, 15.00, 1);
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (3, 20.00, 1);
-
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 17.00, 2);
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (2, 20.00, 2);
-
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 5.00, 3);
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (2, 7.50, 3);
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (3, 10.00, 3);
-
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 20.00, 4);
-
-INSERT INTO Tickets (seatNumber, price, showId) VALUES (1, 10.00, 5);
+INSERT INTO Shows (name, description, date, price) VALUES ("Dead Combo", "A deadly combo is gonna happen", "2019-10-25", 9.99);
+INSERT INTO Shows (name, description, date, price) VALUES ("Jojo Mayer & Nerve", "Is that a jojo's reference!?", "2019-10-26", 4.99);
+INSERT INTO Shows (name, description, date, price) VALUES ("Anna von Hausswolff", "Reminds me of VanHelsing, the vampire slayer", "2019-11-04", 13.50);
+INSERT INTO Shows (name, description, date, price) VALUES ("Júlio Resende", "Also know as Julio Cesar of Rome", "2019-11-13", 27.50);
+INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro", "It's gonna be hoooot!", "2019-11-16", 19.99);
