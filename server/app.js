@@ -5,6 +5,7 @@ const sqlite3 = require('sqlite3').verbose();
 const user = require('./user.js');
 const creditcard = require('./creditcard.js');
 const show = require('./show.js');
+const ticket = require('./ticket.js');
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.put('/users/:id/creditcard', creditcard.update);
 /* --- Show --- */
 app.get('/shows', show.all);
 
+/* --- Ticket --- */
+app.post('/shows/:id/tickets', ticket.create);
 
 /**
  * Close the db connection on exiting.
