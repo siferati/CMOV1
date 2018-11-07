@@ -7,7 +7,11 @@ import android.support.v4.app.DialogFragment;
 import org.feup.cmov.customerapp.dataStructures.CreditCard;
 
 public class CreditCardFragment extends DialogFragment {
-    // static constructor
+    /**
+     * Static constructor of dialog fragment
+     * @param card - credit card to be set on the dialog
+     * @return credit card fragment
+     */
     public static CreditCardFragment constructor(CreditCard card) {
         CreditCardFragment fragment = new CreditCardFragment();     // creates new credit card dialog fragment
 
@@ -19,7 +23,9 @@ public class CreditCardFragment extends DialogFragment {
         return fragment;
     }
 
-    // Override to build your own custom Dialog container. When doing so, onCreateView does not need to be implemented
+    /**
+     * Creates custom Dialog container
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         CreditCard card = (CreditCard) getArguments().getSerializable("creditCard");

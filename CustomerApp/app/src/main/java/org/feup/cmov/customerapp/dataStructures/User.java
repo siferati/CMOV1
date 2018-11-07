@@ -1,76 +1,127 @@
 package org.feup.cmov.customerapp.dataStructures;
 
-public final class User {
-    public static String id;
-    public static boolean loggedIn = false;
+import android.content.Context;
 
-    private static String name;
-    private static String username;
-    private static String password;
-    private static String nifNumber;
-    private static CreditCard creditCard;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-    public static void setUser(String name, String username, String password, String nifNumber, CreditCard creditCard) {
-        User.name = name;
-        User.username = username;
-        User.password = password;
-        User.nifNumber = nifNumber;
-        User.creditCard = creditCard;
+public class User implements Serializable {
+    public static final String USER_PATH = "user.dat";
+
+    private String id;
+    private String name;
+    private String username;
+    private String password;
+    private String nifNumber;
+    private CreditCard creditCard;
+
+    private static User instance = null;
+
+    private User(){}
+
+    public static User getInstance(){
+        if (instance == null) {
+            instance = new User();
+        }
+
+        return instance;
     }
 
-    public static void setId(String id) {
-        User.id = id;
+    public static void setInstance(User user) {
+        instance = user;
     }
 
-    public static String getId() {
+    public void setUser(String id, String name, String username, String password, String nifNumber, CreditCard creditCard) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.nifNumber = nifNumber;
+        this.creditCard = creditCard;
+    }
+
+    public static synchronized void saveUser(User user, String path, Context context) {
+
+        FileOutputStream fos;
+        try {
+            fos = context.openFileOutput(path, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+
+            os.writeObject(user);
+
+            os.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static synchronized User loadUser(String path, Context context) {
+
+        FileInputStream fis;
+        User user = null;
+        try {
+            fis = context.openFileInput(path);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            user = (User) is.readObject();
+            is.close();
+            fis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
-    public static void setName(String name) {
-        User.name = name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public static String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public static void setUsername(String username) {
-        User.username = username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public static String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public static void setPassword(String password) {
-        User.password = password;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public static String getNifNumber() {
+    public String getNifNumber() {
         return nifNumber;
     }
 
-    public static void setNifNumber(String nifNumber) {
-        User.nifNumber = nifNumber;
+    public void setNifNumber(String nifNumber) {
+        this.nifNumber = nifNumber;
     }
 
-    public static CreditCard getCreditCard() {
+    public CreditCard getCreditCard() {
         return creditCard;
     }
 
-    public static void setCreditCard(CreditCard creditCard) {
-        User.creditCard = creditCard;
-    }
-
-    public static boolean isLoggedIn() {
-        return loggedIn;
-    }
-
-    public static void setLoggedIn(boolean loggedIn) {
-        User.loggedIn = loggedIn;
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 }

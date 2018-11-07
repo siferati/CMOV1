@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.feup.cmov.customerapp.userOptions.ShowsActivity;
 import org.feup.cmov.customerapp.dataStructures.Show;
+import org.feup.cmov.customerapp.utils.Constants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,12 +26,12 @@ public class GetShows extends ServerConnection implements Runnable {
     public void run() {
         URL url;
         HttpURLConnection urlConnection = null;
-        int responseCode = -1;
+        int responseCode = Constants.NO_INTERNET;
 
         try {
             url = new URL("http://" + address + ":" + port + "/shows");
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setConnectTimeout(5000);
+            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setUseCaches(false);
 
@@ -38,7 +39,7 @@ public class GetShows extends ServerConnection implements Runnable {
 
             responseCode = urlConnection.getResponseCode();
             String response;
-            if (responseCode == 200) {
+            if (responseCode == Constants.OK_RESPONSE) {
                 response = readStream(urlConnection.getInputStream());
                 Log.d("http", response);
 
@@ -53,8 +54,8 @@ public class GetShows extends ServerConnection implements Runnable {
         catch (Exception e) {
             Log.d("http", "ERROR");
 
-            if (responseCode == -1) {
-                String errorMessage = "Error connecting";
+            if (responseCode == Constants.NO_INTERNET) {
+                String errorMessage = Constants.ERROR_CONNECTING;
                 //activity.handleResponse(0, errorMessage);
             }
         }
@@ -73,10 +74,11 @@ public class GetShows extends ServerConnection implements Runnable {
             for(int i=0; i<jArray.length(); i++){
                 JSONObject show = jArray.getJSONObject(i);
 
+                int id = show.getInt("id");
                 String name = show.getString("name");
                 String date = show.getString("date");
 
-                Show s = new Show(name, date);
+                Show s = new Show(id, name, date);
                 shows_list.add(s);
             }
         } catch(JSONException e) {

@@ -15,6 +15,7 @@ import org.feup.cmov.customerapp.dataStructures.CreditCard;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.AddCreditCard;
 import org.feup.cmov.customerapp.database.Register;
+import org.feup.cmov.customerapp.utils.Constants;
 import org.feup.cmov.customerapp.utils.MyCrypto;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,15 +30,32 @@ import java.security.cert.CertificateException;
 import java.security.interfaces.RSAPublicKey;
 
 public class RegisterActivity extends AppCompatActivity implements CreditCardDialog.MyDialogCloseListener {
+
+    // username input
     private EditText text_username;
+
+    // password input
     private EditText text_password;
+
+    // repeat password input
     private EditText text_rep_password;
+
+    // name input
     private EditText text_name;
+
+    // nif input
     private EditText text_nif;
+
+    // checkbox determining whether credit card has been inserted or not
     private CheckBox check_credit_card;
 
+    // credit card button
     private Button btn_credit_card;
+
+    // register button
     private Button btn_register;
+
+    // credit card
     private CreditCard card;
 
     @Override
@@ -51,6 +69,9 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
         this.btn_credit_card.setOnClickListener((View v)->creditCardDialog());
     }
 
+    /**
+     * Finds register layout views
+     */
     public void findViews() {
         this.text_username = findViewById(R.id.username_register);
         this.text_password = findViewById(R.id.password_register);
@@ -63,20 +84,23 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
         this.btn_register = findViewById(R.id.btn_register);
     }
 
+    /**
+     * Function called when user tries to register
+     */
     public void register() {
         btn_register.setEnabled(false);
 
+        // verify if register credentials are valid
         if (!validateRegisterCredentials()) {
-            Toast.makeText(RegisterActivity.this, "Register failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this, Constants.REGISTER_FAILED, Toast.LENGTH_LONG).show();
+
+            // enable register button if register failed
             btn_register.setEnabled(true);
         } else {
-
             String username = text_username.getText().toString();
             String password = text_password.getText().toString();
             String name = text_name.getText().toString();
             String nif = text_nif.getText().toString();
-
-            User.setUser(name, username, password, nif, card);
 
             // generate RSA key pair
             String keyN = "";
@@ -98,54 +122,92 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
         }
     }
 
+    /**
+     * Handles response from server
+     * @param code - response code from server
+     * @param response - response message given by server
+     */
     public void handleResponse(int code, String response) {
-        if (code == 200) {
-            JSONObject resp = null;
+        if (code == Constants.OK_RESPONSE) {
+            JSONObject resp;
             String result_id = null;
 
             try {
                 resp = new JSONObject(response);
+
+                // if register is successful, server returns an id
                 result_id = resp.get("id").toString();
             } catch(JSONException e) {
                 e.getStackTrace();
             }
 
-            User.setId(result_id);
+            String username = text_username.getText().toString();
+            String password = text_password.getText().toString();
+            String name = text_name.getText().toString();
+            String nif = text_nif.getText().toString();
 
-            AddCreditCard addCreditCard = new AddCreditCard(this, User.getId(), this.card);
+            // set singleton user's parameters
+            User.getInstance().setUser(result_id, name, username, password, nif, card);
+
+            // locally save user
+            User.saveUser(User.getInstance(), User.USER_PATH, getApplicationContext());
+
+            // add credit card to user
+            AddCreditCard addCreditCard = new AddCreditCard(this, User.getInstance().getId(), this.card);
             Thread thr = new Thread(addCreditCard);
             thr.start();
         } else {
             showToast(response);
+
+            // enable register button if register failed
             enableRegisterBtn(true);
         }
     }
 
     public void handleResponseCC(int code, String response) {
-        if (code == 200) {
-            showToast("Register success");
+        if (code == Constants.OK_RESPONSE) {
+            showToast(Constants.REGISTER_SUCCESS);
+
+            // start login activity
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         } else {
             showToast(response);
-            btn_register.setEnabled(true);
+
+            // enable register button if register failed
+            enableRegisterBtn(true);
         }
     }
 
+    /**
+     * Shows toast message
+     * @param toast - message to show
+     */
     public void showToast(final String toast)
     {
         runOnUiThread(() -> Toast.makeText(RegisterActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
+    /**
+     * Enables or disables register button
+     * @param enabled - tells whether register button should be enabled (true) or not (false)
+     */
     public void enableRegisterBtn(boolean enabled) {
         runOnUiThread(() -> btn_register.setEnabled(enabled));
     }
 
+    /**
+     * Show credit card dialog
+     */
     public void creditCardDialog() {
         CreditCardFragment dialog = CreditCardFragment.constructor(card);       // create dialog instance
         dialog.show(getSupportFragmentManager(),"get_card");               // show dialog
     }
 
+    /**
+     * Validates register credentials
+     * @return true if valid credentials, false if not
+     */
     public boolean validateRegisterCredentials() {
         boolean valid = true;
 
@@ -192,6 +254,10 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
         return valid;
     }
 
+    /**
+     * Handles closing of credit card dialog
+     * @param card - credit card to be set on dialog fragment
+     */
     @Override
     public void handleDialogClose(CreditCard card) {
         if (card == null) {

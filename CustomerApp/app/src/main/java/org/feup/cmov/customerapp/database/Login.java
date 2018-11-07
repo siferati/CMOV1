@@ -3,6 +3,7 @@ package org.feup.cmov.customerapp.database;
 import android.util.Log;
 
 import org.feup.cmov.customerapp.login.LoginActivity;
+import org.feup.cmov.customerapp.utils.Constants;
 import org.json.JSONObject;
 
 import java.io.OutputStreamWriter;
@@ -25,12 +26,12 @@ public class Login extends ServerConnection implements Runnable {
     public void run() {
         URL url;
         HttpURLConnection urlConnection = null;
-        int responseCode = -1;
+        int responseCode = Constants.NO_INTERNET;
 
         try {
             url = new URL("http://" + address + ":" + port + "/login");
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setConnectTimeout(2000);
+            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
 
             urlConnection.setDoOutput(true);
             urlConnection.setRequestMethod("POST");
@@ -50,7 +51,7 @@ public class Login extends ServerConnection implements Runnable {
 
             responseCode = urlConnection.getResponseCode();
             String response;
-            if (responseCode == 200) {
+            if (responseCode == Constants.OK_RESPONSE) {
                 response = readStream(urlConnection.getInputStream());
                 Log.d("connection", response);
             } else {
@@ -60,10 +61,10 @@ public class Login extends ServerConnection implements Runnable {
             activity.handleResponse(responseCode, response);
         }
         catch (Exception e) {
-            if (responseCode == -1) {
+            if (responseCode == Constants.NO_INTERNET) {
                 e.printStackTrace();
-                String errorMessage = "Error connecting";
-                activity.handleResponse(0, errorMessage);
+                String errorMessage = Constants.ERROR_CONNECTING;
+                activity.handleResponse(Constants.NO_INTERNET, errorMessage);
             }
         }
         finally {

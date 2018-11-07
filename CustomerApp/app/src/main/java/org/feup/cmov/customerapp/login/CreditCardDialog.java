@@ -20,23 +20,43 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CreditCardDialog extends Dialog {
+    /**
+     * Called when dialog is closed
+     */
     public interface MyDialogCloseListener
     {
-        public void handleDialogClose(CreditCard card);
+        /**
+         * After dialog is closed, sets credit card check to true on the register layout
+         * @param card - credit card to be set on dialog fragment
+         */
+        void handleDialogClose(CreditCard card);
     }
 
     // interface object
     private MyDialogCloseListener dialogListener;
 
+    // parent context
     private Context context;
+
+    // credit card to be set on dialog
     private CreditCard card;
 
+    // spinner with card types
     private Spinner card_type;
+
+    // card number input
     private EditText card_number;
+
+    // spinner with valid months
     private Spinner date_month;
+
+    // spinner with valid years
     private Spinner date_year;
 
-    public CreditCardDialog(Context context, CreditCard card) {
+    // years limit from now on
+    private final int LIMIT_YEARS = 50;
+
+    CreditCardDialog(Context context, CreditCard card) {
         super(context);
 
         this.context = context;
@@ -53,19 +73,32 @@ public class CreditCardDialog extends Dialog {
 
         this.card_number = findViewById(R.id.number_card);
 
+        // populates type spinner with credit card types
         ArrayAdapter<String> type_adapter = populateTypeSpinner(R.id.type_card);
+
+        // populates years spinner with valid years (years from now on plus LIMIT_YEARS)
         ArrayAdapter<Integer> year_adapter = populateYearsSpinner(R.id.year_date);
+
+        // populates months spinner with all year's months
         ArrayAdapter<Integer> month_adapter = populateMonthSpinner(R.id.month_date);
 
         if (this.card != null) {
+            // sets card data if it already exists
             setCardData(type_adapter, year_adapter, month_adapter);
         }
 
         Button saveBtn = findViewById(R.id.btn_save);
+
+        // getOwnerActivity() returns the Activity that owns this Dialog
         dialogListener = (MyDialogCloseListener) getOwnerActivity();
+
+        // sets click listener on save button
         saveBtn.setOnClickListener((View v)->saveCreditCard());
     }
 
+    /**
+     * Function called when user tries to save credit card
+     */
     private void saveCreditCard() {
         if (validateCreditCard()) {
             CreditCard c;
@@ -88,6 +121,10 @@ public class CreditCardDialog extends Dialog {
         }
     }
 
+    /**
+     * Validates credit card parameters
+     * @return true if valid parameters, false if not
+     */
     private boolean validateCreditCard() {
         boolean valid = true;
 
@@ -114,6 +151,11 @@ public class CreditCardDialog extends Dialog {
         return valid;
     }
 
+    /**
+     * Populates credit card type's spinner
+     * @param type_id - layout's type spinner
+     * @return array adapter with parameters to populate spinner
+     */
     private ArrayAdapter<String> populateTypeSpinner(int type_id) {
 
         ArrayList<String> list = new ArrayList<>();
@@ -129,6 +171,11 @@ public class CreditCardDialog extends Dialog {
         return type_adapter;
     }
 
+    /**
+     * Populates credit card date's months spinner
+     * @param months_id - layout's months spinner
+     * @return array adapter with parameters to populate spinner
+     */
     private ArrayAdapter<Integer> populateMonthSpinner(int months_id) {
         ArrayList<Integer> months = new ArrayList<>();
         int limit_month = 12;
@@ -144,10 +191,15 @@ public class CreditCardDialog extends Dialog {
         return months_adapter;
     }
 
+    /**
+     * Populates credit card date's years spinner
+     * @param years_id - layout's years spinner
+     * @return array adapter with parameters to populate spinner
+     */
     private ArrayAdapter<Integer> populateYearsSpinner(int years_id) {
         ArrayList<Integer> years = new ArrayList<>();
         int this_year = Calendar.getInstance().get(Calendar.YEAR);
-        int limit_year = this_year + 50;
+        int limit_year = this_year + LIMIT_YEARS;
 
         for (int i = this_year; i <= limit_year; i++) {
             years.add(i);
@@ -160,6 +212,12 @@ public class CreditCardDialog extends Dialog {
         return years_adapter;
     }
 
+    /**
+     * Get spinners' data
+     * @param type_adapter - credit card types
+     * @param year_adapter - years
+     * @param month_adapter - months
+     */
     private void setCardData(ArrayAdapter<String> type_adapter, ArrayAdapter<Integer> year_adapter, ArrayAdapter<Integer> month_adapter) {
         int spinnerPosition = type_adapter.getPosition(card.getType().toString());
         card_type.setSelection(spinnerPosition);

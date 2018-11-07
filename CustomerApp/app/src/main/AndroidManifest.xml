@@ -16,11 +16,6 @@
         <activity
             android:name=".login.LoginActivity"
             android:theme="@style/AppTheme.Dark">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".login.RegisterActivity"
@@ -33,8 +28,7 @@
                 android:value=".login.LoginActivity" />
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:label="Casa da Música" />
+            android:name=".MainActivity"/>
         <activity
             android:name=".userOptions.ShowsActivity"
             android:label="Shows"
@@ -54,8 +48,13 @@
         <activity
             android:name=".userOptions.VouchersActivity"
             android:label="Vouchers"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".AutomaticLogin">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
