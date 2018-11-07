@@ -24,3 +24,4 @@
 | GET   | /users/:id/creditcard | { } | { id, type, number, validity } | Get user's credit card. |
 | POST | /users/:id/creditcard | { type, number, validity } | { id } | Create new user's credit card. |
 | PUT | /users/:id/creditcard | { type, number, validity } | { } | Update user's credit card. |
+| GET | /shows?page=\<PAGE\>&limit=\<LIMIT\> | { } | { } | Get the next airing shows.

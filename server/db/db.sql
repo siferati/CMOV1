@@ -37,6 +37,7 @@ CREATE TABLE CreditCards (
 CREATE TABLE Shows (
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
+	description TEXT,
 	date DATETIME NOT NULL
 );
 

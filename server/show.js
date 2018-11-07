@@ -4,13 +4,21 @@ const db = new sqlite3.cached.Database('db/db.sqlite3');
 
 module.exports = {
 
-	/* TODO pagination */
 	all: (req, res) => {
 
+		const limit = parseInt(req.query.limit);
+		const offset = parseInt(limit * (req.query.page - 1));
+
+		if (isNaN(limit) || limit < 0 || isNaN(offset) || offset < 0) {
+			return res.status(400).send('Limit and/or page number missing.');
+		}
+
 		db.all(
-			`SELECT name, date
+			`SELECT name, description, date
 			FROM Shows
-			ORDER BY date DESC`,
+			ORDER BY date ASC
+			LIMIT ?, ?`,
+			[offset, limit],
 			(err, rows) => {
 				if (err) {
 					console.error(err);
