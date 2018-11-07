@@ -94,11 +94,11 @@ INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", 
 
 /* --- SHOWS --- */
 
-INSERT INTO Shows (name, date) VALUES ("Dead Combo", "2019-10-25");
-INSERT INTO Shows (name, date) VALUES ("Jojo Mayer & Nerve", "2019-10-26");
-INSERT INTO Shows (name, date) VALUES ("Anna von Hausswolff", "2019-11-04");
-INSERT INTO Shows (name, date) VALUES ("Júlio Resende", "2019-11-13");
-INSERT INTO Shows (name, date) VALUES ("Festival Termómetro", "2019-11-16");
+INSERT INTO Shows (name, description, date) VALUES ("Dead Combo", "A deadly combo is gonna happen", "2019-10-25");
+INSERT INTO Shows (name, description, date) VALUES ("Jojo Mayer & Nerve", "Is that a jojo's reference!?", "2019-10-26");
+INSERT INTO Shows (name, description, date) VALUES ("Anna von Hausswolff", "Reminds me of VanHelsing, the vampire slayer", "2019-11-04");
+INSERT INTO Shows (name, description, date) VALUES ("Júlio Resende", "Also know as Julio Cesar of Rome", "2019-11-13");
+INSERT INTO Shows (name, description, date) VALUES ("Festival Termómetro", "It's gonna be hoooot!", "2019-11-16");
 
 /* --- TICKETS --- */
 
