@@ -38,7 +38,7 @@ public class User {
         userString += user.getName() + "\n" + user.getNifNumber() + "\n";
 
         String creditCardString = user.getCreditCard().getType() + "\n" + user.getCreditCard().getNumber() + "\n";
-        creditCardString += user.getCreditCard().getMonthValidity() + "\n" + user.getCreditCard().getYearValidity() + "\n";
+        creditCardString += user.getCreditCard().getMonthValidity() + "\n" + user.getCreditCard().getYearValidity();
 
         return userString + creditCardString;
     }
@@ -50,6 +50,7 @@ public class User {
 
            String userString = User.userToString(user);
            fos.write(userString.getBytes());
+           fos.write(System.getProperty("line.separator").getBytes());
 
            fos.close();
        } catch (IOException e) {
