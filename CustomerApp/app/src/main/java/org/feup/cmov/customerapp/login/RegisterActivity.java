@@ -146,14 +146,14 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
             String name = text_name.getText().toString();
             String nif = text_nif.getText().toString();
 
-            // set singleton user's parameters
-            User.getInstance().setUser(result_id, name, username, password, nif, card);
+            // set user's parameters
+            User user = new User(result_id, username, password, name, nif, card);
 
             // locally save user
-            User.saveUser(User.getInstance(), User.USER_PATH, getApplicationContext());
+            User.saveUser(user, User.USER_PATH, getApplicationContext());
 
             // add credit card to user
-            AddCreditCard addCreditCard = new AddCreditCard(this, User.getInstance().getId(), this.card);
+            AddCreditCard addCreditCard = new AddCreditCard(this, result_id, this.card);
             Thread thr = new Thread(addCreditCard);
             thr.start();
         } else {

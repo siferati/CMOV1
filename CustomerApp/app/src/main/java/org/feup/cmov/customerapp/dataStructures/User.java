@@ -1,81 +1,156 @@
 package org.feup.cmov.customerapp.dataStructures;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
-public class User implements Serializable {
+public class User {
     public static final String USER_PATH = "user.dat";
+    public static final String LOGGEDIN_USER_PATH = "login_user.dat";
 
     private String id;
-    private String name;
     private String username;
     private String password;
+    private String name;
     private String nifNumber;
     private CreditCard creditCard;
 
-    private static User instance = null;
-
-    private User(){}
-
-    public static User getInstance(){
-        if (instance == null) {
-            instance = new User();
-        }
-
-        return instance;
-    }
-
-    public static void setInstance(User user) {
-        instance = user;
-    }
-
-    public void setUser(String id, String name, String username, String password, String nifNumber, CreditCard creditCard) {
+    public User(String id, String username, String password, String name, String nifNumber, CreditCard creditCard) {
         this.id = id;
-        this.name = name;
         this.username = username;
         this.password = password;
+        this.name = name;
         this.nifNumber = nifNumber;
         this.creditCard = creditCard;
     }
 
-    public static synchronized void saveUser(User user, String path, Context context) {
+    private static String userToString(User user) {
+        if (user == null) return "";
 
+        String userString = user.getId() + "\n" + user.getUsername() + "\n" + user.getPassword() + "\n";
+        userString += user.getName() + "\n" + user.getNifNumber() + "\n";
+
+        String creditCardString = user.getCreditCard().getType() + "\n" + user.getCreditCard().getNumber() + "\n";
+        creditCardString += user.getCreditCard().getMonthValidity() + "\n" + user.getCreditCard().getYearValidity() + "\n";
+
+        return userString + creditCardString;
+    }
+
+    public static synchronized void saveUser(User user, String path, Context context) {
+       FileOutputStream fos;
+       try {
+           fos = context.openFileOutput(path, Context.MODE_APPEND);
+
+           String userString = User.userToString(user);
+           fos.write(userString.getBytes());
+
+           fos.close();
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+    }
+
+    public static synchronized List<User> loadUsers(String path, Context context) {
+
+        FileInputStream fis;
+        List<User> users = new ArrayList<>();
+
+        try {
+            fis = context.openFileInput(path);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+            String tmpLine;
+
+            while ((tmpLine = reader.readLine()) != null) {
+                String id = tmpLine;
+                String username = reader.readLine();
+                String pass = reader.readLine();
+                String name = reader.readLine();
+                String nif = reader.readLine();
+
+                Log.d("lookie", id + " " + username);
+
+                String cc_type = reader.readLine();
+                String cc_number = reader.readLine();
+                String cc_month = reader.readLine();
+                String cc_year = reader.readLine();
+
+                Log.d("lookie", cc_type + " " + cc_year);
+
+                CardType cardType = CardType.getCardType(cc_type);
+                CreditCard cc = new CreditCard(cardType, cc_number, Integer.parseInt(cc_month), Integer.parseInt(cc_year));
+                User u = new User(id, username, pass, name, nif, cc);
+
+                users.add(u);
+
+                Log.d("lookie", "added user");
+            }
+
+            fis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public static synchronized void setLoggedinUser(String username, String path, Context context) {
         FileOutputStream fos;
         try {
             fos = context.openFileOutput(path, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-
-            os.writeObject(user);
-
-            os.close();
+            fos.write(username.getBytes());
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static synchronized User loadUser(String path, Context context) {
+    public static synchronized User loadLoggedinUser(String path, Context context) {
 
         FileInputStream fis;
-        User user = null;
+        String username = "";
+
         try {
             fis = context.openFileInput(path);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            user = (User) is.readObject();
-            is.close();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+            String tmpLine;
+
+            while ((tmpLine = reader.readLine()) != null) {
+                username = tmpLine;
+            }
+
             fis.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return user;
+        List<User> users = loadUsers(USER_PATH, context);
+
+
+        Log.d("lookie", "Array size : " + users.size());
+
+        for(int i = 0; i < users.size(); i++) {
+            Log.d("lookie", users.get(i).getUsername());
+        }
+
+        return getUser(username, users);
     }
+
+    public static User getUser(String username, List<User> users) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername().equals(username)) {
+                return users.get(i);
+            }
+        }
+        return null;
+    }
+
+
 
     public void setId(String id) {
         this.id = id;

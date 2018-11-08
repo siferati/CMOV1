@@ -76,9 +76,11 @@ public class GetShows extends ServerConnection implements Runnable {
 
                 int id = show.getInt("id");
                 String name = show.getString("name");
+                String description = show.getString("description");
                 String date = show.getString("date");
+                double price = show.getDouble("price");
 
-                Show s = new Show(id, name, date);
+                Show s = new Show(id, name, description, date, price);
                 shows_list.add(s);
             }
         } catch(JSONException e) {

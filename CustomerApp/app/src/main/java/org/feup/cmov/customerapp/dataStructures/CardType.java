@@ -13,13 +13,13 @@ public enum CardType implements Serializable {
         this.cardID = id;
     }
 
-    CardType(String type) {
+    public static CardType getCardType(String type) {
         if (type.equals("Master Card")) {
-            this.cardID = 1;
+            return MASTER_CARD;
         } else if (type.equals("Visa")) {
-            this.cardID = 2;
+            return VISA;
         } else {
-            this.cardID = 3;
+            return AMERICAN_EXPRESS;
         }
     }
 

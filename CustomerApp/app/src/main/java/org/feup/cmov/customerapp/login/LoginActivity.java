@@ -16,6 +16,8 @@ import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.Login;
 import org.feup.cmov.customerapp.utils.Constants;
 
+import java.util.List;
+
 public class LoginActivity extends AppCompatActivity {
     //private static final int REQUEST_SIGNUP = 0;
 
@@ -84,10 +86,8 @@ public class LoginActivity extends AppCompatActivity {
             // show login success message
             showToast(Constants.LOGIN_SUCCESS);
 
-            if (User.getInstance() == null) {
-                User user = User.loadUser(User.USER_PATH, this);
-                User.setInstance(user);
-            }
+            String username = text_username.getText().toString();
+            User.setLoggedinUser(username, User.LOGGEDIN_USER_PATH, getApplicationContext());
 
             // start main activity
             Intent intent = new Intent(this, MainActivity.class);

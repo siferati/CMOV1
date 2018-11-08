@@ -40,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle(User.getInstance().getUsername());
+
+        User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+        setTitle(user.getUsername());
 
         this.findViews();
         this.setIcons();
@@ -124,11 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init_logout() {
-        // destroy logged in user
-        User.setInstance(null);
-
-        // locally save user
-        User.saveUser(null, User.USER_PATH, getApplicationContext());
+        User.setLoggedinUser("", User.USER_PATH, getApplicationContext());
 
         Toast.makeText(this, "Logout success", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, LoginActivity.class);

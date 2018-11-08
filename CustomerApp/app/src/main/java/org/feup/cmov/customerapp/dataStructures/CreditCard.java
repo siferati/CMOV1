@@ -14,6 +14,13 @@ public class CreditCard implements Serializable {
         this.type = type;
     }
 
+    public CreditCard(CardType type, String number, int month, int year) {
+        this.type = type;
+        this.number = number;
+        this.monthValidity = month;
+        this.yearValidity = year;
+    }
+
     public CardType getType() {
         return type;
     }

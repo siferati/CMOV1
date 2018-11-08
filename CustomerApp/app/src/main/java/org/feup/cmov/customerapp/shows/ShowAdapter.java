@@ -38,14 +38,7 @@ public class ShowAdapter extends ArrayAdapter<Show> {
         ((TextView)row.findViewById(R.id.name)).setText(s.getName());      // fill show name
         ((TextView)row.findViewById(R.id.date)).setText(s.getDate());      // fill show address
 
-        Button btn_buy = row.findViewById(R.id.btn_buy);
-        btn_buy.setOnClickListener((View v)->init_show(s));
-
         return (row);
-    }
-
-    private void init_show(Show show) {
-        // create new activity giving the show name and date as parameters
     }
 
 
