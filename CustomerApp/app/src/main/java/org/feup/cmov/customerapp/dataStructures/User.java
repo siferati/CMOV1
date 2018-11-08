@@ -1,7 +1,6 @@
 package org.feup.cmov.customerapp.dataStructures;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -75,22 +74,16 @@ public class User {
                 String name = reader.readLine();
                 String nif = reader.readLine();
 
-                Log.d("lookie", id + " " + username);
-
                 String cc_type = reader.readLine();
                 String cc_number = reader.readLine();
                 String cc_month = reader.readLine();
                 String cc_year = reader.readLine();
-
-                Log.d("lookie", cc_type + " " + cc_year);
 
                 CardType cardType = CardType.getCardType(cc_type);
                 CreditCard cc = new CreditCard(cardType, cc_number, Integer.parseInt(cc_month), Integer.parseInt(cc_year));
                 User u = new User(id, username, pass, name, nif, cc);
 
                 users.add(u);
-
-                Log.d("lookie", "added user");
             }
 
             fis.close();
@@ -131,13 +124,6 @@ public class User {
         }
 
         List<User> users = loadUsers(USER_PATH, context);
-
-
-        Log.d("lookie", "Array size : " + users.size());
-
-        for(int i = 0; i < users.size(); i++) {
-            Log.d("lookie", users.get(i).getUsername());
-        }
 
         return getUser(username, users);
     }

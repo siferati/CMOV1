@@ -22,8 +22,6 @@ public class AutomaticLogin extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         } else {
-            Toast.makeText(getApplicationContext(), user.getName(), Toast.LENGTH_SHORT).show();
-
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
