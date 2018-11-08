@@ -29,7 +29,10 @@ public class GetShows extends ServerConnection implements Runnable {
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            url = new URL("http://" + address + ":" + port + "/shows");
+            String page = "1";
+            String limit = "15";
+
+            url = new URL("http://" + address + ":" + port + "/shows?page=" + page + "&limit=" + limit);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
             urlConnection.setRequestProperty("Content-Type", "application/json");
@@ -49,14 +52,11 @@ public class GetShows extends ServerConnection implements Runnable {
                 response = readStream(urlConnection.getErrorStream());
                 Log.d("http", response);
             }
-            //activity.handleResponseCC(responseCode, response);
         }
         catch (Exception e) {
-            Log.d("http", "ERROR");
-
             if (responseCode == Constants.NO_INTERNET) {
                 String errorMessage = Constants.ERROR_CONNECTING;
-                //activity.handleResponse(0, errorMessage);
+                activity.handleResponse(0, errorMessage);
             }
         }
         finally {

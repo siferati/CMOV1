@@ -1,5 +1,6 @@
 package org.feup.cmov.customerapp.userOptions;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,13 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.feup.cmov.customerapp.MainActivity;
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
+import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.GetShows;
+import org.feup.cmov.customerapp.login.LoginActivity;
 import org.feup.cmov.customerapp.shows.ShowAdapter;
 import org.feup.cmov.customerapp.shows.TicketAdapter;
+import org.feup.cmov.customerapp.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +47,34 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
 
         setTicketsList();
         setTabs();
+    }
+
+    /**
+     * Handles response from server
+     * @param code - response code from server
+     * @param response - response message given by server
+     */
+    public void handleResponse(int code, String response) {
+        if (code == Constants.OK_RESPONSE) {
+            // show login success message
+            showToast("GOT SHOWS");
+
+            // start main activity
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            // show error response
+            showToast(response);
+        }
+    }
+
+    /**
+     * Shows toast message
+     * @param toast - message to show
+     */
+    public void showToast(final String toast)
+    {
+        runOnUiThread(() -> Toast.makeText(ShowsActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
     public void setShowsList() {

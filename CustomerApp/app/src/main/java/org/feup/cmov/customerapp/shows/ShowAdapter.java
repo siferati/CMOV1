@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.feup.cmov.customerapp.R;
@@ -35,8 +34,10 @@ public class ShowAdapter extends ArrayAdapter<Show> {
         }
 
         Show s = shows.get(position);
+        String price = Double.toString(s.getPrice()) + " €";
         ((TextView)row.findViewById(R.id.name)).setText(s.getName());      // fill show name
         ((TextView)row.findViewById(R.id.date)).setText(s.getDate());      // fill show address
+        ((TextView)row.findViewById(R.id.price)).setText(price);           // fill show price
 
         return (row);
     }
