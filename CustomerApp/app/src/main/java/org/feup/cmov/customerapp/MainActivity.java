@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init_logout() {
-        User.setLoggedinUser("", User.USER_PATH, getApplicationContext());
+        User.setLoggedinUser("\n", User.LOGGEDIN_USER_PATH, getApplicationContext());
 
         Toast.makeText(this, "Logout success", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, LoginActivity.class);

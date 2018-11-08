@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    public static final String USER_PATH = "user.dat";
+    // locally saves users registered on the app
+    public static final String USER_PATH = "users.dat";
+
+    // locally saves currently logged in user (username or null)
     public static final String LOGGEDIN_USER_PATH = "login_user.dat";
 
     private String id;
@@ -30,6 +33,11 @@ public class User {
         this.creditCard = creditCard;
     }
 
+    /**
+     * Converts user to string to represent it in app's internal storage
+     * @param user - registered user
+     * @return string representing user
+     */
     private static String userToString(User user) {
         if (user == null) return "";
 
@@ -42,10 +50,16 @@ public class User {
         return userString + creditCardString;
     }
 
+    /**
+     * Saves registered user locally
+     * @param user - registered user
+     * @param path - path to save user
+     * @param context - current application context
+     */
     public static synchronized void saveUser(User user, String path, Context context) {
        FileOutputStream fos;
        try {
-           fos = context.openFileOutput(path, Context.MODE_APPEND);
+           fos = context.openFileOutput(path, Context.MODE_APPEND | Context.MODE_PRIVATE);     // opens in append mode to append new registered user
 
            String userString = User.userToString(user);
            fos.write(userString.getBytes());
@@ -57,6 +71,12 @@ public class User {
        }
     }
 
+    /**
+     * Loads users that were saved locally
+     * @param path - path in which registered users were saved
+     * @param context - current context
+     * @return list of saved users
+     */
     public static synchronized List<User> loadUsers(String path, Context context) {
 
         FileInputStream fis;
@@ -93,6 +113,12 @@ public class User {
         return users;
     }
 
+    /**
+     * Saves currently logged in user locally
+     * @param username - username of currently logged in user
+     * @param path - path in which to save user
+     * @param context - current context
+     */
     public static synchronized void setLoggedinUser(String username, String path, Context context) {
         FileOutputStream fos;
         try {
@@ -104,6 +130,12 @@ public class User {
         }
     }
 
+    /**
+     * Loads currently logged in user
+     * @param path - path in which to load user
+     * @param context - current context
+     * @return user class representing currently logged in user or null if none is logged in
+     */
     public static synchronized User loadLoggedinUser(String path, Context context) {
 
         FileInputStream fis;
@@ -128,6 +160,12 @@ public class User {
         return getUser(username, users);
     }
 
+    /**
+     * Get user by its username in the list of registered users
+     * @param username - user's username
+     * @param users - list of users
+     * @return user class representing wanted user
+     */
     public static User getUser(String username, List<User> users) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUsername().equals(username)) {
@@ -136,7 +174,6 @@ public class User {
         }
         return null;
     }
-
 
 
     public void setId(String id) {
