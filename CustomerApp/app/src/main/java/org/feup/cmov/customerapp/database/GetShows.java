@@ -13,14 +13,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class GetShows extends ServerConnection implements Runnable {
+
+    // shows' activity
     private ShowsActivity activity;
 
+    // checks if we got the last page of shows from server
     private boolean isLastPage = false;
 
+    // shows' current page
     private int currentPage;
+
+    // shows' page limit
     private int pageSize;
 
     public GetShows(ShowsActivity activity, int currentPage, int pageSize) {
@@ -31,7 +36,6 @@ public class GetShows extends ServerConnection implements Runnable {
 
     @Override
     public void run() {
-        Log.d("scroll", "GET SHOWS " + currentPage + " " + pageSize);
         URL url;
         HttpURLConnection urlConnection = null;
 
@@ -53,24 +57,29 @@ public class GetShows extends ServerConnection implements Runnable {
             String response;
 
             if (responseCode == Constants.OK_RESPONSE) {
-
-
                 response = readStream(urlConnection.getInputStream());
+
+                // get new shows from server
                 List<Show> shows = jsonToArray(response);
 
-                Log.d("scroll", "GET SHOWS! " + shows.size());
-
+                // add new shows to adapter
                 activity.showsAdapter.addAll(shows);
+
+                // notify adapter that new shows have been added
                 activity.notifyRV();
 
-                Log.d("scroll", "ADAPTER " + activity.showsAdapter.getItemCount());
-
+                // removes footer because loading finished
                 activity.showsAdapter.removeFooter();
+
+                // notifies activity that loading finished
                 activity.handleResponse(responseCode, response);
 
+                // if the amount of shows we get from the server is equal to the limit...
                 if (shows.size() >= pageSize) {
+                    // then there is more shows to load
                     activity.showsAdapter.addFooter();
                 } else {
+                    // otherwise we've reached the end
                     isLastPage = true;
                 }
 
@@ -81,7 +90,6 @@ public class GetShows extends ServerConnection implements Runnable {
         } catch (Exception e) {
             if (responseCode == Constants.NO_INTERNET) {
                 String errorMessage = Constants.ERROR_CONNECTING;
-
                 activity.handleResponse(responseCode, errorMessage);
             }
         } finally {
@@ -118,10 +126,6 @@ public class GetShows extends ServerConnection implements Runnable {
 
     public boolean isLastPage() {
         return isLastPage;
-    }
-
-    public int getPageSize() {
-        return pageSize;
     }
 
 }

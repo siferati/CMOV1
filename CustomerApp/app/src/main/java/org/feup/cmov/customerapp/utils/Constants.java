@@ -5,7 +5,7 @@ public class Constants {
     public static final int NO_INTERNET = -1;
     public static final int SERVER_TIMEOUT = 2000;
 
-    public static final int SHOWS_PER_LOAD = 5;
+    public static final int SHOWS_PER_LOAD = 10;
 
     public static final String ERROR_CONNECTING = "Error connecting";
 

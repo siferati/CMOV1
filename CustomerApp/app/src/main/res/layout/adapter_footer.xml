@@ -15,26 +15,4 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
     </FrameLayout>
-
-    <RelativeLayout
-        android:id="@+id/error_rl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/reload_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/reload"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textAllCaps="false"/>
-
-    </RelativeLayout>
 </FrameLayout>

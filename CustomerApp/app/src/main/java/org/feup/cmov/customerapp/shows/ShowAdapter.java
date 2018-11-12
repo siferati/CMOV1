@@ -1,18 +1,13 @@
 package org.feup.cmov.customerapp.shows;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Show;
-import org.feup.cmov.customerapp.database.GetShows;
-import org.feup.cmov.customerapp.userOptions.ShowsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -209,37 +204,4 @@ public class ShowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void removeFooter() {
         isFooterAdded = false;
     }
-
-    public void updateFooter(FooterType footerType){
-        switch (footerType) {
-            case LOAD_MORE:
-                displayLoadMoreFooter();
-                break;
-            case ERROR:
-                displayErrorFooter();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void displayLoadMoreFooter() {
-        if(footerViewHolder!= null){
-            footerViewHolder.errorView.setVisibility(View.GONE);
-            footerViewHolder.loadingView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void displayErrorFooter() {
-        if(footerViewHolder!= null){
-            footerViewHolder.loadingView.setVisibility(View.GONE);
-            footerViewHolder.errorView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public enum FooterType {
-        LOAD_MORE,
-        ERROR
-    }
-
 }
