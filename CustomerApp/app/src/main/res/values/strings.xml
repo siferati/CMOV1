@@ -46,5 +46,6 @@
     <string name="empty">No bought tickets yet.</string>
     <string name="buy_btn">Buy</string>
     <string name="validate_btn">Validate</string>
+    <string name="reload">Reload</string>
 
 </resources>

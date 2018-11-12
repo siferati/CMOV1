@@ -64,7 +64,7 @@ public class Login extends ServerConnection implements Runnable {
             if (responseCode == Constants.NO_INTERNET) {
                 e.printStackTrace();
                 String errorMessage = Constants.ERROR_CONNECTING;
-                activity.handleResponse(Constants.NO_INTERNET, errorMessage);
+                activity.handleResponse(responseCode, errorMessage);
             }
         }
         finally {

@@ -1,35 +1,57 @@
 package org.feup.cmov.customerapp.userOptions;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.os.Debug;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.feup.cmov.customerapp.MainActivity;
 import org.feup.cmov.customerapp.R;
-import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
-import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.GetShows;
-import org.feup.cmov.customerapp.login.LoginActivity;
+import org.feup.cmov.customerapp.database.Login;
 import org.feup.cmov.customerapp.shows.ShowAdapter;
 import org.feup.cmov.customerapp.shows.TicketAdapter;
 import org.feup.cmov.customerapp.utils.Constants;
+import org.feup.cmov.customerapp.utils.ItemClickSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
-    List<Show> shows = new ArrayList<>();
-    public ArrayAdapter<Show> showsAdapter;
+
+    // API to get shows from server
+    public GetShows showsAPI;
+
+    // shows adapter to manage shows array
+    public ShowAdapter showsAdapter;
+
+    public class ServiceHandler /** Whichever class you extend */ {
+        public ServiceHandler() {}
+        public void run() {
+            ShowsActivity.this.runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    showsAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+    }
+
+    LinearLayoutManager layoutManager;
+    RecyclerView recyclerView;
+
+    private int page = 1;
+    private int pageSize = Constants.SHOWS_PER_LOAD;
+    private boolean isLoading = false;
+
     List<Ticket> tickets = new ArrayList<>();
     ArrayAdapter<Ticket> ticketsAdapter;
 
@@ -41,8 +63,10 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shows);
 
-        GetShows getShows = new GetShows(this);
-        Thread thr = new Thread(getShows);
+        setRecyclerView();
+
+        showsAPI = new GetShows(this, page, pageSize);
+        Thread thr = new Thread(showsAPI);
         thr.start();
 
         setTicketsList();
@@ -55,16 +79,11 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
      * @param response - response message given by server
      */
     public void handleResponse(int code, String response) {
-        if (code == Constants.OK_RESPONSE) {
-            // show login success message
-            showToast("GOT SHOWS");
-
-            // start main activity
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else {
+        if (code != Constants.OK_RESPONSE) {
             // show error response
             showToast(response);
+        } else {
+            isLoading = false;
         }
     }
 
@@ -77,13 +96,69 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         runOnUiThread(() -> Toast.makeText(ShowsActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
-    public void setShowsList() {
-        ListView list_shows = findViewById(R.id.list_shows);
-        showsAdapter = new ShowAdapter(this, shows);
-        list_shows.setAdapter(showsAdapter);
-        //list_shows.setOnItemClickListener(this);
+    public void notifyRV() {
+        ServiceHandler sh = new ServiceHandler();
+        sh.run();
+    }
 
-        tab1 = list_shows;
+    public void setRecyclerView() {
+        recyclerView = findViewById(R.id.list_shows);
+
+        layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
+        showsAdapter = new ShowAdapter();
+        recyclerView.setAdapter(showsAdapter);
+        recyclerView.addOnScrollListener(recyclerViewOnScrollListener);
+
+        view_single_show(recyclerView);
+
+        tab1 = recyclerView;
+    }
+
+
+    public RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int visibleItemCount = layoutManager.getChildCount();
+            int totalItemCount = layoutManager.getItemCount();
+            int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+            //Log.d("scroll", "I got called " + firstVisibleItemPosition + " " + firstVisibleItemPosition);
+
+            if (!isLoading && !showsAPI.isLastPage()) {
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0) {
+                    loadMoreItems();
+                }
+            }
+        }
+    };
+
+    private void loadMoreItems() {
+        isLoading = true;
+
+        page++;
+
+        showsAPI = new GetShows(this, page, pageSize);
+        Thread thr = new Thread(showsAPI);
+        thr.start();
+    }
+
+    public void view_single_show(RecyclerView list_shows) {
+        ItemClickSupport.addTo(list_shows).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                // show view
+            }
+        });
     }
 
     public void setTicketsList() {
@@ -101,12 +176,6 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         boughtTicketsTab = tabs.newTab().setText("Validate").setIcon(R.drawable.check);
         tabs.addTab(boughtTicketsTab);
         tabs.addOnTabSelectedListener(this);
-    }
-
-    public void setShows(List<Show> shows) {
-        this.shows = shows;
-
-        setShowsList();
     }
 
     @Override

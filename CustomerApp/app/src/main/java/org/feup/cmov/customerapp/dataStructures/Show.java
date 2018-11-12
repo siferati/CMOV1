@@ -7,6 +7,8 @@ public class Show {
     private String date;
     private double price;
 
+    public Show() {}
+
     public Show(int id, String name, String description, String date, double price) {
         this.id = id;
         this.name = name;

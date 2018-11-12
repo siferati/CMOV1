@@ -73,7 +73,7 @@ public class Register extends ServerConnection implements Runnable {
         catch (Exception e) {
             if (responseCode == Constants.NO_INTERNET) {
                 String errorMessage = Constants.ERROR_CONNECTING;
-                activity.handleResponse(Constants.NO_INTERNET, errorMessage);
+                activity.handleResponse(responseCode, errorMessage);
             }
         }
         finally {

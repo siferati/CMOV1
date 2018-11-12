@@ -15,6 +15,7 @@ import org.feup.cmov.customerapp.userOptions.SettingsActivity;
 import org.feup.cmov.customerapp.userOptions.ShowsActivity;
 import org.feup.cmov.customerapp.userOptions.TransactionsActivity;
 import org.feup.cmov.customerapp.userOptions.VouchersActivity;
+import org.feup.cmov.customerapp.utils.Constants;
 import org.feup.cmov.customerapp.utils.FontManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     private void init_logout() {
         User.setLoggedinUser("\n", User.LOGGEDIN_USER_PATH, getApplicationContext());
 
-        Toast.makeText(this, "Logout success", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, Constants.LOGOUT_SUCCESS, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }

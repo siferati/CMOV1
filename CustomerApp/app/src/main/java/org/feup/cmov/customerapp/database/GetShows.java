@@ -13,24 +13,33 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GetShows extends ServerConnection implements Runnable {
     private ShowsActivity activity;
-    private List<Show> shows;
 
-    public GetShows(ShowsActivity activity) {
+    private boolean isLastPage = false;
+
+    private int currentPage;
+    private int pageSize;
+
+    public GetShows(ShowsActivity activity, int currentPage, int pageSize) {
         this.activity = activity;
+        this.currentPage = currentPage;
+        this.pageSize = pageSize;
     }
 
     @Override
     public void run() {
+        Log.d("scroll", "GET SHOWS " + currentPage + " " + pageSize);
         URL url;
         HttpURLConnection urlConnection = null;
+
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            String page = "1";
-            String limit = "15";
+            String page = currentPage + "";
+            String limit = pageSize + "";
 
             url = new URL("http://" + address + ":" + port + "/shows?page=" + page + "&limit=" + limit);
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -42,27 +51,44 @@ public class GetShows extends ServerConnection implements Runnable {
 
             responseCode = urlConnection.getResponseCode();
             String response;
-            if (responseCode == Constants.OK_RESPONSE) {
-                response = readStream(urlConnection.getInputStream());
-                Log.d("http", response);
 
-                shows = jsonToArray(response);
-                activity.setShows(shows);
+            if (responseCode == Constants.OK_RESPONSE) {
+
+
+                response = readStream(urlConnection.getInputStream());
+                List<Show> shows = jsonToArray(response);
+
+                Log.d("scroll", "GET SHOWS! " + shows.size());
+
+                activity.showsAdapter.addAll(shows);
+                activity.notifyRV();
+
+                Log.d("scroll", "ADAPTER " + activity.showsAdapter.getItemCount());
+
+                activity.showsAdapter.removeFooter();
+                activity.handleResponse(responseCode, response);
+
+                if (shows.size() >= pageSize) {
+                    activity.showsAdapter.addFooter();
+                } else {
+                    isLastPage = true;
+                }
+
             } else {
                 response = readStream(urlConnection.getErrorStream());
-                Log.d("http", response);
+                activity.handleResponse(responseCode, response);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (responseCode == Constants.NO_INTERNET) {
                 String errorMessage = Constants.ERROR_CONNECTING;
-                activity.handleResponse(0, errorMessage);
+
+                activity.handleResponse(responseCode, errorMessage);
             }
-        }
-        finally {
-            if(urlConnection != null)
+        } finally {
+            if (urlConnection != null)
                 urlConnection.disconnect();
         }
+
     }
 
     private List<Show> jsonToArray(String jsonString) {
@@ -89,4 +115,13 @@ public class GetShows extends ServerConnection implements Runnable {
 
         return shows_list;
     }
+
+    public boolean isLastPage() {
+        return isLastPage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
 }
