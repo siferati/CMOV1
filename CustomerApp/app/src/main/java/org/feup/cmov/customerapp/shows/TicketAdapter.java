@@ -1,6 +1,5 @@
 package org.feup.cmov.customerapp.shows;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +33,7 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
             row = inflater.inflate(R.layout.row_ticket, parent, false);    // get our custom layout
         }
         Ticket s = tickets.get(position);
-        ((TextView)row.findViewById(R.id.name)).setText(s.getName());      // fill ticket name
+        ((TextView)row.findViewById(R.id.name)).setText(s.getName());                   // fill ticket name
 
         return (row);
     }

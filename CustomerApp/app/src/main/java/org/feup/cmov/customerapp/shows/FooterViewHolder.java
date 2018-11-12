@@ -2,19 +2,18 @@ package org.feup.cmov.customerapp.shows;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import org.feup.cmov.customerapp.R;
 
 public class FooterViewHolder extends RecyclerView.ViewHolder {
 
+    // loading view containing progress bar
     public FrameLayout loadingView;
+
+    // rotating progress bar
     public ProgressBar loadingPB;
-    public RelativeLayout errorView;
-    public Button reload;
 
     // We also create a constructor that accepts the entire item row
     // and does the view lookups to find each subview

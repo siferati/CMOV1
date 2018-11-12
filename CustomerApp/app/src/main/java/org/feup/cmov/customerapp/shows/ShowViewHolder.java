@@ -7,8 +7,14 @@ import android.widget.TextView;
 import org.feup.cmov.customerapp.R;
 
 public class ShowViewHolder extends RecyclerView.ViewHolder {
+
+    // show's name
     public TextView name;
+
+    // show's date
     public TextView date;
+
+    // show's price
     public TextView price;
 
     // We also create a constructor that accepts the entire item row

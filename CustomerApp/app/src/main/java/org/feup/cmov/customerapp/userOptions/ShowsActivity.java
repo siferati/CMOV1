@@ -210,15 +210,23 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         tabs.addOnTabSelectedListener(this);
     }
 
+    /**
+     * Show empty message if there's no bought tickets
+     */
     @Override
     public void onContentChanged() {
         super.onContentChanged();
 
         View empty = findViewById(R.id.empty);
+
         ListView list = findViewById(R.id.list_tickets);
         list.setEmptyView(empty);
     }
 
+    /**
+     * Called when a tab is selected
+     * @param tab - selected tab
+     */
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         switch (tab.getPosition()) {
@@ -231,6 +239,10 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         }
     }
 
+    /**
+     * Called when a tab is unselected
+     * @param tab - unselected tab
+     */
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
         switch (tab.getPosition()) {
@@ -243,6 +255,10 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         }
     }
 
+    /**
+     * Called when a tab is reselected
+     * @param tab - reselected tab
+     */
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
     }
