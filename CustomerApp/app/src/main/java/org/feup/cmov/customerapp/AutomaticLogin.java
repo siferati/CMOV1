@@ -12,6 +12,7 @@ public class AutomaticLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
 
         if (user == null) {

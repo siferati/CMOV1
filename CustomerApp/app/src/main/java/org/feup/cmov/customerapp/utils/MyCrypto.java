@@ -47,10 +47,16 @@ public final class MyCrypto {
         // check if keypair already exists
         KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
         keyStore.load(null);
-        KeyStore.Entry entry = keyStore.getEntry(alias, null);
+
+        PrivateKey privateKey = (PrivateKey) keyStore.getKey("alias", null);
+
+        if (privateKey != null)
+            return keyStore.getCertificate("alias").getPublicKey();
+
+        /*KeyStore.Entry entry = keyStore.getEntry(alias, null);
         if (entry != null) {
-            return ((KeyStore.PrivateKeyEntry) entry).getCertificate().getPublicKey();
-        }
+            return keyStore.getCertificate("alias").getPublicKey();
+        }*/
 
         // setup
         Calendar start = Calendar.getInstance();

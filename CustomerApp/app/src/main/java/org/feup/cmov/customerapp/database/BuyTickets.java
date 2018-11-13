@@ -48,9 +48,11 @@ public class BuyTickets extends ServerConnection implements Runnable {
         try {
             url = new URL("http://" + address + ":" + port + "/shows/" + showID + "/tickets");
             urlConnection = (HttpURLConnection) url.openConnection();
+
             urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setUseCaches(false);
+            urlConnection.setRequestMethod("POST");
 
             //Create JSONObject here
             JSONObject jsonParam = new JSONObject();
@@ -58,11 +60,12 @@ public class BuyTickets extends ServerConnection implements Runnable {
             jsonParam.put("quantity", this.quantity);
 
             String signedMessage = MyCrypto.signMessage(this.user.getUsername(), jsonParam);
+            urlConnection.setRequestProperty("signature", signedMessage);
 
             urlConnection.connect();
 
             OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-            out.write(signedMessage);
+            out.write(jsonParam.toString());
             out.close();
 
             responseCode = urlConnection.getResponseCode();
@@ -75,16 +78,16 @@ public class BuyTickets extends ServerConnection implements Runnable {
                 List<Ticket> tickets = jsonToArray(response);
 
                 // notifies activity that loading finished
-                //activity.handleResponse(responseCode, response, tickets);
+                activity.handleResponse(responseCode, response, tickets);
 
             } else {
                 response = readStream(urlConnection.getErrorStream());
-                //activity.handleResponse(responseCode, response, null);
+                activity.handleResponse(responseCode, response, null);
             }
         } catch (Exception e) {
             if (responseCode == Constants.NO_INTERNET) {
                 String errorMessage = Constants.ERROR_CONNECTING;
-                //activity.handleResponse(responseCode, errorMessage, null);
+                activity.handleResponse(responseCode, errorMessage, null);
             }
         } finally {
             if (urlConnection != null)

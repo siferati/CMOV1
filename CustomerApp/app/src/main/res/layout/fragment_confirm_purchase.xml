@@ -112,7 +112,7 @@
                 android:text="@string/close"
                 android:textColor="@color/white"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:theme="@style/AltPrimary.Button"/>
+                android:theme="@style/Alt.Button"/>
 
         </LinearLayout>
     </TableLayout>
