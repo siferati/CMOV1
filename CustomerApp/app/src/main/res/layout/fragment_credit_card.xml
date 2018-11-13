@@ -5,10 +5,18 @@
     android:layout_width="match_parent"
     tools:context=".login.RegisterActivity">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/primary_darker" />
+
     <TableLayout
         android:id="@+id/table_credit_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:stretchColumns="1"
         android:shrinkColumns="1">
 
@@ -23,7 +31,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/type"
                 android:textStyle="bold"
-                android:paddingRight="10dp"/>
+                android:textAllCaps="true"
+                android:paddingEnd="10dp"/>
 
             <Spinner
                 android:id="@+id/type_card"
@@ -44,8 +53,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/number"
+                android:textAllCaps="true"
                 android:textStyle="bold"
-                android:paddingRight="10dp"/>
+                android:paddingEnd="10dp"/>
 
             <EditText
                 android:id="@+id/number_card"
@@ -62,13 +72,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="5dp">
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/validity_date"
+                android:textAllCaps="true"
                 android:textStyle="bold"
                 android:paddingRight="10dp"/>
 
@@ -87,16 +97,32 @@
                 style="@style/Widget.AppCompat.Spinner.Underlined" />
         </TableRow>
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp">
 
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/save"
-            android:textColor="@color/white"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:theme="@style/Alt.Button"/>
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:theme="@style/AltPrimary.Button"/>
+
+            <Button
+                android:id="@+id/btn_close"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/close"
+                android:textColor="@color/white"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:theme="@style/Alt.Button"/>
+        </TableRow>
+
     </TableLayout>
 
-</FrameLayout>
+</FrameLayout >

@@ -16,4 +16,8 @@ public class Constants {
     public static final String LOGIN_FAILED = "Login Failed";
     public static final String REGISTER_FAILED = "Register Failed";
 
+    public static final String GET_SHOW = "get_show";
+    public static final String BUY_FAILED = "Need to buy at least a ticket";
+    public static final String DECREASE_FAILED = "Negative number of tickets not allowed";
+
 }

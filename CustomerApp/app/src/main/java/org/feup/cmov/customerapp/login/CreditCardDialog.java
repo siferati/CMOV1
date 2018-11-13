@@ -88,12 +88,16 @@ public class CreditCardDialog extends Dialog {
         }
 
         Button saveBtn = findViewById(R.id.btn_save);
+        Button closeBtn = findViewById(R.id.btn_close);
 
         // getOwnerActivity() returns the Activity that owns this Dialog
         dialogListener = (MyDialogCloseListener) getOwnerActivity();
 
         // sets click listener on save button
         saveBtn.setOnClickListener((View v)->saveCreditCard());
+
+        // sets click listener on close button
+        closeBtn.setOnClickListener((View v)->dismiss());
     }
 
     /**

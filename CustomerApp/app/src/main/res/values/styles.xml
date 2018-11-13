@@ -35,7 +35,7 @@
     </style>
 
     <style name="TitleStyle">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -72,6 +72,10 @@
         <item name="colorButtonNormal">@color/primary_darker</item>
     </style>
 
+    <style name="AltPrimary.Button" parent="AppTheme">
+        <item name="colorAccent">@color/primary</item>
+        <item name="colorControlHighlight">@color/primary_darker</item>
+    </style>
     <style name="Alt.Button" parent="AppTheme">
         <item name="colorAccent">@color/monsoon</item>
         <item name="colorControlHighlight">@color/base</item>

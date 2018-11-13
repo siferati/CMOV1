@@ -1,5 +1,6 @@
 package org.feup.cmov.customerapp.userOptions;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,8 +12,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.feup.cmov.customerapp.R;
+import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.database.GetShows;
+import org.feup.cmov.customerapp.shows.ShowActivity;
 import org.feup.cmov.customerapp.shows.ShowAdapter;
 import org.feup.cmov.customerapp.shows.TicketAdapter;
 import org.feup.cmov.customerapp.utils.Constants;
@@ -182,7 +185,17 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         ItemClickSupport.addTo(list_shows).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                // show view
+                Show s = showsAdapter.getItem(position);
+
+                Intent intent = new Intent(getApplicationContext(), ShowActivity.class);
+
+                Bundle b = new Bundle();
+                b.putSerializable(Constants.GET_SHOW, s);
+
+                intent.putExtras(b);
+                startActivity(intent);
+
+                showToast("Show clicked: " + s.getId() + " " + s.getName() + " " + s.getPrice());
             }
         });
     }

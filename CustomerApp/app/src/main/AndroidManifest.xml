@@ -15,8 +15,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".login.LoginActivity"
-            android:theme="@style/AppTheme.Dark">
-        </activity>
+            android:theme="@style/AppTheme.Dark"></activity>
         <activity
             android:name=".login.RegisterActivity"
             android:label="Register"
@@ -27,8 +26,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".login.LoginActivity" />
         </activity>
-        <activity
-            android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".userOptions.ShowsActivity"
             android:label="Shows"
@@ -48,7 +46,7 @@
         <activity
             android:name=".userOptions.VouchersActivity"
             android:label="Vouchers"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".AutomaticLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,6 +54,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".shows.ShowActivity"
+            android:label="Show Details"
+            android:parentActivityName=".userOptions.ShowsActivity"/>
     </application>
 
 </manifest>

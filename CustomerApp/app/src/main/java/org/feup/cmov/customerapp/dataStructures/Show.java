@@ -1,6 +1,8 @@
 package org.feup.cmov.customerapp.dataStructures;
 
-public class Show {
+import java.io.Serializable;
+
+public class Show implements Serializable {
     private int id;
     private String name;
     private String description;
