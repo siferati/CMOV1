@@ -22,12 +22,23 @@
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/tickets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="invisible">
+
+
+            <Button
+                android:id="@+id/btn_validate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/validate_btn"
+                android:textColor="@color/white"
+                android:layout_margin="12dp"
+                />
+
             <ListView
                 android:id="@+id/list_tickets"
                 android:layout_width="match_parent"
@@ -42,16 +53,7 @@
                 android:gravity="center"
                 />
 
-            <Button
-                android:id="@+id/btn_validate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/validate_btn"
-                android:textColor="@color/white"
-                android:layout_margin="12dp"
-                android:layout_alignParentBottom="true"
-                />
-        </RelativeLayout >
+        </LinearLayout >
 
     </FrameLayout>
 
