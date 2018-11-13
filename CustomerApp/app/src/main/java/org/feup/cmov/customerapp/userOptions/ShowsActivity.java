@@ -194,8 +194,6 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
 
                 intent.putExtras(b);
                 startActivity(intent);
-
-                showToast("Show clicked: " + s.getId() + " " + s.getName() + " " + s.getPrice());
             }
         });
     }

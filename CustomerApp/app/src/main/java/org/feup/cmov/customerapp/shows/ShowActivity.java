@@ -20,7 +20,7 @@ import org.feup.cmov.customerapp.utils.Constants;
 
 import java.util.List;
 
-public class ShowActivity extends AppCompatActivity {
+public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDialog.MyDialogCloseListener{
 
     // show to be shown on the dialog
     private Show show;
@@ -41,18 +41,12 @@ public class ShowActivity extends AppCompatActivity {
             show = (Show) b.getSerializable(Constants.GET_SHOW);
 
         setShow();
-
-        numberTickets = findViewById(R.id.number_tickets);
-        TextView increaseTickets = findViewById(R.id.increase);
-        TextView decreaseTickets = findViewById(R.id.decrease);
-
-        increaseTickets.setOnClickListener((View v)->increaseTickets());
-        decreaseTickets.setOnClickListener((View v)->decreaseTickets());
+        setTickets();
 
         Button buyBtn = findViewById(R.id.btn_buy);
 
         // sets click listener on buy tickets button
-        buyBtn.setOnClickListener((View v)->buyTickets());
+        buyBtn.setOnClickListener((View v)->confirmPurchase());
     }
 
     private void setShow() {
@@ -70,16 +64,30 @@ public class ShowActivity extends AppCompatActivity {
         price.setText(priceText);
     }
 
-    private void buyTickets() {
-        if (tickets > 0) {
-            User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+    private void setTickets() {
+        numberTickets = findViewById(R.id.number_tickets);
+        TextView increaseTickets = findViewById(R.id.increase);
+        TextView decreaseTickets = findViewById(R.id.decrease);
 
-            BuyTickets buyTicketsAPI = new BuyTickets(this, show.getId(), user, tickets);
-            Thread thr = new Thread(buyTicketsAPI);
-            thr.start();
+        increaseTickets.setOnClickListener((View v)->increaseTickets());
+        decreaseTickets.setOnClickListener((View v)->decreaseTickets());
+    }
+
+    private void confirmPurchase() {
+        if (tickets > 0) {
+            ConfirmPurchaseFragment dialog = ConfirmPurchaseFragment.constructor(show.getName(), tickets, show.getPrice());
+            dialog.show(getSupportFragmentManager(), "confirm_purchase");
         } else {
             showToast(Constants.BUY_FAILED);
         }
+    }
+
+    private void buyTickets() {
+        User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+
+        BuyTickets buyTicketsAPI = new BuyTickets(this, show.getId(), user, tickets);
+        Thread thr = new Thread(buyTicketsAPI);
+        thr.start();
     }
 
     private void decreaseTickets() {
@@ -131,4 +139,9 @@ public class ShowActivity extends AppCompatActivity {
         runOnUiThread(() -> Toast.makeText(ShowActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
+    @Override
+    public void handleDialogClose() {
+        showToast(Constants.BUYING_TICKETS);
+        buyTickets();
+    }
 }

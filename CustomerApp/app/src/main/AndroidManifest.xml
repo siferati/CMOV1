@@ -57,7 +57,7 @@
         <activity
             android:name=".shows.ShowActivity"
             android:label="Show Details"
-            android:parentActivityName=".userOptions.ShowsActivity"/>
+            android:parentActivityName=".userOptions.ShowsActivity" />
     </application>
 
 </manifest>

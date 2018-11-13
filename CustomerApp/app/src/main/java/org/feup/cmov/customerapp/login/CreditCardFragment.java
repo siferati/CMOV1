@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
 import org.feup.cmov.customerapp.dataStructures.CreditCard;
+import org.feup.cmov.customerapp.utils.Constants;
 
 public class CreditCardFragment extends DialogFragment {
     /**
@@ -16,7 +17,7 @@ public class CreditCardFragment extends DialogFragment {
         CreditCardFragment fragment = new CreditCardFragment();     // creates new credit card dialog fragment
 
         Bundle argument = new Bundle();
-        argument.putSerializable("creditCard", card);               // inserts a Serializable value into the mapping of this Bundle, replacing any existing value for the given key
+        argument.putSerializable(Constants.CREDIT_CARD, card);      // inserts a Serializable value into the mapping of this Bundle, replacing any existing value for the given key
 
         fragment.setArguments(argument);                            // this allows the card to be saved even after fragment is destroyed
 
@@ -28,7 +29,7 @@ public class CreditCardFragment extends DialogFragment {
      */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        CreditCard card = (CreditCard) getArguments().getSerializable("creditCard");
+        CreditCard card = (CreditCard) getArguments().getSerializable(Constants.CREDIT_CARD);
         return new CreditCardDialog(getActivity(), card);
     }
 

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".shows.ShowActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/primary_darker" />
+
+    <TableLayout
+        android:id="@+id/table_confirm_purchase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:stretchColumns="1"
+        android:shrinkColumns="1">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:text="@string/show_title_desc"/>
+            <TextView
+                android:id="@+id/show_name_CP"
+                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:text="@string/tickets"/>
+            <TextView
+                android:id="@+id/buy_no_tickets"
+                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:text="@string/total_price"/>
+            <TextView
+                android:id="@+id/total_price"
+                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_buy_CP"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/buy_btn"
+                android:textColor="@color/white"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:theme="@style/AltPrimary.Button"/>
+
+            <Button
+                android:id="@+id/btn_close_CP"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/close"
+                android:textColor="@color/white"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:theme="@style/AltPrimary.Button"/>
+
+        </LinearLayout>
+    </TableLayout>
+</FrameLayout>
