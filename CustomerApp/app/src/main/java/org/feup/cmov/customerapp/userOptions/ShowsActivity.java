@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -31,6 +32,8 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
 
     // shows adapter to manage shows array
     public ShowAdapter showsAdapter;
+
+    public final int REQUEST_TICKETS = 1;
 
     // Service Handler allows to notify the adapter of its list's changes using threads
     public class ServiceHandler {
@@ -89,6 +92,22 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         setTabs();
     }
 
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+
+        ArrayList<Ticket> ts = (ArrayList<Ticket>) data.getSerializableExtra("tickets");
+
+        if (ts != null) {
+            for (int i = 0; i < ts.size(); i++) {
+                Ticket t = ts.get(i);
+                Log.d("http", t.getId() + " " + t.getSeatNumber() + " " + t.getName());
+            }
+
+            ticketsAdapter.addAll(ts);
+        } else {
+            Log.d("http", "null tickets");
+        }
+    }
+
     /**
      * Handles response from server
      * @param code - response code from server
@@ -115,7 +134,7 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
     /**
      * Notifies shows' adapter of new changes to shows' array
      */
-    public void notifyRV() {
+    public void notifyShowsAdapter() {
         ServiceHandler sh = new ServiceHandler();
         sh.run();
     }
@@ -193,7 +212,10 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
                 b.putSerializable(Constants.GET_SHOW, s);
 
                 intent.putExtras(b);
-                startActivity(intent);
+
+                int requestCode = REQUEST_TICKETS;
+                startActivityForResult(intent, requestCode);
+                //startActivity(intent);
             }
         });
     }

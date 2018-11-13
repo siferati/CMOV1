@@ -32,8 +32,15 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
             LayoutInflater inflater = activity.getLayoutInflater();
             row = inflater.inflate(R.layout.row_ticket, parent, false);    // get our custom layout
         }
-        Ticket s = tickets.get(position);
-        ((TextView)row.findViewById(R.id.name)).setText(s.getName());                   // fill ticket name
+        Ticket t = tickets.get(position);
+        ((TextView)row.findViewById(R.id.ticket_name)).setText(t.getName());                   // fill ticket name
+        ((TextView)row.findViewById(R.id.ticket_date)).setText(t.getDate());                   // fill ticket date
+
+        String price = t.getPrice()  + " €";
+        ((TextView)row.findViewById(R.id.ticket_price)).setText(price);
+
+        String seat = "Seat: " + t.getSeatNumber();
+        ((TextView)row.findViewById(R.id.ticket_seatNumber)).setText(seat);
 
         return (row);
     }

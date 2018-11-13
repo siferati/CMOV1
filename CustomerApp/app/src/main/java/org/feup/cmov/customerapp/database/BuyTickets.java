@@ -74,8 +74,8 @@ public class BuyTickets extends ServerConnection implements Runnable {
             if (responseCode == Constants.OK_RESPONSE) {
                 response = readStream(urlConnection.getInputStream());
 
-                // get new shows from server
-                List<Ticket> tickets = jsonToArray(response);
+                // get new tickets from server
+                ArrayList<Ticket> tickets = jsonToArray(response);
 
                 // notifies activity that loading finished
                 activity.handleResponse(responseCode, response, tickets);
@@ -96,16 +96,17 @@ public class BuyTickets extends ServerConnection implements Runnable {
 
     }
 
-    private List<Ticket> jsonToArray(String jsonString) {
-        List<Ticket> tickets_list = new ArrayList<>();
+    private ArrayList<Ticket> jsonToArray(String jsonString) {
+        ArrayList<Ticket> tickets_list = new ArrayList<>();
 
         try {
-            JSONArray jArray = new JSONArray(jsonString);
+            JSONObject tickets = new JSONObject(jsonString);
+            JSONArray jArray = tickets.getJSONArray("tickets");
 
-            for(int i=0; i<jArray.length(); i++){
+            for(int i = 0; i < jArray.length(); i++){
                 JSONObject ticket = jArray.getJSONObject(i);
 
-                int id = ticket.getInt("id");
+                String id = ticket.getString("id");
                 String name = ticket.getString("name");
                 String date = ticket.getString("date");
                 int seatNumber = ticket.getInt("seatNumber");

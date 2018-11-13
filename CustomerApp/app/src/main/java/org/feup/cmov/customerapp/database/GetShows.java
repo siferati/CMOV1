@@ -66,7 +66,7 @@ public class GetShows extends ServerConnection implements Runnable {
                 activity.showsAdapter.addAll(shows);
 
                 // notify adapter that new shows have been added
-                activity.notifyRV();
+                activity.notifyShowsAdapter();
 
                 // removes footer because loading finished
                 activity.showsAdapter.removeFooter();

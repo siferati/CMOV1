@@ -18,6 +18,7 @@ import org.feup.cmov.customerapp.database.BuyTickets;
 import org.feup.cmov.customerapp.userOptions.ShowsActivity;
 import org.feup.cmov.customerapp.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDialog.MyDialogCloseListener{
@@ -114,20 +115,30 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
      * @param response - response message given by server
      * @param tickets - list of tickets received from server
      */
-    public void handleResponse(int code, String response, List<Ticket> tickets) {
+    public void handleResponse(int code, String response, ArrayList<Ticket> tickets) {
         if (code == Constants.OK_RESPONSE) {
-            saveTickets();
+            saveTickets(tickets);
 
-            Intent intent = new Intent(this, ShowsActivity.class);
-            startActivity(intent);
+            /*Intent intent = new Intent(this, ShowsActivity.class);
+            startActivity(intent);*/
         } else {
             // show error response
             showToast(response);
         }
     }
 
-    private void saveTickets() {
+    private void saveTickets(ArrayList<Ticket> tickets) {
         // save tickets locally and add them to tickets adapter
+
+        Intent intent = new Intent();
+        intent.putExtra("tickets", tickets);
+        setResult(RESULT_OK, intent);
+        finish();
+
+        /*for(int i = 0; i < tickets.size(); i++) {
+            Ticket t = tickets.get(i);
+            Log.d("http", t.getId() + " " + t.getSeatNumber() + " " + t.getName());
+        }*/
     }
 
     /**

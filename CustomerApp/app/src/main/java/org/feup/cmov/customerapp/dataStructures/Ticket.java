@@ -1,13 +1,15 @@
 package org.feup.cmov.customerapp.dataStructures;
 
-public class Ticket {
-    private int id;
+import java.io.Serializable;
+
+public class Ticket implements Serializable {
+    private String id;
     private String name;
     private String date;
     private int seatNumber;
     private double price;
 
-    public Ticket(int id, String name, String date, int seatNumber, double price) {
+    public Ticket(String id, String name, String date, int seatNumber, double price) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -15,7 +17,7 @@ public class Ticket {
         this.price = price;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
