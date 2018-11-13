@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import org.feup.cmov.customerapp.R;
@@ -42,6 +44,25 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
         String seat = "Seat: " + t.getSeatNumber();
         ((TextView)row.findViewById(R.id.ticket_seatNumber)).setText(seat);
 
+        CheckBox selected = row.findViewById(R.id.validate_ticket);
+
+        /*if (t.isUsed()) {
+            row.setBackgroundColor(activity.getResources().getColor(R.color.iron));
+            selected.setClickable(false);
+        } else {
+            selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(activity, t, isCheck));
+        }*/
+
+        selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(activity, t, isCheck));
+
         return (row);
+    }
+
+    private void checkListener(ShowsActivity activity, Ticket ticket, boolean isChecked) {
+        if (isChecked) {
+            activity.addTicket(ticket);
+        } else {
+            activity.removeTicket(ticket);
+        }
     }
 }

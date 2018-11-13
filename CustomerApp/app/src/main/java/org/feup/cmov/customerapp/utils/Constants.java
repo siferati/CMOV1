@@ -24,4 +24,7 @@ public class Constants {
     public static final String BUY_FAILED = "Need to buy at least a ticket";
     public static final String DECREASE_FAILED = "Negative number of tickets not allowed";
 
+    public static final String VALIDATE_FAILED = "Can't validate more than 4 tickets at once";
+    public static final String NO_TICKETS = "Need at least 1 ticket to validate";
+
 }

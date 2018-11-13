@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,21 +29,12 @@ import java.util.List;
 
 public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
-    // API to get shows from server
-    public GetShows showsAPI;
-
-    // shows adapter to manage shows array
-    public ShowAdapter showsAdapter;
-
-    public final int REQUEST_TICKETS = 1;
-
     // Service Handler allows to notify the adapter of its list's changes using threads
     public class ServiceHandler {
         public ServiceHandler() {}
 
         public void run() {
             ShowsActivity.this.runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
                     showsAdapter.notifyDataSetChanged();
@@ -49,6 +42,15 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
             });
         }
     }
+
+    // API to get shows from server
+    public GetShows showsAPI;
+
+    // shows adapter to manage shows array
+    public ShowAdapter showsAdapter;
+
+    // request code for each show
+    public final int REQUEST_TICKETS = 1;
 
     // measures and positions item views within the recyclerView
     LinearLayoutManager layoutManager;
@@ -77,6 +79,9 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
     // tab1 - shows' list, tab2 - bought tickets' list
     View tab1, tab2;
 
+    // list of selected tickets to validate
+    private List<Ticket> selectedTickets = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,19 +97,22 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         setTabs();
     }
 
+    /**
+     * Callback from show activity
+     * @param requestCode - request code used to request this callback
+     * @param resultCode - checks result code sent from callback activity
+     * @param data - data sent from callback activity
+     */
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 
-        ArrayList<Ticket> ts = (ArrayList<Ticket>) data.getSerializableExtra("tickets");
+        if (resultCode == RESULT_OK) {
+            ArrayList<Ticket> ts = (ArrayList<Ticket>) data.getSerializableExtra("tickets");
 
-        if (ts != null) {
-            for (int i = 0; i < ts.size(); i++) {
-                Ticket t = ts.get(i);
-                Log.d("http", t.getId() + " " + t.getSeatNumber() + " " + t.getName());
+            if (ts != null) {
+                ticketsAdapter.addAll(ts);
+            } else {
+                Log.d("http", "null tickets");
             }
-
-            ticketsAdapter.addAll(ts);
-        } else {
-            Log.d("http", "null tickets");
         }
     }
 
@@ -118,6 +126,7 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
             // show error response
             showToast(response);
         } else {
+            // if loading shows was successful, then set isLoading to false
             isLoading = false;
         }
     }
@@ -153,7 +162,11 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         recyclerView.setAdapter(showsAdapter);
         recyclerView.addOnScrollListener(recyclerViewOnScrollListener);
 
-        view_single_show(recyclerView);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(itemClickListener);
 
         tab1 = recyclerView;
     }
@@ -198,27 +211,22 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
 
     /**
      * Sets click listener on each show
-     * @param list_shows - layout containing all shows
      */
-    public void view_single_show(RecyclerView list_shows) {
-        ItemClickSupport.addTo(list_shows).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Show s = showsAdapter.getItem(position);
+    public ItemClickSupport.OnItemClickListener itemClickListener = new ItemClickSupport.OnItemClickListener() {
+        @Override
+        public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+            Show s = showsAdapter.getItem(position);
 
-                Intent intent = new Intent(getApplicationContext(), ShowActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ShowActivity.class);
 
-                Bundle b = new Bundle();
-                b.putSerializable(Constants.GET_SHOW, s);
+            Bundle b = new Bundle();
+            b.putSerializable(Constants.GET_SHOW, s);
 
-                intent.putExtras(b);
+            intent.putExtras(b);
 
-                int requestCode = REQUEST_TICKETS;
-                startActivityForResult(intent, requestCode);
-                //startActivity(intent);
-            }
-        });
-    }
+            startActivityForResult(intent, REQUEST_TICKETS);
+        }
+    };
 
     /**
      * Sets tickets' list and its adapter
@@ -228,7 +236,32 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         ticketsAdapter = new TicketAdapter(this, tickets);
         list_tickets.setAdapter(ticketsAdapter);
 
+        Button validateBtn = findViewById(R.id.btn_validate);
+        validateBtn.setOnClickListener((View v)->validateTickets());
+
         tab2 = findViewById(R.id.tickets);
+    }
+
+    public void addTicket(Ticket ticket) {
+        selectedTickets.add(ticket);
+    }
+
+    public void removeTicket(Ticket ticket) {
+        selectedTickets.remove(ticket);
+    }
+
+    public void validateTickets() {
+        if (selectedTickets.size() <= 4) {
+            if (selectedTickets.size() > 0) {
+
+                // validate tickets...
+
+            } else {
+                showToast(Constants.NO_TICKETS);
+            }
+        } else {
+            showToast(Constants.VALIDATE_FAILED);
+        }
     }
 
     /**
