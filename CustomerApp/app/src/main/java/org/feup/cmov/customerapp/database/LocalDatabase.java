@@ -31,9 +31,17 @@ public class LocalDatabase extends SQLiteOpenHelper {
     // used set to true
     private static final int USED_TRUE = 1;
 
-    public static synchronized LocalDatabase getInstance(Context context) {
-        Log.d("http", "Created singleton");
+    private static final String TICKETS_TABLE = "tickets";
 
+    private static final String TICKET_ID = "id";
+    private static final String USER_ID = "userid";
+    private static final String TICKET_NAME = "name";
+    private static final String TICKET_DATE = "date";
+    private static final String TICKET_SN = "seatnumber";
+    private static final String TICKET_PRICE = "price";
+    private static final String TICKET_USED = "used";
+
+    public static synchronized LocalDatabase getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new LocalDatabase(context.getApplicationContext());
         }
@@ -44,24 +52,22 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
     private LocalDatabase(Context context) {
         super(context, DATABASE_NAME, null, SCHEMA_VERSION);
-
-        Log.d("http", "New database");
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d("http", "Database created");
-
-        db.execSQL("CREATE TABLE tickets (id TEXT unique, userid TEXT, name TEXT, date TEXT, seatnumber TEXT, price TEXT, used TEXT);");
+        db.execSQL("CREATE TABLE " + TICKETS_TABLE + " (" +
+                TICKET_ID + " TEXT unique, " +
+                USER_ID + " TEXT, " +
+                TICKET_NAME + " TEXT, " +
+                TICKET_DATE + " TEXT, " +
+                TICKET_SN + " INTEGER, " +
+                TICKET_PRICE + " DOUBLE, " +
+                TICKET_USED + " INTEGER);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion != newVersion) {
-            // Simplest implementation is to drop all old tables and recreate them
-            db.execSQL("DROP TABLE IF EXISTS tickets");
-            onCreate(db);
-        }
     }
 
     public void dropAllTables() {
@@ -89,59 +95,44 @@ public class LocalDatabase extends SQLiteOpenHelper {
             User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, context);
 
             ContentValues values = new ContentValues();
-            values.put("id", ticket.getId());
-            values.put("userid", user.getId());
-            values.put("name", ticket.getName());
-            values.put("date", ticket.getDate());
+            values.put(TICKET_ID, ticket.getId());
+            values.put(USER_ID, user.getId());
+            values.put(TICKET_NAME, ticket.getName());
+            values.put(TICKET_DATE, ticket.getDate());
+            values.put(TICKET_SN, ticket.getSeatNumber());
+            values.put(TICKET_PRICE, ticket.getPrice());
+            values.put(TICKET_USED, USED_FALSE);
 
-            String seatNumber = Integer.toString(ticket.getSeatNumber());
-            values.put("seatNumber", seatNumber);
-
-            String price = Double.toString(ticket.getPrice());
-            values.put("price", price);
-
-            String used = Integer.toString(USED_FALSE);
-            values.put("used", used);
-
-            db.insertWithOnConflict("tickets", null, values, SQLiteDatabase.CONFLICT_IGNORE);
-
+            db.insert(TICKETS_TABLE, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.d("http", "Error while trying to add post to database");
         } finally {
             db.endTransaction();
         }
-
     }
 
     public synchronized List<Ticket> getAllTickets(Context context) {
         List<Ticket> tickets = new ArrayList<>();
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, context);
 
-        String TICKETS_SELECT_QUERY = "SELECT id, name, date, seatNumber, price, used FROM tickets WHERE tickets.id = '" + user.getId() + "'";
-
-        SQLiteDatabase db = getReadableDatabase();
+        String TICKETS_SELECT_QUERY = "SELECT * FROM " + TICKETS_TABLE + " WHERE " + USER_ID + " = '" + user.getId() + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(TICKETS_SELECT_QUERY, null);
-
-        Log.d("http", "GETTING TICKETS");
 
         try {
             if (cursor.moveToFirst()) {
                 do {
-                    String id = cursor.getString(cursor.getColumnIndex("id"));
-                    Log.d("http", "ID: " + id);
+                    String id = cursor.getString(cursor.getColumnIndex(TICKET_ID));
+                    String name = cursor.getString(cursor.getColumnIndex(TICKET_NAME));
+                    String date = cursor.getString(cursor.getColumnIndex(TICKET_DATE));
+                    int seatNumber = cursor.getInt(cursor.getColumnIndex(TICKET_SN));
+                    double price = cursor.getDouble(cursor.getColumnIndex(TICKET_PRICE));
+                    int used = cursor.getInt(cursor.getColumnIndex(TICKET_USED));
 
-                    String name = cursor.getString(cursor.getColumnIndex("name"));
-                    String date = cursor.getString(cursor.getColumnIndex("date"));
-                    String seatNumber = cursor.getString(cursor.getColumnIndex("seatNumber"));
-                    String price = cursor.getString(cursor.getColumnIndex("price"));
-                    String used = cursor.getString(cursor.getColumnIndex("used"));
+                    Ticket ticket = new Ticket(id, name, date, seatNumber, price);
 
-                    int sn = Integer.parseInt(seatNumber);
-                    double pr = Double.parseDouble(price);
-                    Ticket ticket = new Ticket(id, name, date, sn, pr);
-
-                    if (Integer.parseInt(used) == USED_TRUE) {
+                    if (used == USED_TRUE) {
                         ticket.setUsed(true);
                     }
 
@@ -168,23 +159,17 @@ public class LocalDatabase extends SQLiteOpenHelper {
             User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, context);
 
             ContentValues values = new ContentValues();
-            values.put("id", ticket.getId());
-            values.put("userid", user.getId());
-            values.put("name", ticket.getName());
-            values.put("date", ticket.getDate());
-
-            String seatNumber = Integer.toString(ticket.getSeatNumber());
-            values.put("seatNumber", seatNumber);
-
-            String price = Double.toString(ticket.getPrice());
-            values.put("price", price);
-
-            String used = Integer.toString(USED_FALSE);
-            values.put("used", used);
+            values.put(TICKET_ID, ticket.getId());
+            values.put(USER_ID, user.getId());
+            values.put(TICKET_NAME, ticket.getName());
+            values.put(TICKET_DATE, ticket.getDate());
+            values.put(TICKET_SN, ticket.getSeatNumber());
+            values.put(TICKET_PRICE, ticket.getPrice());
+            values.put(TICKET_USED, USED_FALSE);
 
             String[] args = {ticket.getId()};
 
-            db.update("tickets", null,"id=?", args);
+            db.update(TICKETS_TABLE, null,"id=?", args);
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.d("http", "Error while trying to add post to database");

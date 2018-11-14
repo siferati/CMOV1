@@ -114,7 +114,7 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
                 saveTicketsDatabase(ts);
                 ticketsAdapter.addAll(ts);
             } else {
-                Log.d("http", "null tickets");
+                Log.d("http", "No tickets");
             }
         }
     }
@@ -267,8 +267,6 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
                 LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
 
                 if (LocalDatabase.checkDataBase(getApplicationContext())) {
-                    Log.d("http", "database exists");
-
                     List<Ticket> localTickets = db.getAllTickets(getApplicationContext());
                     if (localTickets.size() > 0) ticketsAdapter.addAll(localTickets);
                 }
