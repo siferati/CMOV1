@@ -44,6 +44,7 @@ CREATE TABLE Shows (
 
 CREATE TABLE Tickets (
 	id TEXT PRIMARY KEY,
+	available BOOLEAN NOT NULL DEFAULT TRUE,
 	seatNumber INTEGER NOT NULL,
 	showId INTEGER NOT NULL REFERENCES Shows(id),
 	userId INTEGER NOT NULL REFERENCES Users(id)
@@ -130,3 +131,9 @@ INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro
 INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro25", "It's gonna be hoooot!", "2019-11-16", 19.99);
 INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro26", "It's gonna be hoooot!", "2019-11-16", 19.99);
 INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro27", "It's gonna be hoooot!", "2019-11-16", 19.99);
+
+/* --- Tickets --- */
+
+INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('one', 99, 1, 'one');
+INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('two', 12, 1, 'one');
+INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('three', 45, 1, 'one');

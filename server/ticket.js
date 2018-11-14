@@ -11,7 +11,100 @@ function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
+// taken from SO
+function hasDuplicates(array) {
+	return (new Set(array)).size !== array.length;
+}
+
 module.exports = {
+
+	validate: (req, res) => {
+
+		const showId = req.params.id;
+		const {
+			tickets,
+			userId
+		} = req.body;
+
+		if (!Array.isArray(tickets) || tickets.length <= 0 || hasDuplicates(tickets)) {
+			return res.status(400).send('Invalid list of tickets.');
+		}
+
+		db.all(
+			`SELECT Tickets.id
+			FROM Tickets, Shows
+			WHERE showId = Shows.id
+			AND showId = ?
+			AND userId = ?
+			AND available = TRUE`,
+			[showId, userId],
+			(err, rows) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
+				} else if (rows.length <= 0) {
+					return res.send({
+						valid: [],
+						invalid: tickets
+					});
+				}
+
+				// get all possible ticket ids from db
+				let dbTickets = [];
+				rows.forEach((row) => {
+					dbTickets.push(row.id);
+				});
+
+				let valid = [];
+				let invalid = [];
+
+				// validate
+				tickets.forEach((ticket) => {
+					if (dbTickets.includes(ticket)) {
+						valid.push(ticket);
+					} else {
+						invalid.push(ticket);
+					}
+				});
+
+				if (valid.length <= 0) {
+					return res.send({
+						valid: [],
+						invalid: tickets
+					});
+				}
+
+				let sql = 'UPDATE Tickets SET available = FALSE WHERE';
+				let params = [];
+
+				// create sql statement for N updates
+				valid.forEach((ticket) => {
+					sql += ' id = ? OR';
+					params.push(ticket);
+				});
+
+				// remove last OR
+				sql = sql.substr(0, sql.length - 3);
+				
+				// update db
+				db.run(
+					sql,
+					params,
+					(err) => {
+						if (err) {
+							console.error(err);
+							return res.sendStatus(500);
+						}
+
+						return res.send({
+							valid: valid,
+							invalid: invalid
+						});
+					}
+				);
+			}
+		);
+	},
 
 	create: (req, res) => {
 		

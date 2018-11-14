@@ -31,6 +31,7 @@ app.get('/shows', show.all);
 
 /* --- Ticket --- */
 app.post('/shows/:id/tickets', ticket.create);
+app.post('/shows/:id/tickets/validation', ticket.validate);
 
 /**
  * Close the db connection on exiting.
