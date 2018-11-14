@@ -52,17 +52,43 @@ module.exports = {
 					} else if (valid === false) {
 						return res.status(400).send('Invalid signature.');
 					}
-		
-					let sql = 'INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES';
-					let params = [];
+
+					// tickets
+					let sqlTickets = 'INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES';
+					let paramsTickets = [];
 					let tickets = [];
+
+					// vouchers
+					let sqlVouchers = 'INSERT INTO Vouchers (id, userId) VALUES';
+					let paramsVouchers = [];
+					let vouchers = [];
+
+					// promotions
+					let sqlPromotions = 'INSERT INTO Promotions (voucherId, productId, discount) VALUES';
+					let paramsPromotions = [];
 
 					// create sql statement for N inserts
 					for (let i = 0; i < quantity; i++) {
+
+						// tickets
 						const ticketId = uuidv4();
 						const seatNumber = getRandomInt(1, 100);
-						sql += ' (?, ?, ?, ?),';
-						params.push(ticketId, seatNumber, showId, userId);
+						sqlTickets += ' (?, ?, ?, ?),';
+						paramsTickets.push(ticketId, seatNumber, showId, userId);
+
+						// vouchers
+						const voucherId = uuidv4();
+						sqlVouchers += ' (?, ?),';
+						paramsVouchers.push(voucherId, userId);
+
+						// promotions
+						const productId = getRandomInt(2, 4); // 2: coffee, 3: popcorn
+						let productName = productId === 2 ? 'Coffee' : 'Popcorn';
+						const discount = 1.0; // free
+						sqlPromotions += ' (?, ?, ?),';
+						paramsPromotions.push(voucherId, productId, discount);
+
+						// store for response
 						tickets.push({
 							id: ticketId,
 							name: name,
@@ -70,23 +96,58 @@ module.exports = {
 							seatNumber: seatNumber,
 							price: price
 						});
+						vouchers.push({
+							id: voucherId,
+							name: productName,
+							discount: discount
+						});
 					}
 		
 					// remove last comma
-					sql = sql.substr(0, sql.length - 1);
+					sqlTickets = sqlTickets.substr(0, sqlTickets.length - 1);
+					sqlVouchers = sqlVouchers.substr(0, sqlVouchers.length - 1);
+					sqlPromotions = sqlPromotions.substr(0, sqlPromotions.length - 1);
 		
+					// create tickets
 					db.run(
-						sql,
-						params,
-						function (err) {
+						sqlTickets,
+						paramsTickets,
+						(err) => {
 							if (err) {
 								console.error(err);
 								return res.sendStatus(500);
 							}
-		
-							res.send({tickets: tickets});
+
+							// create vouchers
+							db.run(
+								sqlVouchers,
+								paramsVouchers,
+								(err) => {
+									if (err) {
+										console.error(err);
+										return res.sendStatus(500);
+									}
+
+									// create promotions
+									db.run(
+										sqlPromotions,
+										paramsPromotions,
+										(err) => {
+											if (err) {
+												console.error(err);
+												return res.sendStatus(500);
+											}
+
+											return res.send({
+												tickets: tickets,
+												vouchers: vouchers
+											});
+										}										
+									);
+								}
+							);
 						}
-					);
+					);					
 				});
 			}
 		);
