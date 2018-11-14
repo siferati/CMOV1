@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp.shows;
+package org.feup.cmov.customerapp.shows.tickets;
 
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
+import org.feup.cmov.customerapp.shows.ShowsActivity;
 
 import java.util.List;
 

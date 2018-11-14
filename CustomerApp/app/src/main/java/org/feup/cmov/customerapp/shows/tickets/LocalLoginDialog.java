@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp.shows;
+package org.feup.cmov.customerapp.shows.tickets;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.Login;
+import org.feup.cmov.customerapp.shows.ShowActivity;
 import org.feup.cmov.customerapp.utils.Constants;
 
 public class LocalLoginDialog extends Dialog {

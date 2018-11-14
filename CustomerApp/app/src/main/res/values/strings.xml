@@ -57,6 +57,7 @@
     <string name="decrease">-</string>
     <string name="default_tickets">0</string>
     <string name="confirm_purchase">Confirm Purchase</string>
+    <string name="confirm_validation">Validate Tickets</string>
     <string name="show_title_desc">Show Title: </string>
     <string name="total_price">Total price: </string>
 

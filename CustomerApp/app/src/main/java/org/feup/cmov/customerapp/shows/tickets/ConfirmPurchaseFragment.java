@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp.shows;
+package org.feup.cmov.customerapp.shows.tickets;
 
 import android.app.Dialog;
 import android.os.Bundle;

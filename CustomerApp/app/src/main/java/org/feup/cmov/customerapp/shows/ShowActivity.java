@@ -13,6 +13,9 @@ import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.BuyTickets;
+import org.feup.cmov.customerapp.shows.tickets.ConfirmPurchaseDialog;
+import org.feup.cmov.customerapp.shows.tickets.ConfirmPurchaseFragment;
+import org.feup.cmov.customerapp.shows.tickets.LocalLoginDialog;
 import org.feup.cmov.customerapp.utils.Constants;
 
 import java.util.ArrayList;

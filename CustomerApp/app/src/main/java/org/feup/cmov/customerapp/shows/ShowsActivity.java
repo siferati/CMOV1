@@ -19,13 +19,16 @@ import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.database.GetShows;
 import org.feup.cmov.customerapp.database.LocalDatabase;
+import org.feup.cmov.customerapp.shows.tickets.TicketAdapter;
+import org.feup.cmov.customerapp.shows.tickets.ValidateTicketsDialog;
+import org.feup.cmov.customerapp.shows.tickets.ValidateTicketsFragment;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.feup.cmov.customerapp.utils.ItemClickSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
+public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, ValidateTicketsDialog.MyDialogCloseListener {
 
     // Service Handler allows to notify the adapter of its list's changes using threads
     public class ServiceHandler {
@@ -249,9 +252,10 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
     public void validateTickets() {
         if (selectedTickets.size() <= 4) {
             if (selectedTickets.size() > 0) {
+                ArrayList<Ticket> selected_ticks = new ArrayList<>(selectedTickets);
 
-                // validate tickets...
-
+                ValidateTicketsFragment dialog = ValidateTicketsFragment.constructor(selected_ticks);
+                dialog.show(getSupportFragmentManager(), "validate_tickets");
             } else {
                 showToast(Constants.NO_TICKETS);
             }
@@ -368,5 +372,12 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
      */
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+    }
+
+    @Override
+    public void handleValidateTickets() {
+        showToast(Constants.VALIDATING);
+
+        // TODO: validate tickets here...
     }
 }

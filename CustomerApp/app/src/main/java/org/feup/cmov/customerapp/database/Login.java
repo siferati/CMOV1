@@ -3,7 +3,7 @@ package org.feup.cmov.customerapp.database;
 import android.util.Log;
 
 import org.feup.cmov.customerapp.login.LoginActivity;
-import org.feup.cmov.customerapp.shows.LocalLoginDialog;
+import org.feup.cmov.customerapp.shows.tickets.LocalLoginDialog;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.json.JSONObject;
 
