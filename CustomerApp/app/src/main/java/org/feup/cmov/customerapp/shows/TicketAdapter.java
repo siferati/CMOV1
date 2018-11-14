@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.feup.cmov.customerapp.R;
@@ -42,14 +43,18 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
 
         String seat = "Seat: " + t.getSeatNumber();
         ((TextView)row.findViewById(R.id.ticket_seatNumber)).setText(seat);
+        ImageView available = row.findViewById(R.id.available);
 
         CheckBox selected = row.findViewById(R.id.validate_ticket);
 
         if (!t.isAvailable()) {
             row.setBackgroundColor(activity.getResources().getColor(R.color.iron));
             selected.setClickable(false);
+
+            available.setImageResource(R.drawable.available_not);
         } else {
             selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(activity, t, isCheck));
+            available.setImageResource(R.drawable.available_yes);
         }
 
         return (row);

@@ -29,20 +29,11 @@
             android:orientation="vertical"
             android:visibility="invisible">
 
-
-            <Button
-                android:id="@+id/btn_validate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/validate_btn"
-                android:textColor="@color/white"
-                android:layout_margin="12dp"
-                />
-
             <ListView
                 android:id="@+id/list_tickets"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp"
+                android:layout_weight="1">
             </ListView>
 
             <TextView
@@ -51,6 +42,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                />
+
+
+
+            <Button
+                android:id="@+id/btn_validate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/validate_btn"
+                android:textColor="@color/white"
+                android:layout_margin="12dp"
                 />
 
         </LinearLayout >
