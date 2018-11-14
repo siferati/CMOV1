@@ -118,21 +118,6 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         }
     }
 
-    private void saveTicketsDatabase(ArrayList<Ticket> ts) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
-
-                for(int i = 0; i < ts.size(); i++) {
-                    db.addTicket(getApplicationContext(), ts.get(i));
-                }
-
-                List<Ticket> ticketsList = db.getAllTickets(getApplicationContext());
-                ticketsAdapter.addAll(ticketsList);
-            }
-        });
-    }
 
     /**
      * Handles response from server
@@ -262,6 +247,31 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         tab2 = findViewById(R.id.tickets);
     }
 
+    /**
+     * Saves tickets to the local database
+     * @param ts - tickets to save
+     */
+    private void saveTicketsDatabase(ArrayList<Ticket> ts) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
+
+                for(int i = 0; i < ts.size(); i++) {
+                    db.addTicket(getApplicationContext(), ts.get(i));
+                }
+
+                List<Ticket> ticketsList = db.getAllTickets(getApplicationContext());
+
+                ticketsAdapter.clear();
+                ticketsAdapter.addAll(ticketsList);
+            }
+        });
+    }
+
+    /**
+     * Loads tickets from local database to tickets' array adapter
+     */
     private void loadTicketsDatabase() {
         runOnUiThread(new Runnable() {
             @Override

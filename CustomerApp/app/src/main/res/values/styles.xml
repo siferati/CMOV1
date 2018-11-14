@@ -12,7 +12,7 @@
         <item name="colorAccent">@color/monsoon</item>
 
         <!-- controls the normal state of components such as an unselected EditText -->
-        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlNormal">@color/aluminum</item>
         <!-- overrides colorAccent as the activated or checked state for Checkboxes and RadioButtons -->
         <item name="colorControlActivated">@color/monsoon</item>
         <!-- controls the ripple coloring -->
