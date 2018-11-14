@@ -1,7 +1,6 @@
-package org.feup.cmov.customerapp.userOptions;
+package org.feup.cmov.customerapp.shows;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,9 +19,6 @@ import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.database.GetShows;
 import org.feup.cmov.customerapp.database.LocalDatabase;
-import org.feup.cmov.customerapp.shows.ShowActivity;
-import org.feup.cmov.customerapp.shows.ShowAdapter;
-import org.feup.cmov.customerapp.shows.TicketAdapter;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.feup.cmov.customerapp.utils.ItemClickSupport;
 
@@ -175,31 +171,6 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
     }
 
     /**
-     * Sets scroll listener on the recycler view (endless scroll)
-     */
-    public RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            int visibleItemCount = layoutManager.getChildCount();
-            int totalItemCount = layoutManager.getItemCount();
-            int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-
-            if (!isLoading && !showsAPI.isLastPage()) {
-                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                        && firstVisibleItemPosition >= 0) {
-                    loadMoreItems();
-                }
-            }
-        }
-    };
-
-    /**
      * Load more shows from server
      */
     private void loadMoreItems() {
@@ -211,25 +182,6 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         Thread thr = new Thread(showsAPI);
         thr.start();
     }
-
-    /**
-     * Sets click listener on each show
-     */
-    public ItemClickSupport.OnItemClickListener itemClickListener = new ItemClickSupport.OnItemClickListener() {
-        @Override
-        public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-            Show s = showsAdapter.getItem(position);
-
-            Intent intent = new Intent(getApplicationContext(), ShowActivity.class);
-
-            Bundle b = new Bundle();
-            b.putSerializable(Constants.GET_SHOW, s);
-
-            intent.putExtras(b);
-
-            startActivityForResult(intent, REQUEST_TICKETS);
-        }
-    };
 
     /**
      * Sets tickets' list and its adapter
@@ -332,6 +284,51 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         ListView list = findViewById(R.id.list_tickets);
         list.setEmptyView(empty);
     }
+
+
+    /**
+     * Sets click listener on each show
+     */
+    public ItemClickSupport.OnItemClickListener itemClickListener = new ItemClickSupport.OnItemClickListener() {
+        @Override
+        public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+            Show s = showsAdapter.getItem(position);
+
+            Intent intent = new Intent(getApplicationContext(), ShowActivity.class);
+
+            Bundle b = new Bundle();
+            b.putSerializable(Constants.GET_SHOW, s);
+
+            intent.putExtras(b);
+
+            startActivityForResult(intent, REQUEST_TICKETS);
+        }
+    };
+
+    /**
+     * Sets scroll listener on the recycler view (endless scroll)
+     */
+    public RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int visibleItemCount = layoutManager.getChildCount();
+            int totalItemCount = layoutManager.getItemCount();
+            int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+            if (!isLoading && !showsAPI.isLastPage()) {
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0) {
+                    loadMoreItems();
+                }
+            }
+        }
+    };
 
     /**
      * Called when a tab is selected

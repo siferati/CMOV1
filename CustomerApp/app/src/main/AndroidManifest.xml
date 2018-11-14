@@ -30,23 +30,23 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity
-            android:name=".userOptions.ShowsActivity"
+            android:name=".shows.ShowsActivity"
             android:label="Shows"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".userOptions.CafeteriaActivity"
+            android:name=".cafeteria.CafeteriaActivity"
             android:label="Cafeteria"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".userOptions.TransactionsActivity"
+            android:name=".settings.TransactionsActivity"
             android:label="Transactions"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".userOptions.SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".userOptions.VouchersActivity"
+            android:name=".cafeteria.VouchersActivity"
             android:label="Vouchers"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".AutomaticLogin">
@@ -59,7 +59,7 @@
         <activity
             android:name=".shows.ShowActivity"
             android:label="Show Details"
-            android:parentActivityName=".userOptions.ShowsActivity" />
+            android:parentActivityName=".shows.ShowsActivity" />
     </application>
 
 </manifest>

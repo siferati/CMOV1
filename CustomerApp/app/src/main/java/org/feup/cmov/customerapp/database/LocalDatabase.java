@@ -26,12 +26,13 @@ public class LocalDatabase extends SQLiteOpenHelper {
     private static LocalDatabase sInstance;
 
     // used set to false
-    private static final int USED_FALSE = 0;
+    private static final int AVAILABLE_FALSE = 0;
 
     // used set to true
-    private static final int USED_TRUE = 1;
+    private static final int AVAILABLE_TRUE = 1;
 
     private static final String TICKETS_TABLE = "tickets";
+    private static final String VOUCHERS_TABLE = "vouchers";
 
     private static final String TICKET_ID = "id";
     private static final String USER_ID = "userid";
@@ -39,7 +40,10 @@ public class LocalDatabase extends SQLiteOpenHelper {
     private static final String TICKET_DATE = "date";
     private static final String TICKET_SN = "seatnumber";
     private static final String TICKET_PRICE = "price";
-    private static final String TICKET_USED = "used";
+    private static final String TICKET_AVAILABLE = "available";
+
+    private static final String VOUCHER_ID = "id";
+    private static final String TYPE = "type";
 
     public static synchronized LocalDatabase getInstance(Context context) {
         if (sInstance == null) {
@@ -63,7 +67,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
                 TICKET_DATE + " TEXT, " +
                 TICKET_SN + " INTEGER, " +
                 TICKET_PRICE + " DOUBLE, " +
-                TICKET_USED + " INTEGER);");
+                TICKET_AVAILABLE + " INTEGER);");
     }
 
     @Override
@@ -101,7 +105,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
             values.put(TICKET_DATE, ticket.getDate());
             values.put(TICKET_SN, ticket.getSeatNumber());
             values.put(TICKET_PRICE, ticket.getPrice());
-            values.put(TICKET_USED, USED_FALSE);
+            values.put(TICKET_AVAILABLE, AVAILABLE_TRUE);
 
             db.insert(TICKETS_TABLE, null, values);
             db.setTransactionSuccessful();
@@ -118,7 +122,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
         String TICKETS_SELECT_QUERY = "SELECT * FROM " + TICKETS_TABLE +
                 " WHERE " + USER_ID + " = '" + user.getId() + "'" +
-                " ORDER BY " + TICKET_USED + " ASC, " + TICKET_DATE + " ASC";
+                " ORDER BY " + TICKET_AVAILABLE + " ASC, " + TICKET_DATE + " ASC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(TICKETS_SELECT_QUERY, null);
 
@@ -130,12 +134,12 @@ public class LocalDatabase extends SQLiteOpenHelper {
                     String date = cursor.getString(cursor.getColumnIndex(TICKET_DATE));
                     int seatNumber = cursor.getInt(cursor.getColumnIndex(TICKET_SN));
                     double price = cursor.getDouble(cursor.getColumnIndex(TICKET_PRICE));
-                    int used = cursor.getInt(cursor.getColumnIndex(TICKET_USED));
+                    int used = cursor.getInt(cursor.getColumnIndex(TICKET_AVAILABLE));
 
                     Ticket ticket = new Ticket(id, name, date, seatNumber, price);
 
-                    if (used == USED_TRUE) {
-                        ticket.setUsed(true);
+                    if (used == AVAILABLE_FALSE) {
+                        ticket.setAvailable(false);
                     }
 
                     tickets.add(ticket);
@@ -167,7 +171,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
             values.put(TICKET_DATE, ticket.getDate());
             values.put(TICKET_SN, ticket.getSeatNumber());
             values.put(TICKET_PRICE, ticket.getPrice());
-            values.put(TICKET_USED, USED_FALSE);
+            values.put(TICKET_AVAILABLE, AVAILABLE_TRUE);
 
             String[] args = {ticket.getId()};
 

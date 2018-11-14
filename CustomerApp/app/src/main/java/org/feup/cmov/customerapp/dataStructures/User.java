@@ -1,8 +1,10 @@
 package org.feup.cmov.customerapp.dataStructures;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -57,15 +59,15 @@ public class User {
      * @param context - current application context
      */
     public static synchronized void saveUser(User user, String path, Context context) {
-       FileOutputStream fos;
-       try {
-           fos = context.openFileOutput(path, Context.MODE_APPEND | Context.MODE_PRIVATE);     // opens in append mode to append new registered user
+        FileOutputStream fos;
+        try {
+            fos = context.openFileOutput(path, Context.MODE_APPEND | Context.MODE_PRIVATE);     // opens in append mode to append new registered user
 
-           String userString = User.userToString(user);
-           fos.write(userString.getBytes());
-           fos.write(System.getProperty("line.separator").getBytes());
+            String userString = User.userToString(user);
+            fos.write(userString.getBytes());
+            fos.write(System.getProperty("line.separator").getBytes());
 
-           fos.close();
+            fos.close();
        } catch (IOException e) {
            e.printStackTrace();
        }
@@ -93,7 +95,6 @@ public class User {
                 String pass = reader.readLine();
                 String name = reader.readLine();
                 String nif = reader.readLine();
-
                 String cc_type = reader.readLine();
                 String cc_number = reader.readLine();
                 String cc_month = reader.readLine();
@@ -107,6 +108,7 @@ public class User {
             }
 
             fis.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

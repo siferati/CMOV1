@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp.userOptions;
+package org.feup.cmov.customerapp.cafeteria;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

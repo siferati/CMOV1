@@ -103,16 +103,6 @@
             android:layout_margin="8dp">
 
             <Button
-                android:id="@+id/btn_save"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/save"
-                android:textColor="@color/white"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:theme="@style/AltPrimary.Button"/>
-
-            <Button
                 android:id="@+id/btn_close"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -121,6 +111,16 @@
                 android:textColor="@color/white"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:theme="@style/Alt.Button"/>
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:theme="@style/AltPrimary.Button"/>
         </TableRow>
 
     </TableLayout>

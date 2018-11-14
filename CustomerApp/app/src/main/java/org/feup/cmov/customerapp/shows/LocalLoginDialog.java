@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.Login;
-import org.feup.cmov.customerapp.userOptions.ShowsActivity;
 import org.feup.cmov.customerapp.utils.Constants;
 
 public class LocalLoginDialog extends Dialog {

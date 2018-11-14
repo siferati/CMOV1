@@ -5,37 +5,38 @@ import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.login.LoginActivity;
-import org.feup.cmov.customerapp.userOptions.CafeteriaActivity;
-import org.feup.cmov.customerapp.userOptions.SettingsActivity;
-import org.feup.cmov.customerapp.userOptions.ShowsActivity;
-import org.feup.cmov.customerapp.userOptions.TransactionsActivity;
-import org.feup.cmov.customerapp.userOptions.VouchersActivity;
+import org.feup.cmov.customerapp.cafeteria.CafeteriaActivity;
+import org.feup.cmov.customerapp.settings.SettingsActivity;
+import org.feup.cmov.customerapp.shows.ShowsActivity;
+import org.feup.cmov.customerapp.settings.TransactionsActivity;
+import org.feup.cmov.customerapp.cafeteria.VouchersActivity;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.feup.cmov.customerapp.utils.FontManager;
 
 public class MainActivity extends AppCompatActivity {
     TextView shows_icon;
-    TextView shows_text;
+    LinearLayout shows_layout;
 
     TextView cafeteria_icon;
-    TextView cafeteria_text;
+    LinearLayout cafeteria_layout;
 
     TextView vouchers_icon;
-    TextView vouchers_text;
+    LinearLayout vouchers_layout;
 
     TextView history_icon;
-    TextView history_text;
+    LinearLayout history_layout;
 
     TextView settings_icon;
-    TextView settings_text;
+    LinearLayout settings_layout;
 
     TextView logout_icon;
-    TextView logout_text;
+    LinearLayout logout_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,22 +53,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void findViews() {
         this.shows_icon = findViewById(R.id.shows_icon);
-        this.shows_text = findViewById(R.id.shows);
+        this.shows_layout = findViewById(R.id.shows_layout);
 
         this.cafeteria_icon = findViewById(R.id.cafeteria_icon);
-        this.cafeteria_text = findViewById(R.id.cafeteria);
+        this.cafeteria_layout = findViewById(R.id.cafeteria_layout);
 
         this.vouchers_icon = findViewById(R.id.vouchers_icon);
-        this.vouchers_text = findViewById(R.id.vouchers);
+        this.vouchers_layout = findViewById(R.id.vouchers_layout);
 
         this.history_icon = findViewById(R.id.history_icon);
-        this.history_text = findViewById(R.id.history);
+        this.history_layout = findViewById(R.id.history_layout);
 
         this.settings_icon = findViewById(R.id.settings_icon);
-        this.settings_text = findViewById(R.id.settings);
+        this.settings_layout = findViewById(R.id.settings_layout);
 
         this.logout_icon = findViewById(R.id.logout_icon);
-        this.logout_text = findViewById(R.id.logout);
+        this.logout_layout = findViewById(R.id.logout_layout);
     }
 
     private void setIcons() {
@@ -82,23 +83,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        this.shows_icon.setOnClickListener((View v)->init_shows());
-        this.shows_text.setOnClickListener((View v)->init_shows());
-
-        this.cafeteria_icon.setOnClickListener((View v)->init_cafeteria());
-        this.cafeteria_text.setOnClickListener((View v)->init_cafeteria());
-
-        this.vouchers_icon.setOnClickListener((View v)->init_vouchers());
-        this.vouchers_text.setOnClickListener((View v)->init_vouchers());
-
-        this.history_icon.setOnClickListener((View v)->init_history());
-        this.history_text.setOnClickListener((View v)->init_history());
-
-        this.settings_icon.setOnClickListener((View v)->init_settings());
-        this.settings_text.setOnClickListener((View v)->init_settings());
-
-        this.logout_icon.setOnClickListener((View v)->init_logout());
-        this.logout_text.setOnClickListener((View v)->init_logout());
+        this.shows_layout.setOnClickListener((View v)->init_shows());
+        this.cafeteria_layout.setOnClickListener((View v)->init_cafeteria());
+        this.vouchers_layout.setOnClickListener((View v)->init_vouchers());
+        this.history_layout.setOnClickListener((View v)->init_history());
+        this.settings_layout.setOnClickListener((View v)->init_settings());
+        this.logout_layout.setOnClickListener((View v)->init_logout());
     }
 
     private void init_shows() {

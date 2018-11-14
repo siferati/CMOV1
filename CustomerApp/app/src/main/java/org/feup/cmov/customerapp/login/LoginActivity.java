@@ -84,11 +84,11 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void handleResponse(int code, String response) {
         if (code == Constants.OK_RESPONSE) {
-            // show login success message
-            showToast(Constants.LOGIN_SUCCESS);
-
             String username = text_username.getText().toString();
             User.setLoggedinUser(username, User.LOGGEDIN_USER_PATH, getApplicationContext());
+
+            // show login success message
+            showToast(Constants.LOGIN_SUCCESS);
 
             // start main activity
             Intent intent = new Intent(this, MainActivity.class);

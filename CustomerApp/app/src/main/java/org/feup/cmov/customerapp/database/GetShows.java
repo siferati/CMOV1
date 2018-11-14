@@ -2,7 +2,7 @@ package org.feup.cmov.customerapp.database;
 
 import android.util.Log;
 
-import org.feup.cmov.customerapp.userOptions.ShowsActivity;
+import org.feup.cmov.customerapp.shows.ShowsActivity;
 import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.json.JSONArray;

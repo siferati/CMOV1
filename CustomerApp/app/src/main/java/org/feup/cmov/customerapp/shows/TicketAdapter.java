@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
-import org.feup.cmov.customerapp.userOptions.ShowsActivity;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
 
         CheckBox selected = row.findViewById(R.id.validate_ticket);
 
-        if (t.isUsed()) {
+        if (!t.isAvailable()) {
             row.setBackgroundColor(activity.getResources().getColor(R.color.iron));
             selected.setClickable(false);
         } else {
