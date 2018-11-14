@@ -44,6 +44,7 @@ CREATE TABLE Shows (
 
 CREATE TABLE Tickets (
 	id TEXT PRIMARY KEY,
+	available BOOLEAN NOT NULL DEFAULT TRUE,
 	seatNumber INTEGER NOT NULL,
 	showId INTEGER NOT NULL REFERENCES Shows(id),
 	userId INTEGER NOT NULL REFERENCES Users(id)
@@ -56,7 +57,7 @@ CREATE TABLE Orders (
 );
 
 CREATE TABLE Vouchers (
-	id INTEGER PRIMARY KEY,
+	id TEXT PRIMARY KEY,
 	available BOOLEAN NOT NULL DEFAULT TRUE,
 	userId INTEGER NOT NULL REFERENCES Users(id),
 	orderId INTEGER REFERENCES Orders(id)
@@ -84,12 +85,19 @@ CREATE TABLE ProductOrders (
 
 
 /* --- TEST DATA --- */
+
 /* --- USERS --- */
 
 INSERT INTO Users (id, name, username, password, nif, keyN, keyE) VALUES ("one", "tiago", "tirafesi", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "987654321", "c5b6e9093307afbe53fd29d9b4944d92a2bdd5b94bbc6247590dc8f4a768b3fa36874390f5da36ea2823459052c097d0fd75706880e4641a1e5a8f89e9580ce9", "10001");
 INSERT INTO Users (id, name, username, password, nif, keyN, keyE) VALUES ("two", "claudia", "arwen7stars", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "876543210", "n2", "e2");
 INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", "123456789", "2020-03-21", "one");
 INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", "012345678", "2020-03-21", "two");
+
+/* --- Products --- */
+
+INSERT INTO Products (id, name, price) VALUES (1, 'total', 0.0);
+INSERT INTO Products (id, name, price) VALUES (2, 'coffee', 0.50);
+INSERT INTO Products (id, name, price) VALUES (3, 'popcorn', 1.0);
 
 /* --- SHOWS --- */
 
@@ -123,3 +131,9 @@ INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro
 INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro25", "It's gonna be hoooot!", "2019-11-16", 19.99);
 INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro26", "It's gonna be hoooot!", "2019-11-16", 19.99);
 INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro27", "It's gonna be hoooot!", "2019-11-16", 19.99);
+
+/* --- Tickets --- */
+
+INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('one', 99, 1, 'one');
+INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('two', 12, 1, 'one');
+INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('three', 45, 1, 'one');
