@@ -46,14 +46,12 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
 
         CheckBox selected = row.findViewById(R.id.validate_ticket);
 
-        /*if (t.isUsed()) {
+        if (t.isUsed()) {
             row.setBackgroundColor(activity.getResources().getColor(R.color.iron));
             selected.setClickable(false);
         } else {
             selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(activity, t, isCheck));
-        }*/
-
-        selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(activity, t, isCheck));
+        }
 
         return (row);
     }

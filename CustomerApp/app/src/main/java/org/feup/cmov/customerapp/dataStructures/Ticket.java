@@ -8,6 +8,7 @@ public class Ticket implements Serializable {
     private String date;
     private int seatNumber;
     private double price;
+    private boolean used;
 
     public Ticket(String id, String name, String date, int seatNumber, double price) {
         this.id = id;
@@ -15,6 +16,7 @@ public class Ticket implements Serializable {
         this.date = date;
         this.seatNumber = seatNumber;
         this.price = price;
+        this.used = false;
     }
 
     public String getId() {
@@ -35,5 +37,13 @@ public class Ticket implements Serializable {
 
     public double getPrice() {
         return price;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 }

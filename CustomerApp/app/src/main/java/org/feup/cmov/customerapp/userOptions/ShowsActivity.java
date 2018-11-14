@@ -1,6 +1,7 @@
 package org.feup.cmov.customerapp.userOptions;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.database.GetShows;
+import org.feup.cmov.customerapp.database.LocalDatabase;
 import org.feup.cmov.customerapp.shows.ShowActivity;
 import org.feup.cmov.customerapp.shows.ShowAdapter;
 import org.feup.cmov.customerapp.shows.TicketAdapter;
@@ -109,11 +111,25 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
             ArrayList<Ticket> ts = (ArrayList<Ticket>) data.getSerializableExtra("tickets");
 
             if (ts != null) {
+                saveTicketsDatabase(ts);
                 ticketsAdapter.addAll(ts);
             } else {
                 Log.d("http", "null tickets");
             }
         }
+    }
+
+    private void saveTicketsDatabase(ArrayList<Ticket> ts) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
+
+                for(int i = 0; i < ts.size(); i++) {
+                    db.addTicket(getApplicationContext(), ts.get(i));
+                }
+            }
+        });
     }
 
     /**
@@ -236,10 +252,28 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         ticketsAdapter = new TicketAdapter(this, tickets);
         list_tickets.setAdapter(ticketsAdapter);
 
+        loadTicketsDatabase();
+
         Button validateBtn = findViewById(R.id.btn_validate);
         validateBtn.setOnClickListener((View v)->validateTickets());
 
         tab2 = findViewById(R.id.tickets);
+    }
+
+    private void loadTicketsDatabase() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
+
+                if (LocalDatabase.checkDataBase(getApplicationContext())) {
+                    Log.d("http", "database exists");
+
+                    List<Ticket> localTickets = db.getAllTickets(getApplicationContext());
+                    if (localTickets.size() > 0) ticketsAdapter.addAll(localTickets);
+                }
+            }
+        });
     }
 
     public void addTicket(Ticket ticket) {
