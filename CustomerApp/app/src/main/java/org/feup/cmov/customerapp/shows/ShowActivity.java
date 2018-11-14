@@ -21,7 +21,7 @@ import org.feup.cmov.customerapp.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDialog.MyDialogCloseListener{
+public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDialog.MyDialogCloseListener, LocalLoginDialog.MyDialogCloseListener {
 
     // show to be shown on the dialog
     private Show show;
@@ -134,11 +134,6 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
         intent.putExtra("tickets", tickets);
         setResult(RESULT_OK, intent);
         finish();
-
-        /*for(int i = 0; i < tickets.size(); i++) {
-            Ticket t = tickets.get(i);
-            Log.d("http", t.getId() + " " + t.getSeatNumber() + " " + t.getName());
-        }*/
     }
 
     /**
@@ -152,6 +147,12 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
 
     @Override
     public void handleDialogClose() {
+        LocalLoginDialog dialog = new LocalLoginDialog(ShowActivity.this, this);
+        dialog.show();
+    }
+
+    @Override
+    public void handleLocalLogin() {
         showToast(Constants.BUYING_TICKETS);
         buyTickets();
     }

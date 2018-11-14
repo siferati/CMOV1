@@ -78,7 +78,7 @@ public class ConfirmPurchaseDialog extends Dialog {
     }
 
     private void confirm() {
-        dialogListener.handleDialogClose();
         dismiss();
+        dialogListener.handleDialogClose();
     }
 }

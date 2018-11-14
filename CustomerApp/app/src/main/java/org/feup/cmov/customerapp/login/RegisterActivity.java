@@ -147,7 +147,6 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
             String name = text_name.getText().toString();
             String nif = text_nif.getText().toString();
 
-            Log.d("http", result_id);
             // set user's parameters
             User user = new User(result_id, username, password, name, nif, card);
 

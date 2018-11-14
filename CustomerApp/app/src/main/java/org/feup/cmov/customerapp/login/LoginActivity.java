@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             String password = text_password.getText().toString();
 
             // connect to server
-            Login login = new Login(this, username, password);
+            Login login = new Login(username, password, this, null);
             Thread thr = new Thread(login);
             thr.start();
         }

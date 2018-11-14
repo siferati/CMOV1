@@ -3,6 +3,7 @@ package org.feup.cmov.customerapp.database;
 import android.util.Log;
 
 import org.feup.cmov.customerapp.login.LoginActivity;
+import org.feup.cmov.customerapp.shows.LocalLoginDialog;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.json.JSONObject;
 
@@ -11,15 +12,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Login extends ServerConnection implements Runnable {
+    private LocalLoginDialog dialog;
     private LoginActivity activity;
     private String username;
     private String password;
 
-    public Login(LoginActivity activity, String username, String password) {
+    public Login(String username, String password, LoginActivity activity, LocalLoginDialog dialog) {
         super();
-        this.activity = activity;
         this.username = username;
         this.password = password;
+        this.activity = activity;
+        this.dialog = dialog;
     }
 
     @Override
@@ -58,13 +61,23 @@ public class Login extends ServerConnection implements Runnable {
                 response = readStream(urlConnection.getErrorStream());
                 Log.d("connection", response);
             }
-            activity.handleResponse(responseCode, response);
+
+            if(activity != null) {
+                activity.handleResponse(responseCode, response);
+            } else {
+                dialog.handleResponse(responseCode, response);
+            }
         }
         catch (Exception e) {
             if (responseCode == Constants.NO_INTERNET) {
                 e.printStackTrace();
                 String errorMessage = Constants.ERROR_CONNECTING;
-                activity.handleResponse(responseCode, errorMessage);
+
+                if (activity != null) {
+                    activity.handleResponse(responseCode, errorMessage);
+                } else {
+                    dialog.handleResponse(responseCode, errorMessage);
+                }
             }
         }
         finally {

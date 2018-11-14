@@ -5,6 +5,10 @@ public class Constants {
     public static final int NO_INTERNET = -1;
     public static final int SERVER_TIMEOUT = 2000;
 
+    public static final String FREE_POPCORN = "FreePopcorn";
+    public static final String FREE_COFFEE = "FreeCoffee";
+    public static final String DISCOUNT = "Discount";
+
     public static final int SHOWS_PER_LOAD = 10;
 
     public static final String ERROR_CONNECTING = "Error connecting";
@@ -26,5 +30,8 @@ public class Constants {
 
     public static final String VALIDATE_FAILED = "Can't validate more than 4 tickets at once";
     public static final String NO_TICKETS = "Need at least 1 ticket to validate";
+
+    public static final String LOCAL_LOGIN = "Local Login";
+    public static final String INVALID_PASSWORD = "Invalid password";
 
 }

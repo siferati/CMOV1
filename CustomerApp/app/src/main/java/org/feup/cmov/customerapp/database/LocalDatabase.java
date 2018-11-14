@@ -116,7 +116,9 @@ public class LocalDatabase extends SQLiteOpenHelper {
         List<Ticket> tickets = new ArrayList<>();
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, context);
 
-        String TICKETS_SELECT_QUERY = "SELECT * FROM " + TICKETS_TABLE + " WHERE " + USER_ID + " = '" + user.getId() + "'";
+        String TICKETS_SELECT_QUERY = "SELECT * FROM " + TICKETS_TABLE +
+                " WHERE " + USER_ID + " = '" + user.getId() + "'" +
+                " ORDER BY " + TICKET_USED + " ASC, " + TICKET_DATE + " ASC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(TICKETS_SELECT_QUERY, null);
 

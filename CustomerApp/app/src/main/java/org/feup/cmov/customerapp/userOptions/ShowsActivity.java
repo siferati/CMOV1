@@ -112,7 +112,6 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
 
             if (ts != null) {
                 saveTicketsDatabase(ts);
-                ticketsAdapter.addAll(ts);
             } else {
                 Log.d("http", "No tickets");
             }
@@ -128,6 +127,9 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
                 for(int i = 0; i < ts.size(); i++) {
                     db.addTicket(getApplicationContext(), ts.get(i));
                 }
+
+                List<Ticket> ticketsList = db.getAllTickets(getApplicationContext());
+                ticketsAdapter.addAll(ticketsList);
             }
         });
     }
