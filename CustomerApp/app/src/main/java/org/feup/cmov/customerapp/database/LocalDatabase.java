@@ -275,4 +275,25 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
         return vouchers;
     }
+
+    public synchronized void updateVoucher(Context context, Voucher voucher) {
+        // Create and/or open the database for writing
+        SQLiteDatabase db = getWritableDatabase();
+
+        // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures consistency of the database.
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(VOUCHER_AVAILABLE, voucher.isAvailable());
+
+            String[] args = {voucher.getId()};
+
+            db.update(VOUCHERS_TABLE, null,"id=?", args);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("http", "Error while trying to add post to database");
+        } finally {
+            db.endTransaction();
+        }
+    }
 }

@@ -10,10 +10,8 @@ import android.widget.TextView;
 
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Voucher;
-import org.feup.cmov.customerapp.database.LocalDatabase;
 import org.feup.cmov.customerapp.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VoucherAdapter extends ArrayAdapter<Voucher> {

@@ -134,8 +134,6 @@ public class BuyTickets extends ServerConnection implements Runnable {
                 String name = voucher.getString("name");
                 double discount = voucher.getDouble("discount");
 
-                Log.d("http", id + " " + name + " " + discount);
-
                 Voucher v = new Voucher(id, name, discount);
                 vouchers_list.add(v);
             }
