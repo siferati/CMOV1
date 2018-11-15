@@ -62,11 +62,15 @@
             android:name=".shows.ShowActivity"
             android:label="Show Details"
             android:parentActivityName=".shows.ShowsActivity" />
-
         <activity
             android:name=".shows.tickets.TicketValidationActivity"
             android:label="Ticket Validation"
             android:parentActivityName=".shows.ShowsActivity" />
+        <activity
+            android:name=".cafeteria.ShoppingCartActivity"
+            android:label="Shopping Cart"
+            android:parentActivityName=".cafeteria.CafeteriaActivity"
+            />
     </application>
 
 </manifest>

@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
     private void init_cafeteria() {
         Intent intent = new Intent(this, CafeteriaActivity.class);
         startActivity(intent);
-        finish();
     }
 
     private void init_vouchers() {
