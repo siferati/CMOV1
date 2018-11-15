@@ -59,12 +59,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
         <ImageView
             android:id="@+id/available"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
             android:layout_margin="5dp"
             />
     </LinearLayout>

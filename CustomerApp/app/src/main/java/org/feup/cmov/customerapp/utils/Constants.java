@@ -5,15 +5,22 @@ public class Constants {
     public static final int NO_INTERNET = -1;
     public static final int SERVER_TIMEOUT = 2000;
 
-    public static final String FREE_POPCORN = "FreePopcorn";
-    public static final String FREE_COFFEE = "FreeCoffee";
+    public static final String FREE_POPCORN = "Popcorn";
+    public static final String FREE_COFFEE = "Coffee";
     public static final String DISCOUNT = "Discount";
+
+    public static final String POPCORN_DESCRIPTION = "Get a free popcorn";
+    public static final String COFFEE_DESCRIPTION = "Get a free coffee";
+    public static final String DISCOUNT_DESCRIPTION = "5% discount on a cafeteria order";
+
+    public static final String POPCORN_NAME = "Free Popcorn";
+    public static final String COFFEE_NAME = "Free Coffee";
+    public static final String DISCOUNT_NAME = "5% Discount";
 
     public static final int SHOWS_PER_LOAD = 10;
 
     public static final String ERROR_CONNECTING = "Error connecting";
     public static final String BUYING_TICKETS = "Buying Tickets...";
-    public static final String VALIDATING = "Validting Tickets...";
 
     public static final String LOGIN_SUCCESS = "Login Success";
     public static final String LOGOUT_SUCCESS = "Logout Success";
@@ -26,6 +33,7 @@ public class Constants {
     public static final String GET_SHOW = "get_show";
     public static final String CONFIRM_PURCHASE = "confirm_purchase";
     public static final String VALIDATE_TICKETS = "validate_tickets";
+    public static final String VALIDATION_QR = "validation_qr";
 
     public static final String BUY_FAILED = "Need to buy at least a ticket";
     public static final String DECREASE_FAILED = "Negative number of tickets not allowed";

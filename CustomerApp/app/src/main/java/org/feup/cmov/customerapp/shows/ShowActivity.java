@@ -12,13 +12,16 @@ import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Show;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.dataStructures.User;
+import org.feup.cmov.customerapp.dataStructures.Voucher;
 import org.feup.cmov.customerapp.database.BuyTickets;
+import org.feup.cmov.customerapp.database.LocalDatabase;
 import org.feup.cmov.customerapp.shows.tickets.ConfirmPurchaseDialog;
 import org.feup.cmov.customerapp.shows.tickets.ConfirmPurchaseFragment;
 import org.feup.cmov.customerapp.shows.tickets.LocalLoginDialog;
 import org.feup.cmov.customerapp.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDialog.MyDialogCloseListener, LocalLoginDialog.MyDialogCloseListener {
 
@@ -49,6 +52,9 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
         buyBtn.setOnClickListener((View v)->confirmPurchase());
     }
 
+    /**
+     * Set show to display on this activity
+     */
     private void setShow() {
         TextView name = findViewById(R.id.show_name);
         name.setText(show.getName());
@@ -64,6 +70,9 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
         price.setText(priceText);
     }
 
+    /**
+     * Set listeners for text views that increase or decrease number of tickets to buy
+     */
     private void setTickets() {
         numberTickets = findViewById(R.id.number_tickets);
         TextView increaseTickets = findViewById(R.id.increase);
@@ -73,6 +82,9 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
         decreaseTickets.setOnClickListener((View v)->decreaseTickets());
     }
 
+    /**
+     * If user tries to buy tickets, a confirm purchase dialog appears
+     */
     private void confirmPurchase() {
         if (tickets > 0) {
             ConfirmPurchaseFragment dialog = ConfirmPurchaseFragment.constructor(show.getName(), tickets, show.getPrice());
@@ -82,14 +94,9 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
         }
     }
 
-    private void buyTickets() {
-        User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
-
-        BuyTickets buyTicketsAPI = new BuyTickets(this, show.getId(), user, tickets);
-        Thread thr = new Thread(buyTicketsAPI);
-        thr.start();
-    }
-
+    /**
+     * Decrease number of tickets to buy
+     */
     private void decreaseTickets() {
         if (tickets > 0) {
             tickets--;
@@ -101,6 +108,9 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
         }
     }
 
+    /**
+     * Increase number of tickets to buy
+     */
     private void increaseTickets() {
         tickets++;
 
@@ -113,26 +123,50 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
      * @param code - response code from server
      * @param response - response message given by server
      * @param tickets - list of tickets received from server
+     * @param vouchers - list of vouchers received from server
      */
-    public void handleResponse(int code, String response, ArrayList<Ticket> tickets) {
+    public void handleResponse(int code, String response, ArrayList<Ticket> tickets, ArrayList<Voucher> vouchers) {
         if (code == Constants.OK_RESPONSE) {
-            saveTickets(tickets);
-
-            /*Intent intent = new Intent(this, ShowsActivity.class);
-            startActivity(intent);*/
+            saveTicketsAndVouchers(tickets, vouchers);
         } else {
             // show error response
             showToast(response);
         }
     }
 
-    private void saveTickets(ArrayList<Ticket> tickets) {
-        // save tickets locally and add them to tickets adapter
+    /**
+     * Save tickets and vouchers received from server
+     * @param tickets - list of tickets
+     * @param vouchers - list of vouchers
+     */
+    private void saveTicketsAndVouchers(ArrayList<Ticket> tickets, ArrayList<Voucher> vouchers) {
+        saveVouchersDatabase(vouchers);
 
+        // save tickets locally and add them to tickets adapter
         Intent intent = new Intent();
         intent.putExtra("tickets", tickets);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    /**
+     * Saves vouchers to the local database
+     * @param vouchers - vouchers to save
+     */
+    private void saveVouchersDatabase(ArrayList<Voucher> vouchers) {
+        String no_vouchers = "You got " + vouchers.size() + " free vouchers!";
+        showToast(no_vouchers);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
+
+                for(int i = 0; i < vouchers.size(); i++) {
+                    db.addVoucher(getApplicationContext(), vouchers.get(i));
+                }
+            }
+        });
     }
 
     /**
@@ -144,15 +178,32 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
         runOnUiThread(() -> Toast.makeText(ShowActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
+    /**
+     * Call fragment to initiate local user authentication
+     */
     @Override
     public void handleDialogClose() {
         LocalLoginDialog dialog = new LocalLoginDialog(ShowActivity.this, this);
         dialog.show();
     }
 
+    /**
+     * Return from local user authentication and buy tickets
+     */
     @Override
     public void handleLocalLogin() {
         showToast(Constants.BUYING_TICKETS);
         buyTickets();
+    }
+
+    /**
+     * Connect to server to buy tickets
+     */
+    private void buyTickets() {
+        User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+
+        BuyTickets buyTicketsAPI = new BuyTickets(this, show.getId(), user, tickets);
+        Thread thr = new Thread(buyTicketsAPI);
+        thr.start();
     }
 }

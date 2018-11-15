@@ -16,14 +16,18 @@ public class AutomaticLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // resetLocalFiles();
+
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
 
         if (user == null) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
+            finish();
         } else {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 

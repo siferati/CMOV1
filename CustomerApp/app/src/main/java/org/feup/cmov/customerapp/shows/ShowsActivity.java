@@ -20,6 +20,7 @@ import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.database.GetShows;
 import org.feup.cmov.customerapp.database.LocalDatabase;
 import org.feup.cmov.customerapp.shows.tickets.TicketAdapter;
+import org.feup.cmov.customerapp.shows.tickets.TicketValidationActivity;
 import org.feup.cmov.customerapp.shows.tickets.ValidateTicketsDialog;
 import org.feup.cmov.customerapp.shows.tickets.ValidateTicketsFragment;
 import org.feup.cmov.customerapp.utils.Constants;
@@ -99,6 +100,56 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
     }
 
     /**
+     * Sets the recycler view, its layout manager and adapter
+     */
+    public void setRecyclerView() {
+        recyclerView = findViewById(R.id.list_shows);
+
+        layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
+        showsAdapter = new ShowAdapter();
+        recyclerView.setAdapter(showsAdapter);
+        recyclerView.addOnScrollListener(recyclerViewOnScrollListener);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(itemClickListener);
+
+        tab1 = recyclerView;
+    }
+
+    /**
+     * Sets tickets' list and its adapter
+     */
+    public void setTicketsList() {
+        ListView list_tickets = findViewById(R.id.list_tickets);
+        ticketsAdapter = new TicketAdapter(this, tickets);
+        list_tickets.setAdapter(ticketsAdapter);
+
+        loadTicketsDatabase();
+
+        Button validateBtn = findViewById(R.id.btn_validate);
+        validateBtn.setOnClickListener((View v)->validateTickets());
+
+        tab2 = findViewById(R.id.tickets);
+    }
+
+    /**
+     * Sets layout tabs
+     */
+    public void setTabs() {
+        TabLayout tabs = findViewById(R.id.tabs);
+        listShowsTab = tabs.newTab().setText("Shows").setIcon(R.drawable.calendar);
+        tabs.addTab(listShowsTab);
+        boughtTicketsTab = tabs.newTab().setText("Validate").setIcon(R.drawable.check);
+        tabs.addTab(boughtTicketsTab);
+        tabs.addOnTabSelectedListener(this);
+    }
+
+    /**
      * Callback from show activity
      * @param requestCode - request code used to request this callback
      * @param resultCode - checks result code sent from callback activity
@@ -117,90 +168,6 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         }
     }
 
-
-    /**
-     * Handles response from server
-     * @param code - response code from server
-     * @param response - response message given by server
-     */
-    public void handleResponse(int code, String response) {
-        if (code != Constants.OK_RESPONSE) {
-            // show error response
-            showToast(response);
-        } else {
-            // if loading shows was successful, then set isLoading to false
-            isLoading = false;
-        }
-    }
-
-    /**
-     * Shows toast message
-     * @param toast - message to show
-     */
-    public void showToast(final String toast)
-    {
-        runOnUiThread(() -> Toast.makeText(ShowsActivity.this, toast, Toast.LENGTH_LONG).show());
-    }
-
-    /**
-     * Notifies shows' adapter of new changes to shows' array
-     */
-    public void notifyShowsAdapter() {
-        ServiceHandler sh = new ServiceHandler();
-        sh.run();
-    }
-
-    /**
-     * Sets the recycler view, its layout manager and adapter
-     */
-    public void setRecyclerView() {
-        recyclerView = findViewById(R.id.list_shows);
-
-        layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-
-        showsAdapter = new ShowAdapter();
-        recyclerView.setAdapter(showsAdapter);
-        recyclerView.addOnScrollListener(recyclerViewOnScrollListener);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                layoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
-        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(itemClickListener);
-
-        tab1 = recyclerView;
-    }
-
-    /**
-     * Load more shows from server
-     */
-    private void loadMoreItems() {
-        isLoading = true;
-
-        page++;
-
-        showsAPI = new GetShows(this, page, pageSize);
-        Thread thr = new Thread(showsAPI);
-        thr.start();
-    }
-
-    /**
-     * Sets tickets' list and its adapter
-     */
-    public void setTicketsList() {
-        ListView list_tickets = findViewById(R.id.list_tickets);
-        ticketsAdapter = new TicketAdapter(this, tickets);
-        list_tickets.setAdapter(ticketsAdapter);
-
-        loadTicketsDatabase();
-
-        Button validateBtn = findViewById(R.id.btn_validate);
-        validateBtn.setOnClickListener((View v)->validateTickets());
-
-        tab2 = findViewById(R.id.tickets);
-    }
 
     /**
      * Saves tickets to the local database
@@ -241,14 +208,62 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         });
     }
 
+    /**
+     * Show empty message if there's no bought tickets
+     */
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+
+        View empty = findViewById(R.id.empty);
+
+        ListView list = findViewById(R.id.list_tickets);
+        list.setEmptyView(empty);
+    }
+
+
+    /**
+     * Handles response from server
+     * @param code - response code from server
+     * @param response - response message given by server
+     */
+    public void handleResponse(int code, String response) {
+        if (code != Constants.OK_RESPONSE) {
+            // show error response
+            showToast(response);
+        } else {
+            // if loading shows was successful, then set isLoading to false
+            isLoading = false;
+        }
+    }
+
+    /**
+     * Notifies shows' adapter of new changes to shows' array
+     */
+    public void notifyShowsAdapter() {
+        ServiceHandler sh = new ServiceHandler();
+        sh.run();
+    }
+
+    /**
+     * Adds ticket to selected tickets' list
+     * @param ticket - ticket to add
+     */
     public void addTicket(Ticket ticket) {
         selectedTickets.add(ticket);
     }
 
+    /**
+     * Removes ticket from selected tickets' list
+     * @param ticket - ticket to remove
+     */
     public void removeTicket(Ticket ticket) {
         selectedTickets.remove(ticket);
     }
 
+    /**
+     * Calls fragment to confirm tickets validation
+     */
     public void validateTickets() {
         if (selectedTickets.size() <= 4) {
             if (selectedTickets.size() > 0) {
@@ -265,28 +280,27 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
     }
 
     /**
-     * Sets layout tabs
-     */
-    public void setTabs() {
-        TabLayout tabs = findViewById(R.id.tabs);
-        listShowsTab = tabs.newTab().setText("Shows").setIcon(R.drawable.calendar);
-        tabs.addTab(listShowsTab);
-        boughtTicketsTab = tabs.newTab().setText("Validate").setIcon(R.drawable.check);
-        tabs.addTab(boughtTicketsTab);
-        tabs.addOnTabSelectedListener(this);
-    }
-
-    /**
-     * Show empty message if there's no bought tickets
+     * Calls new activity that shows QR code to validate tickets
      */
     @Override
-    public void onContentChanged() {
-        super.onContentChanged();
+    public void handleValidateTickets(ArrayList<Ticket> tickets) {
+        Intent intent = new Intent(this, TicketValidationActivity.class);
+        Bundle argument = new Bundle();
 
-        View empty = findViewById(R.id.empty);
+        argument.putSerializable(Constants.VALIDATION_QR, tickets);
 
-        ListView list = findViewById(R.id.list_tickets);
-        list.setEmptyView(empty);
+        intent.putExtras(argument);
+        startActivity(intent);
+    }
+
+
+    /**
+     * Shows toast message
+     * @param toast - message to show
+     */
+    public void showToast(final String toast)
+    {
+        runOnUiThread(() -> Toast.makeText(ShowsActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
 
@@ -335,6 +349,19 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
     };
 
     /**
+     * Load more shows from server
+     */
+    private void loadMoreItems() {
+        isLoading = true;
+
+        page++;
+
+        showsAPI = new GetShows(this, page, pageSize);
+        Thread thr = new Thread(showsAPI);
+        thr.start();
+    }
+
+    /**
      * Called when a tab is selected
      * @param tab - selected tab
      */
@@ -372,12 +399,5 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
      */
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-    }
-
-    @Override
-    public void handleValidateTickets() {
-        showToast(Constants.VALIDATING);
-
-        // TODO: validate tickets here...
     }
 }

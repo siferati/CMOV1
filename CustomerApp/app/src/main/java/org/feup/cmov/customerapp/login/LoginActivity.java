@@ -1,13 +1,12 @@
 package org.feup.cmov.customerapp.login;
 
 import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,16 +16,14 @@ import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.Login;
 import org.feup.cmov.customerapp.utils.Constants;
 
-import java.util.List;
-
 public class LoginActivity extends AppCompatActivity {
-    //private static final int REQUEST_SIGNUP = 0;
+    private static final int REQUEST_SIGNUP = 0;
 
     // username input
-    private EditText text_username;
+    private TextInputEditText text_username;
 
     // password input
-    private EditText text_password;
+    private TextInputEditText text_password;
 
     // login button
     private Button btn_login;
@@ -50,6 +47,17 @@ public class LoginActivity extends AppCompatActivity {
 
         // set listener on sign up message to start register activity
         text_signup.setOnClickListener((View v)->signup());
+    }
+
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_SIGNUP) {
+            String username = data.getStringExtra("username");
+            String password = data.getStringExtra("password");
+
+            text_username.setText(username, TextView.BufferType.EDITABLE);
+            text_password.setText(password, TextView.BufferType.EDITABLE);
+        }
     }
 
     /**
@@ -147,12 +155,7 @@ public class LoginActivity extends AppCompatActivity {
      * Calls register activity
      */
     public void signup() {
-        // Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-        // startActivityForResult(intent, REQUEST_SIGNUP);
-        // finish();
-
-        // Start the Signup activity
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+        startActivityForResult(intent, REQUEST_SIGNUP);
     }
 }

@@ -85,29 +85,36 @@ public class User {
         List<User> users = new ArrayList<>();
 
         try {
-            fis = context.openFileInput(path);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-            String tmpLine;
+            File file = context.getFileStreamPath(path);
 
-            while ((tmpLine = reader.readLine()) != null) {
-                String id = tmpLine;
-                String username = reader.readLine();
-                String pass = reader.readLine();
-                String name = reader.readLine();
-                String nif = reader.readLine();
-                String cc_type = reader.readLine();
-                String cc_number = reader.readLine();
-                String cc_month = reader.readLine();
-                String cc_year = reader.readLine();
+            if (file.exists()) {
 
-                CardType cardType = CardType.getCardType(cc_type);
-                CreditCard cc = new CreditCard(cardType, cc_number, Integer.parseInt(cc_month), Integer.parseInt(cc_year));
-                User u = new User(id, username, pass, name, nif, cc);
+                fis = context.openFileInput(path);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+                String tmpLine;
 
-                users.add(u);
+                while ((tmpLine = reader.readLine()) != null) {
+                    String id = tmpLine;
+                    String username = reader.readLine();
+                    String pass = reader.readLine();
+                    String name = reader.readLine();
+                    String nif = reader.readLine();
+                    String cc_type = reader.readLine();
+                    String cc_number = reader.readLine();
+                    String cc_month = reader.readLine();
+                    String cc_year = reader.readLine();
+
+                    CardType cardType = CardType.getCardType(cc_type);
+                    CreditCard cc = new CreditCard(cardType, cc_number, Integer.parseInt(cc_month), Integer.parseInt(cc_year));
+                    User u = new User(id, username, pass, name, nif, cc);
+
+                    users.add(u);
+                }
+
+                fis.close();
+            } else {
+                Log.d("http", "File doesn't yet exist");
             }
-
-            fis.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,15 +151,21 @@ public class User {
         String username = "";
 
         try {
-            fis = context.openFileInput(path);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-            String tmpLine;
+            File file = context.getFileStreamPath(path);
 
-            while ((tmpLine = reader.readLine()) != null) {
-                username = tmpLine;
+            if (file.exists()) {
+                fis = context.openFileInput(path);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+                String tmpLine;
+
+                while ((tmpLine = reader.readLine()) != null) {
+                    username = tmpLine;
+                }
+
+                fis.close();
+            } else {
+                Log.d("http", "File doesn't yet exist");
             }
-
-            fis.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
-        setTitle(user.getUsername());
+        setTitle(user.getUsername() + "'s options");
 
         this.findViews();
         this.setIcons();
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private void init_cafeteria() {
         Intent intent = new Intent(this, CafeteriaActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void init_vouchers() {

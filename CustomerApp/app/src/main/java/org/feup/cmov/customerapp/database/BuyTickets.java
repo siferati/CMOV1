@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.dataStructures.User;
+import org.feup.cmov.customerapp.dataStructures.Voucher;
 import org.feup.cmov.customerapp.shows.ShowActivity;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.feup.cmov.customerapp.utils.MyCrypto;
@@ -18,6 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BuyTickets extends ServerConnection implements Runnable {
+
+    public class ServerResponse {
+        public ArrayList<Ticket> tickets;
+        public ArrayList<Voucher> vouchers;
+
+        public ServerResponse() {}
+    }
 
     // shows' activity
     private ShowActivity activity;
@@ -75,19 +83,19 @@ public class BuyTickets extends ServerConnection implements Runnable {
                 response = readStream(urlConnection.getInputStream());
 
                 // get new tickets from server
-                ArrayList<Ticket> tickets = jsonToArray(response);
+                ServerResponse serverResponse = jsonToArray(response);
 
                 // notifies activity that loading finished
-                activity.handleResponse(responseCode, response, tickets);
+                activity.handleResponse(responseCode, response, serverResponse.tickets, serverResponse.vouchers);
 
             } else {
                 response = readStream(urlConnection.getErrorStream());
-                activity.handleResponse(responseCode, response, null);
+                activity.handleResponse(responseCode, response, null, null);
             }
         } catch (Exception e) {
             if (responseCode == Constants.NO_INTERNET) {
                 String errorMessage = Constants.ERROR_CONNECTING;
-                activity.handleResponse(responseCode, errorMessage, null);
+                activity.handleResponse(responseCode, errorMessage, null, null);
             }
         } finally {
             if (urlConnection != null)
@@ -96,15 +104,16 @@ public class BuyTickets extends ServerConnection implements Runnable {
 
     }
 
-    private ArrayList<Ticket> jsonToArray(String jsonString) {
+    private ServerResponse jsonToArray(String jsonString) {
         ArrayList<Ticket> tickets_list = new ArrayList<>();
+        ArrayList<Voucher> vouchers_list = new ArrayList<>();
 
         try {
-            JSONObject tickets = new JSONObject(jsonString);
-            JSONArray jArray = tickets.getJSONArray("tickets");
+            JSONObject response = new JSONObject(jsonString);
+            JSONArray tickets = response.getJSONArray("tickets");
 
-            for(int i = 0; i < jArray.length(); i++){
-                JSONObject ticket = jArray.getJSONObject(i);
+            for(int i = 0; i < tickets.length(); i++){
+                JSONObject ticket = tickets.getJSONObject(i);
 
                 String id = ticket.getString("id");
                 String name = ticket.getString("name");
@@ -115,10 +124,29 @@ public class BuyTickets extends ServerConnection implements Runnable {
                 Ticket t = new Ticket(id, name, date, seatNumber, price);
                 tickets_list.add(t);
             }
+
+            JSONArray vouchers = response.getJSONArray("vouchers");
+
+            for(int i = 0; i < vouchers.length(); i++) {
+                JSONObject voucher = vouchers.getJSONObject(i);
+
+                String id = voucher.getString("id");
+                String name = voucher.getString("name");
+                double discount = voucher.getDouble("discount");
+
+                Log.d("http", id + " " + name + " " + discount);
+
+                Voucher v = new Voucher(id, name, discount);
+                vouchers_list.add(v);
+            }
         } catch(JSONException e) {
             Log.e("ERROR", e.getMessage());
         }
 
-        return tickets_list;
+        ServerResponse serverResponse = new ServerResponse();
+        serverResponse.tickets = tickets_list;
+        serverResponse.vouchers = vouchers_list;
+
+        return serverResponse;
     }
 }

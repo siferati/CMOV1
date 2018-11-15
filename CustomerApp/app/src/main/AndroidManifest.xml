@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.feup.cmov.customerapp">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,10 +15,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".login.LoginActivity"
-            android:theme="@style/AppTheme.Dark"></activity>
+            android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".login.RegisterActivity"
             android:label="Register"
@@ -59,6 +61,11 @@
         <activity
             android:name=".shows.ShowActivity"
             android:label="Show Details"
+            android:parentActivityName=".shows.ShowsActivity" />
+
+        <activity
+            android:name=".shows.tickets.TicketValidationActivity"
+            android:label="Ticket Validation"
             android:parentActivityName=".shows.ShowsActivity" />
     </application>
 

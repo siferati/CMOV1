@@ -1,14 +1,13 @@
 package org.feup.cmov.customerapp.login;
 
 import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import org.feup.cmov.customerapp.R;
@@ -33,19 +32,19 @@ import java.security.interfaces.RSAPublicKey;
 public class RegisterActivity extends AppCompatActivity implements CreditCardDialog.MyDialogCloseListener {
 
     // username input
-    private EditText text_username;
+    private TextInputEditText text_username;
 
     // password input
-    private EditText text_password;
+    private TextInputEditText text_password;
 
     // repeat password input
-    private EditText text_rep_password;
+    private TextInputEditText text_rep_password;
 
     // name input
-    private EditText text_name;
+    private TextInputEditText text_name;
 
     // nif input
-    private EditText text_nif;
+    private TextInputEditText text_nif;
 
     // checkbox determining whether credit card has been inserted or not
     private CheckBox check_credit_card;
@@ -169,9 +168,15 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
         if (code == Constants.OK_RESPONSE) {
             showToast(Constants.REGISTER_SUCCESS);
 
+            String username = text_username.getText().toString();
+            String password = text_password.getText().toString();
+
             // start login activity
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent();
+            intent.putExtra("username", username);
+            intent.putExtra("password", password);
+            setResult(RESULT_OK, intent);
+            finish();
         } else {
             showToast(response);
 

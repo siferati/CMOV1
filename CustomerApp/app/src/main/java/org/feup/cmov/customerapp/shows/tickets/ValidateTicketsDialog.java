@@ -25,7 +25,7 @@ public class ValidateTicketsDialog extends Dialog {
         /**
          * After confirming tickets to validate, go back to shows activity
          */
-        void handleValidateTickets();
+        void handleValidateTickets(ArrayList<Ticket> tickets);
     }
 
     // interface object
@@ -82,6 +82,6 @@ public class ValidateTicketsDialog extends Dialog {
 
     private void validate() {
         dismiss();
-        dialogListener.handleValidateTickets();
+        dialogListener.handleValidateTickets(tickets);
     }
 }

@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp">
-        <EditText android:id="@+id/username_register"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/username_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
@@ -29,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp">
-        <EditText android:id="@+id/password_register"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/password_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
@@ -43,7 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp">
-        <EditText android:id="@+id/repeat_password"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/repeat_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
@@ -57,7 +60,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp">
-        <EditText android:id="@+id/name_register"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/name_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
@@ -71,7 +75,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp">
-        <EditText android:id="@+id/nif_register"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/nif_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"

@@ -2,30 +2,65 @@ package org.feup.cmov.customerapp.dataStructures;
 
 import org.feup.cmov.customerapp.utils.Constants;
 
+import java.util.List;
+
 public class Voucher {
-    public enum VoucherType {
-        FREE_POPCORN,
-        FREE_COFFEE,
-        DISCOUNT
-    }
-
     private String id;
-    private VoucherType type;
+    private String type;
+    private double discount;
     private boolean available;
+    private int quantity = 0;
 
-    public Voucher(String id, String type, boolean available) {
+    public Voucher(String id, String type, double discount) {
         this.id = id;
-        this.type = getType(type);
-        this.available = available;
+        this.type = type;
+        this.discount = discount;
+        this.available = true;
     }
 
-    public VoucherType getType(String type) {
-        if (type.equals(Constants.FREE_POPCORN)) {
-            return VoucherType.FREE_POPCORN;
-        } else if (type.equals(Constants.FREE_COFFEE)) {
-            return VoucherType.FREE_COFFEE;
+    public Voucher(String type, int quantity) {
+        this.type = type;
+        this.quantity = quantity;
+        this.available = true;
+    }
+
+    public static int getQuantityFromList(String type, List<Voucher> voucherList) {
+        int quantity = 0;
+
+        for (int i = 0; i < voucherList.size(); i++) {
+            if (voucherList.get(i).getType().equals(type)) {
+                quantity++;
+            }
+        }
+
+        return quantity;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getName(String type) {
+        if (type.equals(Constants.FREE_COFFEE)) {
+            return Constants.COFFEE_NAME;
+        } else if (type.equals(Constants.FREE_POPCORN)) {
+            return Constants.POPCORN_NAME;
         } else {
-            return VoucherType.DISCOUNT;
+            return Constants.DISCOUNT_NAME;
+        }
+    }
+
+    public String getDescription(String type) {
+        if (type.equals(Constants.FREE_COFFEE)) {
+            return Constants.COFFEE_DESCRIPTION;
+        } else if (type.equals(Constants.FREE_POPCORN)) {
+            return Constants.POPCORN_DESCRIPTION;
+        } else {
+            return Constants.DISCOUNT_DESCRIPTION;
         }
     }
 
@@ -33,8 +68,12 @@ public class Voucher {
         return id;
     }
 
-    public VoucherType getType() {
+    public String getType() {
         return type;
+    }
+
+    public double getDiscount() {
+        return discount;
     }
 
     public boolean isAvailable() {
