@@ -28,4 +28,6 @@
 | POST | /shows/:id/tickets | { userId, quantity } | { tickets: [ { id, name, date, seatNumber, price }, ... ], vouchers: [ { id, name, discount }, ... ] } | Buy tickets for a show. **(signed)** |
 | POST | /shows/:id/tickets/validation | { userId, [ ticketId, ... ] } | { valid: [ ticketId, ... ], invalid: [ ticketId, ... ] } | Validate tickets for a show. |
 | GET | /products | { } | [ { id, name, price }, ... ] | Get all products. |
-| GET | /products/:id | { } | { id, name, price } | Get info about a product. |
+| GET | /products/:id | { } | { id, name, price } | Get a product. |
+| GET | /users/:id/vouchers | { } | [ { id, orderId, promotions: [ { productId, discount }, ... ] }, ... ] | Get all vouchers belonging to an user. |
+| GET | /users/:userId/vouchers/:voucherId | { } | { id, orderId, promotions: [ { productId, discount }, ... ] } | Get a voucher belonging to an user. |

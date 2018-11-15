@@ -6,6 +6,7 @@ const user = require('./user.js');
 const creditcard = require('./creditcard.js');
 const show = require('./show.js');
 const ticket = require('./ticket.js');
+const voucher = require('./voucher.js');
 const product = require('./product.js');
 const order = require('./order.js');
 
@@ -35,12 +36,16 @@ app.get('/shows', show.all);
 app.post('/shows/:id/tickets', ticket.create);
 app.post('/shows/:id/tickets/validation', ticket.validate);
 
+/* --- Voucher --- */
+app.get('/users/:id/vouchers', voucher.all);
+app.get('/users/:userId/vouchers/:voucherId', voucher.get);
+
 /* --- Product --- */
 app.get('/products', product.all);
 app.get('/products/:id', product.get);
 
 /* --- Order --- */
-app.post('users/:id/orders', order.create);
+app.post('/users/:id/orders', order.create);
 
 /**
  * Close the db connection on exiting.
