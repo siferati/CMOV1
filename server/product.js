@@ -28,7 +28,8 @@ module.exports = {
 
 		db.all(
 			`SELECT id, name, price
-			FROM Products`,
+			FROM Products
+			WHERE name != 'total'`,
 			(err, rows) => {
 				if (err) {
 					console.error(err);
