@@ -45,4 +45,6 @@ public class Constants {
     public static final String LOCAL_LOGIN = "Local Login";
     public static final String INVALID_PASSWORD = "Invalid password";
 
+    public static final String DECREASE_FAILED_PRODUCT = "Negative number of produts not allowed";
+
 }

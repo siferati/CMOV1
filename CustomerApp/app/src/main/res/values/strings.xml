@@ -65,4 +65,8 @@
     <!-- VOUCHERS LAYOUT -->
     <string name="empty_vouchers">No vouchers yet.</string>
 
+    <!-- PRODUCTS LAYOUT -->
+    <string name="shopping_cart">Shopping Cart</string>
+    <string name="product_quantity">Quantity: </string>
+
 </resources>
