@@ -265,6 +265,34 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
      * Calls fragment to confirm tickets validation
      */
     public void validateTickets() {
+        if(checkIfSingleShow(selectedTickets)) {
+            checkIfValidNumber();
+        } else {
+            showToast(Constants.SINGLE_SHOW);
+        }
+    }
+
+    public boolean checkIfSingleShow(List<Ticket> tickets) {
+        boolean single_show = true;
+
+        if (tickets.size() > 0) {
+            Ticket t = tickets.get(0);
+
+            if (tickets.size() > 1) {
+                for(int i = 1; i < tickets.size(); i++) {
+                    String ticketIndexName = tickets.get(i).getName();
+                    if (!ticketIndexName.equals(t.getName())) {
+                        single_show = false;
+                        return single_show;
+                    }
+                }
+            }
+        }
+
+        return single_show;
+    }
+
+    public void checkIfValidNumber() {
         if (selectedTickets.size() <= 4) {
             if (selectedTickets.size() > 0) {
                 ArrayList<Ticket> selected_ticks = new ArrayList<>(selectedTickets);
@@ -291,8 +319,53 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
 
         intent.putExtras(argument);
         startActivity(intent);
+
+        // TODO: this update will probably happen when the terminal replies
+        updateTicketsDatabase(tickets);
     }
 
+    public void updateTicketsDatabase(ArrayList<Ticket> tickets) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
+
+                for(int i = 0; i < tickets.size(); i++) {
+                    tickets.get(i).setAvailable(false);
+                    db.updateTicket(tickets.get(i));
+                }
+
+                List<Ticket> ticketsList = db.getAllTickets(getApplicationContext());
+
+                ticketsAdapter.clear();
+                ticketsAdapter.addAll(ticketsList);
+            }
+        });
+    }
+
+    /*public void setUsedTickets(ArrayList<Ticket> ticketsSelected) {
+
+        List<Ticket> adapterList = new ArrayList<>();
+
+        for(int i=0 ; i < ticketsAdapter.getCount() ; i++){
+            Ticket t = ticketsAdapter.getItem(i);
+            adapterList.add(t);
+        }
+
+        for(Ticket t : ticketsSelected) {
+            for (Ticket ta: adapterList) {
+                if(t.getId().equals(ta.getId())) {
+                    ta.setAvailable(false);
+                }
+            }
+        }
+
+        ticketsAdapter.clear();
+        for (Ticket ticket : adapterList) {
+            ticketsAdapter.insert(ticket, ticketsAdapter.getCount());
+        }
+        ticketsAdapter.notifyDataSetChanged();
+    }*/
 
     /**
      * Shows toast message

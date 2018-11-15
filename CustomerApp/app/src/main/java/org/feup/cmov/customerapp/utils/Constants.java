@@ -40,6 +40,7 @@ public class Constants {
 
     public static final String VALIDATE_FAILED = "Can't validate more than 4 tickets at once";
     public static final String NO_TICKETS = "Need at least 1 ticket to validate";
+    public static final String SINGLE_SHOW = "Tickets to validate need to be from the same show";
 
     public static final String LOCAL_LOGIN = "Local Login";
     public static final String INVALID_PASSWORD = "Invalid password";

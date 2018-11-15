@@ -14,6 +14,7 @@ import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.shows.ShowsActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TicketAdapter extends ArrayAdapter<Ticket> {
@@ -54,6 +55,8 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
 
             available.setImageResource(R.drawable.available_not);
         } else {
+            row.setBackgroundColor(activity.getResources().getColor(R.color.white));
+            selected.setClickable(true);
             selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(activity, t, isCheck));
             available.setImageResource(R.drawable.available_yes);
         }

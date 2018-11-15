@@ -152,7 +152,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
         String TICKETS_SELECT_QUERY = "SELECT * FROM " + TICKETS_TABLE +
                 " WHERE " + USER_ID + " = '" + user.getId() + "'" +
-                " ORDER BY " + TICKET_AVAILABLE + " ASC, " + TICKET_DATE + " ASC";
+                " ORDER BY " + TICKET_AVAILABLE + " DESC, " + TICKET_DATE + " ASC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(TICKETS_SELECT_QUERY, null);
 
@@ -187,10 +187,9 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
     /**
      * Updates ticket's availability in the database
-     * @param context - current application context
      * @param ticket - ticket to update
      */
-    public synchronized void updateTicket(Context context, Ticket ticket) {
+    public synchronized void updateTicket(Ticket ticket) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
 
@@ -198,11 +197,19 @@ public class LocalDatabase extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             ContentValues values = new ContentValues();
-            values.put(TICKET_AVAILABLE, ticket.isAvailable());
+            int available = -1;
+            if(ticket.isAvailable()) {
+                available = AVAILABLE_TRUE;
+            } else {
+                available = AVAILABLE_FALSE;
+            }
 
-            String[] args = {ticket.getId()};
+            values.put(TICKET_AVAILABLE, available);
 
-            db.update(TICKETS_TABLE, null,"id=?", args);
+            String ticketId = ticket.getId();
+            String[] args = {ticketId};
+
+            db.update(TICKETS_TABLE, values,"id=?", args);
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.d("http", "Error while trying to add post to database");
