@@ -1,5 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const crypto = require('./crypto.js');
+const Product = require('./product.js');
+const Voucher = require('./voucher.js');
 
 const db = new sqlite3.cached.Database('db/db.sqlite3');
 
@@ -11,7 +13,27 @@ function hasDuplicates(array) {
 module.exports = {
 
 	create: (req, res) => {
-		res.send('Work in Progress!');
+
+		const productIds = req.body.products;
+		const voucherIds = req.body.vouchers;
+
+		Voucher.getMult(voucherIds, (err, vouchers) => {
+			if (err) {
+				console.error(err);
+				return res.sendStatus(500);
+			}
+
+			Product.getMult(productIds, (err, products) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
+				}
+	
+				res.send({vouchers: vouchers, products: products});
+			});
+		});
+
+			
 	}
 
 	
