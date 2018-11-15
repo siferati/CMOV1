@@ -52,7 +52,7 @@ CREATE TABLE Tickets (
 
 CREATE TABLE Orders (
 	id INTEGER PRIMARY KEY,
-	date DATETIME NOT NULL,
+	date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	userId INTEGER NOT NULL REFERENCES Users(id)
 );
 
@@ -85,6 +85,13 @@ CREATE TABLE ProductOrders (
 
 
 /* --- TEST DATA --- */
+
+/* --- USERS --- */
+
+INSERT INTO Users (id, name, username, password, nif, keyN, keyE) VALUES ("one", "tiago", "tirafesi", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "987654321", "c5b6e9093307afbe53fd29d9b4944d92a2bdd5b94bbc6247590dc8f4a768b3fa36874390f5da36ea2823459052c097d0fd75706880e4641a1e5a8f89e9580ce9", "10001");
+INSERT INTO Users (id, name, username, password, nif, keyN, keyE) VALUES ("two", "claudia", "arwen7stars", "$2b$10$4hhfZMgRaZ9JerjwAuNSt.Y4EgsELabjubyEnSB0/rfK5ObSJAGG.", "876543210", "n2", "e2");
+INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", "123456789", "2020-03-21", "one");
+INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", "012345678", "2020-03-21", "two");
 
 /* --- Products --- */
 
