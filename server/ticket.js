@@ -18,6 +18,26 @@ function hasDuplicates(array) {
 
 module.exports = {
 
+	all: (req, res) => {
+		const id = req.params.id;
+
+		db.all(
+			`SELECT Tickets.id, available, name, date, seatNumber, price
+			FROM Tickets, Shows
+			WHERE userId = ?
+			AND showId = Shows.id`,
+			id,
+			(err, rows) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
+				}
+
+				res.send(rows);
+			}
+		);
+	},
+
 	validate: (req, res) => {
 
 		const showId = req.params.id;

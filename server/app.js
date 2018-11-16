@@ -35,6 +35,7 @@ app.get('/shows', show.all);
 /* --- Ticket --- */
 app.post('/shows/:id/tickets', ticket.create);
 app.post('/shows/:id/tickets/validation', ticket.validate);
+app.get('/users/:id/tickets', ticket.all);
 
 /* --- Voucher --- */
 app.get('/users/:id/vouchers', voucher.all);
