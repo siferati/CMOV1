@@ -47,6 +47,7 @@ app.get('/products/:id', product.get);
 
 /* --- Order --- */
 app.post('/users/:id/orders', order.create);
+app.get('/users/:id/orders', order.all);
 
 /**
  * Close the db connection on exiting.

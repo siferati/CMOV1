@@ -12,6 +12,78 @@ function hasDuplicates(array) {
 
 module.exports = {
 
+	all: (req, res) => {
+
+		const userId = req.params.id;
+
+		// get basic info from orders belonging to user
+		db.all(
+			`SELECT id, date, price
+			FROM Orders
+			WHERE userId = ?`,
+			userId,
+			(err, orders) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
+				}
+
+				// get info about products of each order
+				let ordersToUpdate = orders.length;
+				orders.forEach(order => {					
+					db.all(
+						`SELECT id, name, quantity
+						FROM ProductOrders, Products
+						WHERE orderId = ?
+						AND productId = id`,
+						order.id,
+						(err, products) => {
+							if (err) {
+								console.error(err);
+								return res.sendStatus(500);
+							}
+
+							// update each order with their products
+							order = Object.assign(order, { products: products });
+							ordersToUpdate--;
+
+							// all orders are updated, continue
+							if (ordersToUpdate === 0) {
+
+								// get info about vouchers of each order
+								let ordersToUpdate = orders.length;
+								orders.forEach (order => {
+									db.all(
+										`SELECT id
+										FROM Vouchers
+										WHERE orderId = ?
+										AND userId = ?`,
+										[order.id, userId],
+										(err, vouchers) => {
+											if (err) {
+												console.error(err);
+												return res.sendStatus(500);
+											}
+
+											// update each order with their vouchers
+											order = Object.assign(order, { vouchers: vouchers });
+											ordersToUpdate--;
+
+											// all orders are updated, respond to request
+											if (ordersToUpdate === 0) {
+												return res.send(orders);
+											}
+										}
+									);
+								});
+							}
+						}
+					);
+				});
+			}
+		);
+	},
+
 	create: (req, res) => {
 		
 		// read provided info
@@ -29,14 +101,14 @@ module.exports = {
 		}
 
 		crypto.verify(userId, req.body, signature, (err, valid) => {
-			/*if (err) {
+			if (err) {
 				console.error(err);
 				return res.sendStatus(500);
 			} else if (valid === undefined) {
 				return res.status(400).send('User ID doesn\'t exist.');
 			} else if (valid === false) {
 				return res.status(400).send('Invalid signature.');
-			}*/
+			}
 
 			// get full info on vouchers
 			Voucher.getMult(voucherIds, (err, vouchers) => {
@@ -133,7 +205,7 @@ module.exports = {
 										return res.sendStatus(500);
 									}
 
-									res.send({ orderId, price, products, usedVoucherIds });
+									res.send({ id: orderId, price, products, usedVoucherIds });
 								});
 							});
 						}
