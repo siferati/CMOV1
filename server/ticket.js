@@ -221,35 +221,51 @@ module.exports = {
 					sqlVouchers = sqlVouchers.substr(0, sqlVouchers.length - 1);
 					sqlPromotions = sqlPromotions.substr(0, sqlPromotions.length - 1);
 		
+					// begin transaction in new serialized db connection
+					const transdb = new sqlite3.Database('db/db.sqlite3');
+					transdb.serialize();
+					transdb.run('BEGIN TRANSACTION');
+
+
 					// create tickets
-					db.run(
+					transdb.run(
 						sqlTickets,
 						paramsTickets,
 						(err) => {
 							if (err) {
 								console.error(err);
+								transdb.run('ROLLBACK');
+								transdb.close();
 								return res.sendStatus(500);
 							}
 
 							// create vouchers
-							db.run(
+							transdb.run(
 								sqlVouchers,
 								paramsVouchers,
 								(err) => {
 									if (err) {
 										console.error(err);
+										transdb.run('ROLLBACK');
+										transdb.close();
 										return res.sendStatus(500);
 									}
 
 									// create promotions
-									db.run(
+									transdb.run(
 										sqlPromotions,
 										paramsPromotions,
 										(err) => {
 											if (err) {
 												console.error(err);
+												transdb.run('ROLLBACK');
+												transdb.close();
 												return res.sendStatus(500);
 											}
+
+											// commit transaction and close db connection
+											transdb.run('COMMIT');
+											transdb.close();
 
 											return res.send({
 												tickets: tickets,
