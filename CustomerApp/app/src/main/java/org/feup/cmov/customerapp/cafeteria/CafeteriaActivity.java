@@ -27,9 +27,6 @@ public class CafeteriaActivity extends AppCompatActivity {
     // API to get products from server
     public GetProducts productsAPI;
 
-    // products list
-    List<Product> products = new ArrayList<>();
-
     // adapter to products' list
     public ArrayAdapter<Product> productsAdapter;
 
@@ -72,7 +69,7 @@ public class CafeteriaActivity extends AppCompatActivity {
 
             saveSelectedProducts();
         } else {
-            showToast(Constants.NO_PRODUCTS);
+            Constants.showToast(Constants.NO_PRODUCTS, this);
         }
     }
 
@@ -91,7 +88,7 @@ public class CafeteriaActivity extends AppCompatActivity {
             list_products.setAdapter(productsAdapter);
         } else {
             // show error response
-            showToast(response);
+            Constants.showToast(response, this);
         }
     }
 
@@ -167,15 +164,6 @@ public class CafeteriaActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(Constants.PREF_PRODUCTS);
         editor.apply();
-    }
-
-    /**
-     * Shows toast message
-     * @param toast - message to show
-     */
-    public void showToast(final String toast)
-    {
-        runOnUiThread(() -> Toast.makeText(CafeteriaActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
     public void setSelectedProducts(List<Product> selectedProducts) {

@@ -1,5 +1,6 @@
 package org.feup.cmov.customerapp.login;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -96,27 +97,18 @@ public class LoginActivity extends AppCompatActivity {
             User.setLoggedinUser(username, User.LOGGEDIN_USER_PATH, getApplicationContext());
 
             // show login success message
-            showToast(Constants.LOGIN_SUCCESS);
+            Constants.showToast(Constants.LOGIN_SUCCESS, this);
 
             // start main activity
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else {
             // show error response
-            showToast(response);
+            Constants.showToast(response, this);
 
             // enable login button if login failed
             enableLoginBtn(true);
         }
-    }
-
-    /**
-     * Shows toast message
-     * @param toast - message to show
-     */
-    public void showToast(final String toast)
-    {
-        runOnUiThread(() -> Toast.makeText(LoginActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
     /**

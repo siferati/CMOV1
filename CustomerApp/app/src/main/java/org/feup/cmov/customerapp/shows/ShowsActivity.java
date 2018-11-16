@@ -230,7 +230,7 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
     public void handleResponse(int code, String response) {
         if (code != Constants.OK_RESPONSE) {
             // show error response
-            showToast(response);
+            Constants.showToast(response, this);
         } else {
             // if loading shows was successful, then set isLoading to false
             isLoading = false;
@@ -268,7 +268,7 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         if(checkIfSingleShow(selectedTickets)) {
             checkIfValidNumber();
         } else {
-            showToast(Constants.SINGLE_SHOW);
+            Constants.showToast(Constants.SINGLE_SHOW, this);
         }
     }
 
@@ -300,10 +300,10 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
                 ValidateTicketsFragment dialog = ValidateTicketsFragment.constructor(selected_ticks);
                 dialog.show(getSupportFragmentManager(), "validate_tickets");
             } else {
-                showToast(Constants.NO_TICKETS);
+                Constants.showToast(Constants.NO_TICKETS, this);
             }
         } else {
-            showToast(Constants.VALIDATE_FAILED);
+            Constants.showToast(Constants.VALIDATE_FAILED, this);
         }
     }
 
@@ -342,40 +342,6 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
             }
         });
     }
-
-    /*public void setUsedTickets(ArrayList<Ticket> ticketsSelected) {
-
-        List<Ticket> adapterList = new ArrayList<>();
-
-        for(int i=0 ; i < ticketsAdapter.getCount() ; i++){
-            Ticket t = ticketsAdapter.getItem(i);
-            adapterList.add(t);
-        }
-
-        for(Ticket t : ticketsSelected) {
-            for (Ticket ta: adapterList) {
-                if(t.getId().equals(ta.getId())) {
-                    ta.setAvailable(false);
-                }
-            }
-        }
-
-        ticketsAdapter.clear();
-        for (Ticket ticket : adapterList) {
-            ticketsAdapter.insert(ticket, ticketsAdapter.getCount());
-        }
-        ticketsAdapter.notifyDataSetChanged();
-    }*/
-
-    /**
-     * Shows toast message
-     * @param toast - message to show
-     */
-    public void showToast(final String toast)
-    {
-        runOnUiThread(() -> Toast.makeText(ShowsActivity.this, toast, Toast.LENGTH_LONG).show());
-    }
-
 
     /**
      * Sets click listener on each show

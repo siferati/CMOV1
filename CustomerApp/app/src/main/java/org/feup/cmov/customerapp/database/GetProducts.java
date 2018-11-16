@@ -36,6 +36,7 @@ public class GetProducts  extends ServerConnection implements Runnable {
         try {
             url = new URL("http://" + address + ":" + port + "/products");
             urlConnection = (HttpURLConnection) url.openConnection();
+
             urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setUseCaches(false);

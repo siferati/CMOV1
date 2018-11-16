@@ -99,10 +99,10 @@ public class SelectVoucherActivity extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
                 finish();
             } else {
-                showToast(Constants.TWO_DISCOUNTS);
+                Constants.showToast(Constants.TWO_DISCOUNTS, this);
             }
         } else {
-            showToast(Constants.MAX_VOUCHERS);
+            Constants.showToast(Constants.MAX_VOUCHERS, this);
         }
     }
 
@@ -123,15 +123,6 @@ public class SelectVoucherActivity extends AppCompatActivity {
         }
 
         return valid;
-    }
-
-    /**
-     * Shows toast message
-     * @param toast - message to show
-     */
-    public void showToast(final String toast)
-    {
-        runOnUiThread(() -> Toast.makeText(SelectVoucherActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
     public void addVoucher(Voucher v) {

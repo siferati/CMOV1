@@ -40,11 +40,11 @@
             android:label="Cafeteria"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".settings.TransactionsActivity"
+            android:name=".transactions.TransactionsActivity"
             android:label="Transactions"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".transactions.SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".MainActivity" />
         <activity

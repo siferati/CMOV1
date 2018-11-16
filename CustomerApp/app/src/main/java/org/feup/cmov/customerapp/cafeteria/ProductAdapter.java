@@ -84,7 +84,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
             updateQuantity(product, quantity, numberProduct, true);
             updateSelectedProducts(product, quantity, false);
         } else {
-            activity.showToast(Constants.DECREASE_FAILED_PRODUCT);
+            Constants.showToast(Constants.DECREASE_FAILED_PRODUCT, activity);
         }
     }
 

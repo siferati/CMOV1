@@ -157,7 +157,7 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
             Thread thr = new Thread(addCreditCard);
             thr.start();
         } else {
-            showToast(response);
+            Constants.showToast(response, this);
 
             // enable register button if register failed
             enableRegisterBtn(true);
@@ -166,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
 
     public void handleResponseCC(int code, String response) {
         if (code == Constants.OK_RESPONSE) {
-            showToast(Constants.REGISTER_SUCCESS);
+            Constants.showToast(Constants.REGISTER_SUCCESS, this);
 
             String username = text_username.getText().toString();
             String password = text_password.getText().toString();
@@ -178,20 +178,11 @@ public class RegisterActivity extends AppCompatActivity implements CreditCardDia
             setResult(RESULT_OK, intent);
             finish();
         } else {
-            showToast(response);
+            Constants.showToast(response, this);
 
             // enable register button if register failed
             enableRegisterBtn(true);
         }
-    }
-
-    /**
-     * Shows toast message
-     * @param toast - message to show
-     */
-    public void showToast(final String toast)
-    {
-        runOnUiThread(() -> Toast.makeText(RegisterActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
     /**

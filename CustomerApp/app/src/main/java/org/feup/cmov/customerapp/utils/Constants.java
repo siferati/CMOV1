@@ -1,5 +1,10 @@
 package org.feup.cmov.customerapp.utils;
 
+import android.app.Activity;
+import android.widget.Toast;
+
+import org.feup.cmov.customerapp.login.LoginActivity;
+
 public class Constants {
     public static final String SHARED_PREF = "shared_preferences";
     public static final String PREF_PRODUCTS = "products";
@@ -58,5 +63,13 @@ public class Constants {
     public static final String MAX_VOUCHERS = "Can't select more than two vouchers";
     public static final String TWO_DISCOUNTS = "Only one 5% discount voucher allowed";
     public static final String ORDER_IN_PROGRESS = "Sending order to validation terminal";
+
+    /**
+     * Shows toast message
+     * @param toast - message to show
+     */
+    public static void showToast(final String toast, Activity activity) {
+        activity.runOnUiThread(() -> Toast.makeText(activity, toast, Toast.LENGTH_LONG).show());
+    }
 
 }

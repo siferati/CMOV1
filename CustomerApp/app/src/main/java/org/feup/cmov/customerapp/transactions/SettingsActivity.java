@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp.settings;
+package org.feup.cmov.customerapp.transactions;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

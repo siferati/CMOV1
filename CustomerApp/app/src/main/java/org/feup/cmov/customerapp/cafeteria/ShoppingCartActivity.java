@@ -93,17 +93,8 @@ public class ShoppingCartActivity extends AppCompatActivity {
             setPriceText();
         } else {
             // show error response
-            showToast(response);
+            Constants.showToast(response, this);
         }
-    }
-
-    /**
-     * Shows toast message
-     * @param toast - message to show
-     */
-    public void showToast(final String toast)
-    {
-        runOnUiThread(() -> Toast.makeText(ShoppingCartActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
     /**
@@ -225,9 +216,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
             intent.putExtras(argument);
             startActivity(intent);
 
-            showToast(Constants.ORDER_IN_PROGRESS);
+            Constants.showToast(Constants.ORDER_IN_PROGRESS, this);
         } else {
-            showToast(Constants.ERROR_CONNECTING);
+            Constants.showToast(Constants.ERROR_CONNECTING, this);
         }
 
         // TODO: send order to validation terminal!!!!!!!!!!

@@ -47,6 +47,7 @@ public class GetShows extends ServerConnection implements Runnable {
 
             url = new URL("http://" + address + ":" + port + "/shows?page=" + page + "&limit=" + limit);
             urlConnection = (HttpURLConnection) url.openConnection();
+
             urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setUseCaches(false);

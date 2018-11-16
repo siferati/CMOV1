@@ -37,9 +37,9 @@ public class Login extends ServerConnection implements Runnable {
             urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
 
             urlConnection.setDoOutput(true);
-            urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setUseCaches(false);
+            urlConnection.setRequestMethod("POST");
 
             //Create JSONObject here
             JSONObject jsonParam = new JSONObject();

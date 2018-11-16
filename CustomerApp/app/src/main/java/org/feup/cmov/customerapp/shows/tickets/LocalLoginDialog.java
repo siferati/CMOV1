@@ -117,17 +117,8 @@ public class LocalLoginDialog extends Dialog {
         } else {
             enableLoginBtn(true);
             // show error response
-            showToast(response);
+            Constants.showToast(response, activity);
         }
-    }
-
-    /**
-     * Shows toast message
-     * @param toast - message to show
-     */
-    public void showToast(final String toast)
-    {
-        activity.runOnUiThread(() -> Toast.makeText(activity, toast, Toast.LENGTH_LONG).show());
     }
 
     /**

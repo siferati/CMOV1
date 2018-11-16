@@ -90,7 +90,7 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
             ConfirmPurchaseFragment dialog = ConfirmPurchaseFragment.constructor(show.getName(), tickets, show.getPrice());
             dialog.show(getSupportFragmentManager(), "confirm_purchase");
         } else {
-            showToast(Constants.BUY_FAILED);
+            Constants.showToast(Constants.BUY_FAILED, this);
         }
     }
 
@@ -104,7 +104,7 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
             String no_tickets = Integer.toString(tickets);
             numberTickets.setText(no_tickets);
         } else {
-            showToast(Constants.DECREASE_FAILED);
+            Constants.showToast(Constants.DECREASE_FAILED, this);
         }
     }
 
@@ -130,7 +130,7 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
             saveTicketsAndVouchers(tickets, vouchers);
         } else {
             // show error response
-            showToast(response);
+            Constants.showToast(response, this);
         }
     }
 
@@ -155,7 +155,7 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
      */
     private void saveVouchersDatabase(ArrayList<Voucher> vouchers) {
         String no_vouchers = "You got " + vouchers.size() + " free vouchers!";
-        showToast(no_vouchers);
+        Constants.showToast(no_vouchers, this);
 
         runOnUiThread(new Runnable() {
             @Override
@@ -167,15 +167,6 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
                 }
             }
         });
-    }
-
-    /**
-     * Shows toast message
-     * @param toast - message to show
-     */
-    public void showToast(final String toast)
-    {
-        runOnUiThread(() -> Toast.makeText(ShowActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
     /**
@@ -192,7 +183,7 @@ public class ShowActivity extends AppCompatActivity implements ConfirmPurchaseDi
      */
     @Override
     public void handleLocalLogin() {
-        showToast(Constants.BUYING_TICKETS);
+        Constants.showToast(Constants.BUYING_TICKETS, this);
         buyTickets();
     }
 
