@@ -4,7 +4,29 @@ const db = new sqlite3.cached.Database('db/db.sqlite3');
 
 module.exports = {
 
+	addOrder: (orderId, products, callback) => {
+
+		if (!Array.isArray(products) || products.length < 1) {
+			return callback(null);
+		}
+
+		let sql = 'INSERT INTO ProductOrders (productId, orderId, quantity) VALUES';
+		let params = [];
+
+		products.forEach(product => {
+			sql += ' (?, ?, ?),';
+			params.push(product.id, orderId, product.quantity);
+		});
+		sql = sql.substring(0, sql.length - 1);
+
+		db.run(sql, params, (err) => callback(err));
+	},
+
 	getMult: (ids, callback) => {
+
+		if (!Array.isArray(ids) || ids.length < 1) {
+			return callback(null, []);
+		}
 
 		let sql = 'SELECT id, name, price FROM Products WHERE';
 

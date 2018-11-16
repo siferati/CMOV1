@@ -31,3 +31,4 @@
 | GET | /products/:id | { } | { id, name, price } | Get a product. |
 | GET | /users/:id/vouchers | { } | [ { id, orderId, promotions: [ { productId, discount }, ... ] }, ... ] | Get all vouchers belonging to an user. |
 | GET | /users/:userId/vouchers/:voucherId | { } | { id, orderId, promotions: [ { productId, discount }, ... ] } | Get a voucher belonging to an user. |
+| POST | /users/:id/orders | { products: [ { id, quantity }, ... ], vouchers: [ id, ... ] } | { orderId, price, products: [ { id, name, quantity }, ... ], usedVouchers: [ id, ... ] } | Create a new order. **(signed***) |

@@ -13,176 +13,133 @@ function hasDuplicates(array) {
 module.exports = {
 
 	create: (req, res) => {
-
-		const productIds = req.body.products;
+		
+		// read provided info
+		const userId = req.params.id;
+		const productIds = req.body.products.map(product => product.id);
+		const productQts = req.body.products.map(product => product.quantity);
 		const voucherIds = req.body.vouchers;
+		const signature = req.headers.signature || '';
 
-		Voucher.getMult(voucherIds, (err, vouchers) => {
-			if (err) {
-				console.error(err);
-				return res.sendStatus(500);
-			}
-
-			Product.getMult(productIds, (err, products) => {
-				if (err) {
-					console.error(err);
-					return res.sendStatus(500);
-				}
-	
-				res.send({vouchers: vouchers, products: products});
-			});
-		});
-
-			
-	}
-
-	
-	/*
-
-
-	// TODO add vouchers, add transaction
-	create: (req, res) => {
-
-		const userId = req.params.userId;
-		const signature = req.headers.signature;
-		const {
-			voucherIds,
-			productIds
-		} = req.body;
-
-
+		// check for bad request
 		if (!Array.isArray(voucherIds) || hasDuplicates(voucherIds) ||
-			!Array.isArray(productIds) || productIds.length < 1 || hasDuplicates(productIds)) {
+			!Array.isArray(productIds) || productIds.length < 1 || hasDuplicates(productIds) ||
+			productIds.some(isNaN) || productIds.includes(1) || productQts.some(isNaN)) {
 			return res.status(400).send('Invalid list of vouchers and/or products.');
 		}
 
 		crypto.verify(userId, req.body, signature, (err, valid) => {
-			if (err) {
+			/*if (err) {
 				console.error(err);
 				return res.sendStatus(500);
 			} else if (valid === undefined) {
 				return res.status(400).send('User ID doesn\'t exist.');
 			} else if (valid === false) {
 				return res.status(400).send('Invalid signature.');
-			}
+			}*/
 
-			let sql =
-				`SELECT voucherId, productId, discount
-				FROM Promotions, Vouchers
-				WHERE voucherId = Vouchers.id
-				AND available = TRUE
-				AND (`;
-
-			let params = [];
-
-			// create sql statement to get N vouchers
-			voucherIds.forEach((voucherId) => {
-				sql += ' voucherId = ? OR';
-				params.push(voucherId);
-			});
-
-			// remove last OR and close )
-			sql = sql.substr(0, sql.length - 3);
-			sql += ')';
-			
-			// get valid vouchers to use in this order
-			db.all(
-				sql,
-				params,
-				(err, rows) => {
+			// get full info on vouchers
+			Voucher.getMult(voucherIds, (err, vouchers) => {
+				if (err) {
+					console.error(err);
+					return res.sendStatus(500);
+				}
+				
+				// get full info on products
+				Product.getMult(productIds, (err, products) => {
 					if (err) {
 						console.error(err);
 						return res.sendStatus(500);
 					}
+					
+					// append order quantity to each product info
+					for (let i = 0; i < products.length; i++) {
+						products[i] = Object.assign(products[i], {quantity: productQts[i]});
+					}
 
-					// vouchers to use in this order
-					let vouchers = [];
+					// vouchers used in this order
+					let usedVouchers = [];
 
-					rows.forEach((row) => {
-						vouchers.push({
-							id: row.voucherId,
-							product: row.productId,
-							discount: row.discount
+					// price to pay for the order
+					let price = 0;
+
+					// raw price (no discounts)
+					products.forEach(product => price += product.quantity * product.price);
+
+					// check for available discounts
+					vouchers.forEach((voucher) => {
+						if (voucher.orderId !== null) {
+							return;
+						}
+
+						products.forEach((product) => {
+							for (let i = 0; i < voucher.promotions.length; i++) {
+								let promotion = voucher.promotions[i];
+								if (promotion.productId === product.id) {
+									// update price with discount (only affects one unit!)
+									price -= promotion.discount * product.price;
+									usedVouchers.push(voucher);
+								}
+							}
 						});
 					});
 
-					let sql = 'SELECT id, price FROM Products WHERE';
-					let params = [];
+					// remove duplicates
+					usedVouchers = Array.from(new Set(usedVouchers).values());
 
-					productIds.forEach((productId) => {
-						sql += ' id = ? OR';
-						params.push(productId.id);
+					// check of special voucher
+					vouchers.forEach(voucher => {
+						if (voucher.orderId !== null) {
+							return;
+						}
+						for (let i = 0; i < voucher.promotions.length; i++) {
+							let promotion = voucher.promotions[i];
+							if (promotion.productId == 1) {
+								price = price * 0.95;
+								usedVouchers.push(voucher);
+								return;
+							}
+						}
 					});
 
-					// remove last OR
-					sql = sql.substr(0, sql.length - 3);
+					// 2 decimal places
+					price = price.toFixed(2);
 
-					// get products to order
-					db.all(
-						sql,
-						params,
-						(err, rows) => {
+					// create new order in db
+					db.run(
+						`INSERT INTO Orders (price, userId)
+						VALUES (?, ?)`,
+						[price, userId],
+						function (err) {
 							if (err) {
 								console.error(err);
 								return res.sendStatus(500);
 							}
 
-							// products to add to order
-							let products = [];
+							const orderId = this.lastID;
+							const usedVoucherIds = usedVouchers.map(voucher => voucher.id);
 
-							rows.forEach((row) => {
-								products.push({
-									id: row.id,
-									price: row.price
-								});
-							});
+							// update tickets with new order
+							Voucher.updateMult(orderId, usedVoucherIds, (err) => {
+								if (err) {
+									console.error(err);
+									return res.sendStatus(500);
+								}
 
-							// create order
-							db.run(
-								`INSERT INTO Orders (userId)
-								VALUES (?)`,
-								userId,
-								function (err) {
+								// add product to orders
+								Product.addOrder(orderId, products, (err) => {
 									if (err) {
 										console.error(err);
 										return res.sendStatus(500);
 									}
 
-									const orderId = this.lastID;
-
-									let sql = 'INSERT INTO ProductOrders (productId, orderId, quantity) VALUES';
-									let params = [];
-
-									products.forEach((product) => {
-										sql += ' (?, ?, ?),';
-										params.push(product.id, orderId, product.quantity);
-									});
-
-									// remove last comma
-									sql = sql.substr(0, sql.length - 1);
-
-									// add products to orders
-									db.run(
-										sql,
-										params,
-										(err) => {
-											if (err) {
-												console.error(err);
-												return res.sendStatus(500);
-											}
-										}
-									);
-								}
-							);
+									res.send({ orderId, price, products, usedVoucherIds });
+								});
+							});
 						}
 					);
-
-					
-
-				}
-			);					
+				});
+			});
 		});
 	}
-
-	*/
 };
