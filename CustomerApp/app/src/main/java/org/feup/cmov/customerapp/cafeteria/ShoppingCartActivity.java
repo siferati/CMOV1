@@ -13,10 +13,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.feup.cmov.customerapp.MainActivity;
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Product;
 import org.feup.cmov.customerapp.dataStructures.Voucher;
 import org.feup.cmov.customerapp.database.GetProducts;
+import org.feup.cmov.customerapp.database.LocalDatabase;
 import org.feup.cmov.customerapp.utils.Constants;
 
 import java.util.ArrayList;
@@ -194,8 +196,29 @@ public class ShoppingCartActivity extends AppCompatActivity {
      */
     private void buyOrder() {
         CafeteriaActivity.resetSharedPrefs(this);
+        deleteVouchersDatabase();
 
-        // TODO: delete vouchers and send order to validation terminal!!!!!!!!!!!!!!!!!!!!!!
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+
+        showToast(Constants.ORDER_IN_PROGRESS);
+
+        // TODO: send order to validation terminal!!!!!!!!!!
+    }
+
+    public void deleteVouchersDatabase() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
+
+                if (LocalDatabase.checkDataBase(getApplicationContext())) {
+                    for(Voucher v : selectedVouchers) {
+                        db.deleteVoucher(getApplicationContext(), v);
+                    }
+                }
+            }
+        });
     }
 
 }

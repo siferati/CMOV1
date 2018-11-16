@@ -42,7 +42,7 @@ public class SelectVoucherActivity extends AppCompatActivity {
         vouchersAdapter = new SelectVoucherAdapter(this, vouchers);
         list_vouchers.setAdapter(vouchersAdapter);
 
-        loadVouchersDatabase(this);
+        loadVouchersDatabase();
 
         Button selectVouchers = findViewById(R.id.btn_vouchers);
         selectVouchers.setOnClickListener((View v)->selectVouchers());
@@ -61,7 +61,7 @@ public class SelectVoucherActivity extends AppCompatActivity {
         list.setEmptyView(empty);
     }
 
-    public void loadVouchersDatabase(SelectVoucherActivity activity) {
+    public void loadVouchersDatabase() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

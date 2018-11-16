@@ -37,7 +37,6 @@ public class Constants {
     public static final String CONFIRM_PURCHASE = "confirm_purchase";
     public static final String VALIDATE_TICKETS = "validate_tickets";
     public static final String VALIDATION_QR = "validation_qr";
-    public static final String SHOPPING_CART = "shopping_cart";
     public static final String REQUESTED_VOUCHERS = "vouchers";
     public static final String SELECTED_VOUCHERS = "selected_vouchers";
 
@@ -56,5 +55,6 @@ public class Constants {
 
     public static final String MAX_VOUCHERS = "Can't select more than two vouchers";
     public static final String TWO_DISCOUNTS = "Only one 5% discount voucher allowed";
+    public static final String ORDER_IN_PROGRESS = "Sending order to validation terminal";
 
 }

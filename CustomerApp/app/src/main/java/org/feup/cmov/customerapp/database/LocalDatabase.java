@@ -283,7 +283,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
         return vouchers;
     }
 
-    public synchronized void updateVoucher(Context context, Voucher voucher) {
+    public synchronized void deleteVoucher(Context context, Voucher voucher) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
 
@@ -295,7 +295,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
             String[] args = {voucher.getId()};
 
-            db.update(VOUCHERS_TABLE, null,"id=?", args);
+            db.delete(VOUCHERS_TABLE, "id=?", args);
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.d("http", "Error while trying to add post to database");
