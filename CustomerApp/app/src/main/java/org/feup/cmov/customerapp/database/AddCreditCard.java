@@ -39,18 +39,12 @@ public class AddCreditCard extends ServerConnection implements Runnable {
 
     @Override
     public void run() {
-        URL url;
         HttpURLConnection urlConnection = null;
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            url = new URL("http://" + address + ":" + port + "/users/" + userID + "/creditcard");
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setUseCaches(false);
-            urlConnection.setRequestMethod("POST");
+            String url ="http://" + address + ":" + port + "/users/" + userID + "/creditcard";
+            urlConnection = setHeaders("POST", url);
 
             urlConnection.connect();
 

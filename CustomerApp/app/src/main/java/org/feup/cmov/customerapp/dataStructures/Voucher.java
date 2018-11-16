@@ -26,9 +26,8 @@ public class Voucher implements Serializable {
         this.available = true;
     }
 
-    public Voucher(String id, boolean available) {
+    public Voucher(String id) {
         this.id = id;
-        this.available = available;
     }
 
     public static int getQuantityFromList(String type, List<Voucher> voucherList) {

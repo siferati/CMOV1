@@ -36,21 +36,15 @@ public class GetShows extends ServerConnection implements Runnable {
 
     @Override
     public void run() {
-        URL url;
         HttpURLConnection urlConnection = null;
-
         int responseCode = Constants.NO_INTERNET;
 
         try {
             String page = currentPage + "";
             String limit = pageSize + "";
 
-            url = new URL("http://" + address + ":" + port + "/shows?page=" + page + "&limit=" + limit);
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setUseCaches(false);
+            String url = "http://" + address + ":" + port + "/shows?page=" + page + "&limit=" + limit;
+            urlConnection = setHeaders("GET", url);
 
             urlConnection.connect();
 

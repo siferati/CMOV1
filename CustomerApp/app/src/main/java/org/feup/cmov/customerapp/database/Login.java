@@ -27,19 +27,12 @@ public class Login extends ServerConnection implements Runnable {
 
     @Override
     public void run() {
-        URL url;
         HttpURLConnection urlConnection = null;
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            url = new URL("http://" + address + ":" + port + "/login");
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
-
-            urlConnection.setDoOutput(true);
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setUseCaches(false);
-            urlConnection.setRequestMethod("POST");
+            String url = "http://" + address + ":" + port + "/login";
+            urlConnection = setHeaders("POST", url);
 
             //Create JSONObject here
             JSONObject jsonParam = new JSONObject();

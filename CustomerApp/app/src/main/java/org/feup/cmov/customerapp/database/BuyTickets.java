@@ -48,19 +48,12 @@ public class BuyTickets extends ServerConnection implements Runnable {
 
     @Override
     public void run() {
-        URL url;
         HttpURLConnection urlConnection = null;
-
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            url = new URL("http://" + address + ":" + port + "/shows/" + showID + "/tickets");
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setUseCaches(false);
-            urlConnection.setRequestMethod("POST");
+            String url = "http://" + address + ":" + port + "/shows/" + showID + "/tickets";
+            urlConnection = setHeaders("POST", url);
 
             //Create JSONObject here
             JSONObject jsonParam = new JSONObject();

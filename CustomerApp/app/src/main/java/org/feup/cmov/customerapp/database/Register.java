@@ -30,19 +30,12 @@ public class Register extends ServerConnection implements Runnable {
 
     @Override
     public void run() {
-        URL url;
         HttpURLConnection urlConnection = null;
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            url = new URL("http://" + address + ":" + port + "/users");
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
-
-            urlConnection.setDoOutput(true);
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setUseCaches(false);
+            String url = "http://" + address + ":" + port + "/users";
+            urlConnection = setHeaders("POST", url);
 
             urlConnection.connect();
 
@@ -81,6 +74,4 @@ public class Register extends ServerConnection implements Runnable {
                 urlConnection.disconnect();
         }
     }
-
-
 }

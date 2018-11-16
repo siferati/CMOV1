@@ -2,6 +2,7 @@ package org.feup.cmov.customerapp.transactions;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
@@ -46,17 +47,19 @@ public class TransactionsActivity extends AppCompatActivity {
 
     public void handleResponseVouchers(int code, String response, List<Voucher> vouchers) {
         if (code == Constants.OK_RESPONSE) {
+            availableVouchers = vouchers;
 
         } else {
-
+            Constants.showToast(response, this);
         }
     }
 
     public void handleResponseTickets(int code, String response, List<Ticket> tickets) {
         if (code == Constants.OK_RESPONSE) {
-
+            availableTickets = tickets;
+            
         } else {
-
+            Constants.showToast(response, this);
         }
     }
 

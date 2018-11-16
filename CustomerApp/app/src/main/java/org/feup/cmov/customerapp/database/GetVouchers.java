@@ -30,16 +30,13 @@ public class GetVouchers extends ServerConnection implements Runnable {
 
     @Override
     public void run() {
-        URL url;
         HttpURLConnection urlConnection = null;
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            url = new URL("http://" + address + ":" + port + "/users/" + userID + "/vouchers");
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setUseCaches(false);
+            String url = "http://" + address + ":" + port + "/users/" + userID + "/vouchers";
+
+            urlConnection = setHeaders("GET", url);
 
             urlConnection.connect();
 
@@ -77,14 +74,14 @@ public class GetVouchers extends ServerConnection implements Runnable {
 
                 String id = show.getString("id");
                 boolean available;
-                if (show.has("orderId")) {
+                if (!show.has("orderId")) {
                     available = false;
                 } else {
                     available = true;
                 }
 
                 if (available) {
-                    Voucher v = new Voucher(id, available);
+                    Voucher v = new Voucher(id);
                     vouchersList.add(v);
                 }
             }

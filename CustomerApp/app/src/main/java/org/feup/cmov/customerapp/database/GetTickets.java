@@ -29,17 +29,13 @@ public class GetTickets extends ServerConnection implements Runnable {
 
     @Override
     public void run() {
-        URL url;
         HttpURLConnection urlConnection = null;
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            url = new URL("http://" + address + ":" + port + "/users/" + userID + "/tickets");
-            urlConnection = (HttpURLConnection) url.openConnection();
+            String url = "http://" + address + ":" + port + "/users/" + userID + "/tickets";
 
-            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setUseCaches(false);
+            urlConnection = setHeaders("GET", url);
 
             urlConnection.connect();
 
@@ -67,6 +63,7 @@ public class GetTickets extends ServerConnection implements Runnable {
     }
 
     private List<Ticket> jsonToArray(String jsonString) {
+
         List<Ticket> ticketList = new ArrayList<>();
 
         try {
@@ -76,13 +73,13 @@ public class GetTickets extends ServerConnection implements Runnable {
                 JSONObject ticket = jArray.getJSONObject(i);
 
                 String id = ticket.getString("id");
-                boolean available = ticket.getBoolean("available");
+                int available = ticket.getInt("available");
                 String name = ticket.getString("name");
                 String date = ticket.getString("date");
                 int seatNumber = ticket.getInt("seatNumber");
                 double price = ticket.getDouble("price");
 
-                if (available) {
+                if (available == 1) {
                     Ticket t = new Ticket(id, name, date, seatNumber, price);
                     ticketList.add(t);
                 }
