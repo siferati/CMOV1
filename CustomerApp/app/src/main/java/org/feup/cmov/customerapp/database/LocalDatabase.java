@@ -135,7 +135,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
             db.insert(TICKETS_TABLE, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.d("http", "Error while trying to add post to database");
+            Log.d("http", "Error while trying to add ticket to database");
         } finally {
             db.endTransaction();
         }
@@ -176,7 +176,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
                 } while(cursor.moveToNext());
             }
         } catch (Exception e) {
-            Log.d("http", "Error while trying to get posts from database");
+            Log.d("http", "Error while trying to get all tickets from database");
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
@@ -212,12 +212,40 @@ public class LocalDatabase extends SQLiteOpenHelper {
             db.update(TICKETS_TABLE, values,"id=?", args);
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.d("http", "Error while trying to add post to database");
+            Log.d("http", "Error while trying to update ticket on the database");
         } finally {
             db.endTransaction();
         }
     }
 
+    /**
+     * Deletes ticket from local database
+     * @param context - current application context
+     * @param ticket - ticket to delete from local database
+     */
+    public synchronized void deleteTicket(Context context, Ticket ticket) {
+        // Create and/or open the database for writing
+        SQLiteDatabase db = getWritableDatabase();
+
+        // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures consistency of the database.
+        db.beginTransaction();
+        try {
+            String[] args = {ticket.getId()};
+
+            db.delete(TICKETS_TABLE, "id=?", args);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("http", "Error while trying to delete ticket from the database");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    /**
+     * Add voucher to local database
+     * @param context - current application context
+     * @param voucher - voucher to add to local database
+     */
     public synchronized void addVoucher(Context context, Voucher voucher) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
@@ -238,12 +266,17 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.d("http", "Error while trying to add post to database");
+            Log.d("http", "Error while trying to add voucher to database");
         } finally {
             db.endTransaction();
         }
     }
 
+    /**
+     * Gets all vouchers
+     * @param context - current application context
+     * @return all vouchers stored in local database
+     */
     public synchronized List<Voucher> getAllVouchers(Context context) {
         List<Voucher> vouchers = new ArrayList<>();
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, context);
@@ -273,7 +306,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
                 } while(cursor.moveToNext());
             }
         } catch (Exception e) {
-            Log.d("http", "Error while trying to get posts from database");
+            Log.d("http", "Error while trying to get all vouchers from database");
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
@@ -283,6 +316,11 @@ public class LocalDatabase extends SQLiteOpenHelper {
         return vouchers;
     }
 
+    /**
+     * Delete voucher from local database
+     * @param context - current application context
+     * @param voucher - voucher to delete
+     */
     public synchronized void deleteVoucher(Context context, Voucher voucher) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
@@ -290,15 +328,12 @@ public class LocalDatabase extends SQLiteOpenHelper {
         // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures consistency of the database.
         db.beginTransaction();
         try {
-            ContentValues values = new ContentValues();
-            values.put(VOUCHER_AVAILABLE, voucher.isAvailable());
-
             String[] args = {voucher.getId()};
 
             db.delete(VOUCHERS_TABLE, "id=?", args);
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.d("http", "Error while trying to add post to database");
+            Log.d("http", "Error while trying to delete voucher from database");
         } finally {
             db.endTransaction();
         }

@@ -79,7 +79,8 @@ public class GetTickets extends ServerConnection implements Runnable {
                 int seatNumber = ticket.getInt("seatNumber");
                 double price = ticket.getDouble("price");
 
-                if (available == 1) {
+                if (available == 0) // if not available
+                {
                     Ticket t = new Ticket(id, name, date, seatNumber, price);
                     ticketList.add(t);
                 }

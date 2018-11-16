@@ -10,8 +10,10 @@ import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.dataStructures.Voucher;
 import org.feup.cmov.customerapp.database.GetTickets;
 import org.feup.cmov.customerapp.database.GetVouchers;
+import org.feup.cmov.customerapp.database.LocalDatabase;
 import org.feup.cmov.customerapp.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionsActivity extends AppCompatActivity {
@@ -25,8 +27,8 @@ public class TransactionsActivity extends AppCompatActivity {
     // available vouchers
     List<Voucher> availableVouchers;
 
-    // available tickets
-    List<Ticket> availableTickets;
+    // used tickets
+    List<Ticket> unavailableTickets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +58,35 @@ public class TransactionsActivity extends AppCompatActivity {
 
     public void handleResponseTickets(int code, String response, List<Ticket> tickets) {
         if (code == Constants.OK_RESPONSE) {
-            availableTickets = tickets;
-            
+            unavailableTickets = tickets;
+            deleteUsedTickets(unavailableTickets);
         } else {
             Constants.showToast(response, this);
         }
     }
 
+    public void deleteUsedTickets(List<Ticket> tickets) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
+
+                if (LocalDatabase.checkDataBase(getApplicationContext())) {
+                    if(tickets.size() > 0) {
+                        for(Ticket t : tickets) {
+                            db.deleteTicket(getApplicationContext(), t);
+                        }
+
+                        List<Ticket> ticketList = db.getAllTickets(getApplicationContext());
+
+                        for(Ticket t : ticketList) {
+                            t.setAvailable(true);
+                            db.updateTicket(t);
+                        }
+                    }
+                }
+            }
+        });
+    }
 
 }
