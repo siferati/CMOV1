@@ -12,9 +12,9 @@ import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Product;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ShoppingCartAdapter extends ArrayAdapter<Product> {
+
     // cafeteria activity
     public ShoppingCartActivity activity;
 

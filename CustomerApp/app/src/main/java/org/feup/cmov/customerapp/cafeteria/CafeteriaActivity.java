@@ -50,6 +50,19 @@ public class CafeteriaActivity extends AppCompatActivity {
     }
 
     /**
+     * Show empty message if there's no vouchers
+     */
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+
+        View empty = findViewById(R.id.empty_products);
+
+        ListView list = findViewById(R.id.list_products);
+        list.setEmptyView(empty);
+    }
+
+    /**
      * Called when shopping cart button is clicked. Starts ShoppingCartActivity and saves user's order on SharedPreferences
      */
     private void shoppingCart() {

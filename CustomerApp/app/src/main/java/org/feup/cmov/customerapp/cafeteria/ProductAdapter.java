@@ -24,14 +24,11 @@ public class ProductAdapter extends ArrayAdapter<Product> {
     // list of products
     public List<Product> products;
 
-    public HashMap<Product, Integer> productsQuantity;
-
     ProductAdapter(CafeteriaActivity activity, List<Product> products) {
         super(activity, R.layout.row_product, products);
 
         this.activity = activity;
         this.products = products;
-        productsQuantity = new HashMap<Product, Integer>();
     }
 
     @Override
@@ -71,47 +68,27 @@ public class ProductAdapter extends ArrayAdapter<Product> {
     }
 
     private void increaseQuantity(Product product, TextView numberProduct) {
-        Integer quantity = productsQuantity.get(product);
-        if (quantity != null) {
-            quantity++;
+        int quantity = product.getQuantity();
+        quantity++;
 
-            updateQuantity(product, quantity, numberProduct, true);
-            updateSelectedProducts(product, quantity, true);
-        } else {
-            int quant = product.getQuantity()+1;
-
-            updateQuantity(product, quant, numberProduct, true);
-            updateSelectedProducts(product, quant, true);
-        }
+        updateQuantity(product, quantity, numberProduct, true);
+        updateSelectedProducts(product, quantity, true);
     }
 
     private void decreaseQuantity(Product product, TextView numberProduct) {
-        Integer quantity = productsQuantity.get(product);
-        if (quantity != null) {
+        int quantity = product.getQuantity();
 
-            if (quantity > 0) {
-                quantity--;
+        if (quantity > 0) {
+            quantity--;
 
-                updateQuantity(product, quantity, numberProduct, true);
-                updateSelectedProducts(product, quantity, false);
-            } else {
-                activity.showToast(Constants.DECREASE_FAILED_PRODUCT);
-            }
-
+            updateQuantity(product, quantity, numberProduct, true);
+            updateSelectedProducts(product, quantity, false);
         } else {
-            int quant = 0;
-            if (product.getQuantity() > 0) {
-                quant = product.getQuantity() - 1;
-            } else activity.showToast(Constants.DECREASE_FAILED_PRODUCT);
-
-            updateQuantity(product, quant, numberProduct, false);
-            updateSelectedProducts(product, quant, false);
+            activity.showToast(Constants.DECREASE_FAILED_PRODUCT);
         }
     }
 
     private void updateQuantity(Product p, int quantity, TextView numberProduct, boolean changeAdapter) {
-        productsQuantity.put(p, quantity);
-
         String no_products = Integer.toString(quantity);
         numberProduct.setText(no_products);
 
