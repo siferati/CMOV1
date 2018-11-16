@@ -20,24 +20,12 @@ import java.util.ArrayList;
 public class SelectVoucherAdapter extends ArrayAdapter<Voucher> {
     public SelectVoucherActivity activity;
     public ArrayList<Voucher> vouchers;
-    boolean[] checkedStates;
 
-    SelectVoucherAdapter (SelectVoucherActivity activity, ArrayList<Voucher> vouchers, ArrayList<Voucher> selectedVouchers) {
+    SelectVoucherAdapter (SelectVoucherActivity activity, ArrayList<Voucher> vouchers) {
         super(activity, R.layout.row_voucher, vouchers);
 
         this.activity = activity;
         this.vouchers = vouchers;
-        checkStates(selectedVouchers);
-    }
-
-    private void checkStates(ArrayList<Voucher> vs) {
-        checkedStates = new boolean[vouchers.size()];
-
-        for(int i = 0; i < vouchers.size(); i++) {
-            if (vs.contains(vouchers.get(i))) {
-                checkedStates[i] = true;
-            }
-        }
     }
 
     @Override
@@ -64,20 +52,27 @@ public class SelectVoucherAdapter extends ArrayAdapter<Voucher> {
             symbol.setImageResource((R.drawable.voucher_discount));
 
         CheckBox selected = row.findViewById(R.id.select_voucher);
-        selected.setChecked(checkedStates[position]);
 
-        selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(position, activity, v, isCheck));
+        selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(btnView, activity, v, isCheck));
+
+        if(v.selected) {
+            selected.setChecked(true);
+        } else {
+            selected.setChecked(false);
+        }
 
         return (row);
     }
 
-    private void checkListener(int position, SelectVoucherActivity activity, Voucher voucher, boolean isChecked) {
-        checkedStates[position] = !checkedStates[position];
-
-        if (isChecked) {
-            activity.addVoucher(voucher);
-        } else {
-            activity.removeVoucher(voucher);
+    private void checkListener(CompoundButton btnView, SelectVoucherActivity activity, Voucher voucher, boolean isChecked) {
+        if (btnView.isPressed()) {
+            if (isChecked) {
+                voucher.selected = true;
+                activity.addVoucher(voucher);
+            } else {
+                voucher.selected = false;
+                activity.removeVoucher(voucher);
+            }
         }
     }
 

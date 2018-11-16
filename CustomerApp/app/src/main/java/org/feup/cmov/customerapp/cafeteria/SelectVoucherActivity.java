@@ -28,20 +28,21 @@ public class SelectVoucherActivity extends AppCompatActivity {
     // adapter to products' list
     public ArrayAdapter<Voucher> vouchersAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_voucher);
 
         Bundle argument = getIntent().getExtras();
-
-        ArrayList<Voucher> vouchersList = new ArrayList<>();
         if (argument != null) {
-            vouchersList = (ArrayList<Voucher>) argument.getSerializable(Constants.SELECTED_VOUCHERS);
+            selectedVouchers = (ArrayList<Voucher>) argument.getSerializable(Constants.SELECTED_VOUCHERS);
         }
 
-        loadVouchersDatabase(this, vouchersList);
+        ListView list_vouchers = findViewById(R.id.list_select_vouchers);
+        vouchersAdapter = new SelectVoucherAdapter(this, vouchers);
+        list_vouchers.setAdapter(vouchersAdapter);
+
+        loadVouchersDatabase(this);
 
         Button selectVouchers = findViewById(R.id.btn_vouchers);
         selectVouchers.setOnClickListener((View v)->selectVouchers());
@@ -60,7 +61,7 @@ public class SelectVoucherActivity extends AppCompatActivity {
         list.setEmptyView(empty);
     }
 
-    public void loadVouchersDatabase(SelectVoucherActivity activity, ArrayList<Voucher> vs) {
+    public void loadVouchersDatabase(SelectVoucherActivity activity) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -69,18 +70,27 @@ public class SelectVoucherActivity extends AppCompatActivity {
                 if (LocalDatabase.checkDataBase(getApplicationContext())) {
                     List<Voucher> localVouchers = db.getAllVouchers(getApplicationContext());
 
-                    if (localVouchers.size() > 0) {
-                        vouchers = new ArrayList<>(localVouchers);
+                    if (selectedVouchers.size() > 0) {
+                        for (Voucher v : selectedVouchers) {
+                            for (Voucher local : localVouchers) {
+                                if (v.getId().equals(local.getId())) {
+                                    local.selected = true;
+                                }
+                            }
+                        }
+                    }
 
-                        ListView list_vouchers = findViewById(R.id.list_select_vouchers);
-                        vouchersAdapter = new SelectVoucherAdapter(activity, vouchers, vs);
-                        list_vouchers.setAdapter(vouchersAdapter);
+                    if (localVouchers.size() > 0) {
+                        vouchersAdapter.addAll(localVouchers);
                     }
                 }
             }
         });
     }
 
+    /**
+     * Called when select vouchers' button is clicked. Checks if selected vouchers are valid and if they are, returns them to ShoppingCartActivity
+     */
     private void selectVouchers() {
         if (selectedVouchers.size() <= 2) {
             if (validVouchers()) {
@@ -96,6 +106,10 @@ public class SelectVoucherActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if vouchers selected are valid (if there are two discount vouchers, they aren't)
+     * @return true of valid vouchers, false if not!
+     */
     public boolean validVouchers() {
         boolean valid = true;
 

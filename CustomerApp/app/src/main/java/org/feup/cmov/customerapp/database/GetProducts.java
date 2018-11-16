@@ -51,7 +51,6 @@ public class GetProducts  extends ServerConnection implements Runnable {
                 // get products from server
                 List<Product> products = jsonToArray(response);
 
-                // notifies activity that loading finished
                 if (activity instanceof CafeteriaActivity) {
                     CafeteriaActivity act = (CafeteriaActivity) activity;
                     act.handleResponse(responseCode, response, products);

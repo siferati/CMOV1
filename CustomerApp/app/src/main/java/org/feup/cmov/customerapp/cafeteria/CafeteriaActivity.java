@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,13 +17,10 @@ import org.feup.cmov.customerapp.dataStructures.Product;
 import org.feup.cmov.customerapp.database.GetProducts;
 import org.feup.cmov.customerapp.utils.Constants;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 public class CafeteriaActivity extends AppCompatActivity {
 
@@ -53,30 +49,15 @@ public class CafeteriaActivity extends AppCompatActivity {
         shoppingBtn.setOnClickListener((View v)->shoppingCart());
     }
 
+    /**
+     * Called when shopping cart button is clicked. Starts ShoppingCartActivity and saves user's order on SharedPreferences
+     */
     private void shoppingCart() {
         if(selectedProducts.size() > 0) {
             Intent intent = new Intent(this, ShoppingCartActivity.class);
-            Bundle argument = new Bundle();
-
-            ArrayList<Product> productsList = new ArrayList<>(selectedProducts);
-            argument.putSerializable(Constants.SHOPPING_CART, productsList);
-
-            intent.putExtras(argument);
             startActivity(intent);
 
-            Set<String> productSet = new HashSet<>();
-
-            for(Product p: selectedProducts) {
-                String product = p.getId() + " " + p.getQuantity();
-                productSet.add(product);
-            }
-
-            SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-
-            editor.putStringSet(Constants.PREF_PRODUCTS, productSet);
-
-            editor.apply();
+            saveSelectedProducts();
         } else {
             showToast(Constants.NO_PRODUCTS);
         }
@@ -94,32 +75,61 @@ public class CafeteriaActivity extends AppCompatActivity {
             ListView list_products = findViewById(R.id.list_products);
             productsAdapter = new ProductAdapter(this, productsList);
             list_products.setAdapter(productsAdapter);
-
-            //productsAdapter.addAll(productsList);
         } else {
             // show error response
             showToast(response);
         }
     }
 
+    /**
+     * Saves selected products locally (id + quantity)
+     */
+    public void saveSelectedProducts() {
+        Set<String> productSet = new HashSet<>();
+
+        for(Product p: selectedProducts) {
+            String product = p.getId() + " " + p.getQuantity();
+            productSet.add(product);
+        }
+
+        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putStringSet(Constants.PREF_PRODUCTS, productSet);
+
+        editor.apply();
+    }
+
+    /**
+     * Restores selected products when this activity is created
+     * @param products - products that we got from the server
+     * @return updated products's info according to the user's order (with correct quantities)
+     */
     public List<Product> restoreSelectedProducts(List<Product> products) {
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE);
 
         if (prefs.contains(Constants.PREF_PRODUCTS)) {
+            // get set from shared preferences
             Set<String> productSet = prefs.getStringSet(Constants.PREF_PRODUCTS, null);
-            List<Product> selectedProds = new ArrayList<>();
+
+            // get array stored in shared preferences
+            List<Product> prefsProducts = new ArrayList<>();
 
             for(String p : productSet) {
                 if(p.contains(" ")){
+                    // id is first part of string before first space
                     String id = p.substring(0, p.indexOf(" "));
+
+                    // quantity is second part of string after first space
                     String quantity = p.substring(p.indexOf(" ")+1, p.length());
 
                     Product product = new Product(Integer.parseInt(id), Integer.parseInt(quantity));
-                    selectedProds.add(product);
+                    prefsProducts.add(product);
                 }
             }
 
-            for (Product sp : selectedProds) {
+            // goes through all products stored in shared preferences (id, quantity) and updates products' quantity
+            for (Product sp : prefsProducts) {
                 for (Product p : products) {
                     if (p.getId() == sp.getId()) {
                         p.setQuantity(sp.getQuantity());
@@ -132,6 +142,10 @@ public class CafeteriaActivity extends AppCompatActivity {
         return products;
     }
 
+    /**
+     * Resets products in shared preferences
+     * @param activity - activity in which this function is called
+     */
     public static void resetSharedPrefs(Activity activity) {
         SharedPreferences prefs = activity.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -139,6 +153,10 @@ public class CafeteriaActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    /**
+     * Shows toast message
+     * @param toast - message to show
+     */
     public void showToast(final String toast)
     {
         runOnUiThread(() -> Toast.makeText(CafeteriaActivity.this, toast, Toast.LENGTH_LONG).show());

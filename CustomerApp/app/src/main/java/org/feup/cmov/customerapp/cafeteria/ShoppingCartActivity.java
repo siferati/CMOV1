@@ -15,10 +15,8 @@ import android.widget.Toast;
 
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Product;
-import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.dataStructures.Voucher;
 import org.feup.cmov.customerapp.database.GetProducts;
-import org.feup.cmov.customerapp.login.RegisterActivity;
 import org.feup.cmov.customerapp.utils.Constants;
 
 import java.util.ArrayList;
@@ -27,6 +25,7 @@ import java.util.Set;
 
 public class ShoppingCartActivity extends AppCompatActivity {
 
+    // request vouchers from SelectVoucherActivity
     private static final int REQUEST_VOUCHERS = 0;
 
     // API to get shows from server
@@ -41,6 +40,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
     // selected vouchers
     ArrayList<Voucher> selectedVouchers = new ArrayList<>();
 
+    // text view displaying total price
     TextView totalPrice;
 
     @Override
@@ -48,20 +48,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
 
-        Bundle argument = getIntent().getExtras();
-
-        /*products = new ArrayList<>();
-        if (argument != null) {
-            products = (ArrayList<Product>) argument.getSerializable(Constants.SHOPPING_CART);
-        }*/
-
         productsAPI = new GetProducts(this);
         Thread thr = new Thread(productsAPI);
         thr.start();
-
-        /*ListView list_products = findViewById(R.id.list_shopping_cart);
-        productsAdapter = new ShoppingCartAdapter(this, products);
-        list_products.setAdapter(productsAdapter);*/
 
         Button selectVouchers = findViewById(R.id.btn_select_vouchers);
         selectVouchers.setOnClickListener((View v)->selectVouchers());
@@ -81,6 +70,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
             productsAdapter = new ShoppingCartAdapter(this, products);
             list_products.setAdapter(productsAdapter);
 
+            // set price text
             setPriceText();
         } else {
             // show error response
@@ -88,11 +78,18 @@ public class ShoppingCartActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Shows toast message
+     * @param toast - message to show
+     */
     public void showToast(final String toast)
     {
         runOnUiThread(() -> Toast.makeText(ShoppingCartActivity.this, toast, Toast.LENGTH_LONG).show());
     }
 
+    /**
+     * Sets price text on the layout (runs on the UI's thread)
+     */
     public void setPriceText() {
         runOnUiThread(() -> {
             String price = "TOTAL PRICE (without vouchers): " + getTotalPrice() + " €";
@@ -100,31 +97,41 @@ public class ShoppingCartActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Returns shopping cart's products
+     * @param products - all products that we got from server
+     * @return list of products to be bought by the user
+     */
     public ArrayList<Product> restoreSelectedProducts(ArrayList<Product> products) {
         ArrayList<Product> productList = new ArrayList<>();
-        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE);
 
+        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE);
         if (prefs.contains(Constants.PREF_PRODUCTS)) {
+            // get set from shared preferences
             Set<String> productSet = prefs.getStringSet(Constants.PREF_PRODUCTS, null);
-            ArrayList<Product> selectedProds = new ArrayList<>();
+
+            // get array stored in shared preferences
+            ArrayList<Product> prefsProducts = new ArrayList<>();
 
             for(String p : productSet) {
                 if(p.contains(" ")){
+                    // id is first part of string before first space
                     String id = p.substring(0, p.indexOf(" "));
+
+                    // quantity is second part of string after first space
                     String quantity = p.substring(p.indexOf(" ")+1, p.length());
 
                     Product product = new Product(Integer.parseInt(id), Integer.parseInt(quantity));
-                    selectedProds.add(product);
+                    prefsProducts.add(product);
                 }
             }
 
-            for (Product sp : selectedProds) {
+            // goes through all products stored in shared preferences (id, quantity) and populates array with all needed data
+            for (Product sp : prefsProducts) {
                 for (Product p : products) {
                     if (p.getId() == sp.getId()) {
-                        Product product = p;
-                        product.setQuantity(sp.getQuantity());
-
-                        productList.add(product);
+                        p.setQuantity(sp.getQuantity());        // sets product's order quantity
+                        productList.add(p);
                     }
                 }
             }
@@ -133,6 +140,10 @@ public class ShoppingCartActivity extends AppCompatActivity {
         return productList;
     }
 
+    /**
+     * Calculates total price of all the shopping cart's products
+     * @return total price rounded up to two digits
+     */
     private String getTotalPrice() {
         double price = 0.0;
 
@@ -144,6 +155,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
         return Double.toString(rounded);
     }
 
+    /**
+     * Start SelectVoucherActivity so the user can select vouchers
+     */
     private void selectVouchers() {
         Intent intent = new Intent(getApplicationContext(), SelectVoucherActivity.class);
 
@@ -156,6 +170,13 @@ public class ShoppingCartActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_VOUCHERS);
     }
 
+    /**
+     *
+     * @param requestCode - code of the request
+     * @param resultCode - result given by the callback activity
+     * @param data - data returned by the callback activity
+     */
+    @Override
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 
         if (requestCode == REQUEST_VOUCHERS) {
@@ -168,6 +189,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when buy button is clicked
+     */
     private void buyOrder() {
         CafeteriaActivity.resetSharedPrefs(this);
 

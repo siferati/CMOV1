@@ -43,6 +43,9 @@ public class VouchersActivity extends AppCompatActivity {
         list.setEmptyView(empty);
     }
 
+    /**
+     * Sets vouchers' list adapter and loads them from local database
+     */
     private void setVouchers() {
         ListView list_tickets = findViewById(R.id.list_vouchers);
         voucherAdapter = new VoucherAdapter(this, vouchers);
@@ -51,6 +54,9 @@ public class VouchersActivity extends AppCompatActivity {
         loadVouchersDatabase();
     }
 
+    /**
+     * Loads vouchers from local database (shows them by quantity)
+     */
     public void loadVouchersDatabase() {
         runOnUiThread(new Runnable() {
             @Override
@@ -60,8 +66,13 @@ public class VouchersActivity extends AppCompatActivity {
                 if (LocalDatabase.checkDataBase(getApplicationContext())) {
                     List<Voucher> localVouchers = db.getAllVouchers(getApplicationContext());
 
+                    // gets free popcorn vouchers' quantity
                     int free_popcorn = Voucher.getQuantityFromList(Constants.FREE_POPCORN, localVouchers);
+
+                    // gets free coffee vouchers' quantity
                     int free_coffee = Voucher.getQuantityFromList(Constants.FREE_COFFEE, localVouchers);
+
+                    // gets discount vouchers' quantity
                     int discount = Voucher.getQuantityFromList(Constants.DISCOUNT, localVouchers);
 
                     List<Voucher> vouchers = new ArrayList<>();

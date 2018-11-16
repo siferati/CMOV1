@@ -11,6 +11,7 @@ public class Voucher implements Serializable {
     private double discount;
     private boolean available;
     private int quantity = 0;
+    public boolean selected = false;
 
     public Voucher(String id, String type, double discount) {
         this.id = id;
