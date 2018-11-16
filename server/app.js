@@ -35,6 +35,7 @@ app.get('/shows', show.all);
 /* --- Ticket --- */
 app.post('/shows/:id/tickets', ticket.create);
 app.post('/shows/:id/tickets/validation', ticket.validate);
+app.get('/users/:id/tickets', ticket.all);
 
 /* --- Voucher --- */
 app.get('/users/:id/vouchers', voucher.all);
@@ -46,6 +47,7 @@ app.get('/products/:id', product.get);
 
 /* --- Order --- */
 app.post('/users/:id/orders', order.create);
+app.get('/users/:id/orders', order.all);
 
 /**
  * Close the db connection on exiting.
