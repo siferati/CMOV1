@@ -53,6 +53,7 @@ CREATE TABLE Tickets (
 CREATE TABLE Orders (
 	id INTEGER PRIMARY KEY,
 	date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	price DOUBLE NOT NULL,
 	userId INTEGER NOT NULL REFERENCES Users(id)
 );
 
@@ -107,8 +108,10 @@ INSERT INTO Vouchers (id, userId) VALUES ('one', 'one');
 INSERT INTO Vouchers (id, userId) VALUES ('two', 'one');
 INSERT INTO Vouchers (id, userId) VALUES ('three', 'one');
 
-INSERT INTO Promotions(voucherId, productId, discount) VALUES ('one', 1, 0.1);
-INSERT INTO Promotions(voucherId, productId, discount) VALUES ('one', 2, 0.1);
+INSERT INTO Promotions(voucherId, productId, discount) VALUES ('one', 2, 1);
+INSERT INTO Promotions(voucherId, productId, discount) VALUES ('one', 3, 0.5);
+INSERT INTO Promotions(voucherId, productId, discount) VALUES ('two', 2, 0.5);
+INSERT INTO Promotions(voucherId, productId, discount) VALUES ('three', 1, 0);
 
 /* --- SHOWS --- */
 
