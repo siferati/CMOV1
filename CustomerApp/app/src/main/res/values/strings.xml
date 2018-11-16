@@ -72,5 +72,6 @@
     <string name="select_vouchers">Select Vouchers</string>
     <string name="default_vouchers">0 vouchers selected</string>
     <string name="product_quantity">Quantity: </string>
+    <string name="qr_code_cafeteria">Show your QR Code at the cafeteria!</string>
 
 </resources>

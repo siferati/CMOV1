@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
@@ -27,6 +28,9 @@ public class TicketValidationActivity extends AppCompatActivity {
         if (argument != null) {
             tickets = (ArrayList<Ticket>) argument.getSerializable(Constants.VALIDATION_QR);
         }
+
+        ImageView qr_code = findViewById(R.id.qrCodeImageView);
+
     }
 
     /*@Override

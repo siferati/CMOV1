@@ -24,16 +24,16 @@ import java.util.Set;
 
 public class CafeteriaActivity extends AppCompatActivity {
 
-    // API to get shows from server
+    // API to get products from server
     public GetProducts productsAPI;
 
-    // tickets list
+    // products list
     List<Product> products = new ArrayList<>();
 
     // adapter to products' list
     public ArrayAdapter<Product> productsAdapter;
 
-    // list of selected tickets to validate
+    // list of selected products to order
     private List<Product> selectedProducts = new ArrayList<>();
 
     @Override
@@ -50,7 +50,7 @@ public class CafeteriaActivity extends AppCompatActivity {
     }
 
     /**
-     * Show empty message if there's no vouchers
+     * Show empty message if there's no products
      */
     @Override
     public void onContentChanged() {
@@ -80,6 +80,7 @@ public class CafeteriaActivity extends AppCompatActivity {
      * Handles response from server
      * @param code - response code from server
      * @param response - response message given by server
+     * @param products - products that we got from the server
      */
     public void handleResponse(int code, String response, List<Product> products) {
         if (code == Constants.OK_RESPONSE) {
@@ -128,25 +129,27 @@ public class CafeteriaActivity extends AppCompatActivity {
             // get array stored in shared preferences
             List<Product> prefsProducts = new ArrayList<>();
 
-            for(String p : productSet) {
-                if(p.contains(" ")){
-                    // id is first part of string before first space
-                    String id = p.substring(0, p.indexOf(" "));
+            if (productSet != null) {
+                for (String p : productSet) {
+                    if (p.contains(" ")) {
+                        // id is first part of string before first space
+                        String id = p.substring(0, p.indexOf(" "));
 
-                    // quantity is second part of string after first space
-                    String quantity = p.substring(p.indexOf(" ")+1, p.length());
+                        // quantity is second part of string after first space
+                        String quantity = p.substring(p.indexOf(" ") + 1, p.length());
 
-                    Product product = new Product(Integer.parseInt(id), Integer.parseInt(quantity));
-                    prefsProducts.add(product);
+                        Product product = new Product(Integer.parseInt(id), Integer.parseInt(quantity));
+                        prefsProducts.add(product);
+                    }
                 }
-            }
 
-            // goes through all products stored in shared preferences (id, quantity) and updates products' quantity
-            for (Product sp : prefsProducts) {
-                for (Product p : products) {
-                    if (p.getId() == sp.getId()) {
-                        p.setQuantity(sp.getQuantity());
-                        selectedProducts.add(p);
+                // goes through all products stored in shared preferences (id, quantity) and updates products' quantity
+                for (Product sp : prefsProducts) {
+                    for (Product p : products) {
+                        if (p.getId() == sp.getId()) {
+                            p.setQuantity(sp.getQuantity());
+                            selectedProducts.add(p);
+                        }
                     }
                 }
             }

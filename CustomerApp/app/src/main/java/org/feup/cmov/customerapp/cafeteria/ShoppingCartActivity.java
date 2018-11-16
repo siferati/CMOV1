@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.feup.cmov.customerapp.MainActivity;
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Product;
 import org.feup.cmov.customerapp.dataStructures.Voucher;
@@ -30,10 +28,10 @@ public class ShoppingCartActivity extends AppCompatActivity {
     // request vouchers from SelectVoucherActivity
     private static final int REQUEST_VOUCHERS = 0;
 
-    // API to get shows from server
+    // API to get products from server
     public GetProducts productsAPI;
 
-    // tickets to validate
+    // products to validate
     ArrayList<Product> products;
 
     // adapter to products' list
@@ -63,6 +61,25 @@ public class ShoppingCartActivity extends AppCompatActivity {
         totalPrice = findViewById(R.id.total_price_SC);
     }
 
+    /**
+     * Show empty message if there's no products
+     */
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+
+        View empty = findViewById(R.id.empty_products);
+
+        ListView list = findViewById(R.id.list_shopping_cart);
+        list.setEmptyView(empty);
+    }
+
+    /**
+     * Handles response from server
+     * @param code - response code from server
+     * @param response - response message given by server
+     * @param prods - products that we got from the server
+     */
     public void handleResponse(int code, String response, List<Product> prods) {
         ArrayList<Product> productsList = new ArrayList<>(prods);
         if (code == Constants.OK_RESPONSE) {
@@ -195,17 +212,30 @@ public class ShoppingCartActivity extends AppCompatActivity {
      * Called when buy button is clicked
      */
     private void buyOrder() {
-        CafeteriaActivity.resetSharedPrefs(this);
-        deleteVouchersDatabase();
+        if (products.size() > 0) {
+            CafeteriaActivity.resetSharedPrefs(this);
+            deleteVouchersDatabase();
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
+            Intent intent = new Intent(this, OrderValidationActivity.class);
+            Bundle argument = new Bundle();
 
-        showToast(Constants.ORDER_IN_PROGRESS);
+            argument.putSerializable(Constants.ORDER_VALIDATION, products);
+            argument.putSerializable(Constants.VOUCHERS_VALIDATION, selectedVouchers);
+
+            intent.putExtras(argument);
+            startActivity(intent);
+
+            showToast(Constants.ORDER_IN_PROGRESS);
+        } else {
+            showToast(Constants.ERROR_CONNECTING);
+        }
 
         // TODO: send order to validation terminal!!!!!!!!!!
     }
 
+    /**
+     * Delete vouchers from database after sending order
+     */
     public void deleteVouchersDatabase() {
         runOnUiThread(new Runnable() {
             @Override

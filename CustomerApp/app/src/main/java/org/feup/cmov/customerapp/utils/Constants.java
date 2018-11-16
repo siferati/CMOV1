@@ -39,6 +39,8 @@ public class Constants {
     public static final String VALIDATION_QR = "validation_qr";
     public static final String REQUESTED_VOUCHERS = "vouchers";
     public static final String SELECTED_VOUCHERS = "selected_vouchers";
+    public static final String ORDER_VALIDATION = "order_validation";
+    public static final String VOUCHERS_VALIDATION = "vouchers_validation";
 
     public static final String BUY_FAILED = "Need to buy at least a ticket";
     public static final String DECREASE_FAILED = "Negative number of tickets not allowed";

@@ -65,7 +65,7 @@
         <activity
             android:name=".shows.tickets.TicketValidationActivity"
             android:label="Ticket Validation"
-            android:parentActivityName=".shows.ShowsActivity" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".cafeteria.ShoppingCartActivity"
             android:label="Shopping Cart"
@@ -74,6 +74,10 @@
             android:name=".cafeteria.SelectVoucherActivity"
             android:label="Select Vouchers"
             android:parentActivityName=".cafeteria.ShoppingCartActivity" />
+        <activity
+            android:name=".cafeteria.OrderValidationActivity"
+            android:label="Order Validation"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
