@@ -9,7 +9,7 @@ module.exports = {
 		const id = req.params.id;
 	
 		db.get(
-			`SELECT id, name, price
+			`SELECT id, name, price, image
 			FROM Products
 			WHERE id = ?`,
 			id,
@@ -27,7 +27,7 @@ module.exports = {
 	all: (req, res) => {
 
 		db.all(
-			`SELECT id, name, price
+			`SELECT id, name, price, image
 			FROM Products
 			WHERE name != 'total'`,
 			(err, rows) => {

@@ -2,20 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ListView
-        android:id="@+id/list_products"
+        android:id="@+id/list_select_vouchers"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
     </ListView>
 
-    <Button
-        android:id="@+id/btn_shopping_cart"
+    <TextView
+        android:id="@+id/empty_select_vouchers"
+        android:text="@string/empty_vouchers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/shopping_cart"
+        android:gravity="center"
+        />
+
+    <Button
+        android:id="@+id/btn_vouchers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_vouchers"
         android:textColor="@color/white"
         android:layout_margin="12dp"
         />

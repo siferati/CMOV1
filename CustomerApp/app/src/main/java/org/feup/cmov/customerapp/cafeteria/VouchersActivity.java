@@ -31,7 +31,7 @@ public class VouchersActivity extends AppCompatActivity {
     }
 
     /**
-     * Show empty message if there's no vouhcers
+     * Show empty message if there's no vouchers
      */
     @Override
     public void onContentChanged() {

@@ -1,7 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/list_shopping_cart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="12dp">
+
+
+        <TextView
+            android:id="@+id/total_price_SC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:id="@+id/btn_select_vouchers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/select_vouchers"
+                android:textColor="@color/white"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:theme="@style/Alt.Button"
+                />
+            <TextView
+                android:layout_marginEnd="4dp"
+                android:id="@+id/text_vouchers_selected"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/default_vouchers"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_buy_SC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/buy_btn"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
 
 </LinearLayout>

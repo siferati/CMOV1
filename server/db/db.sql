@@ -66,7 +66,8 @@ CREATE TABLE Vouchers (
 CREATE TABLE Products (
 	id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
-	price DOUBLE NOT NULL
+	price DOUBLE NOT NULL,
+	image TEXT
 );
 
 CREATE TABLE Promotions (
@@ -96,8 +97,10 @@ INSERT INTO CreditCards (type, number, validity, userId) VALUES ("Master Card", 
 /* --- Products --- */
 
 INSERT INTO Products (id, name, price) VALUES (1, 'total', 0.0);
-INSERT INTO Products (id, name, price) VALUES (2, 'coffee', 0.50);
-INSERT INTO Products (id, name, price) VALUES (3, 'popcorn', 1.0);
+INSERT INTO Products (id, name, price, image) VALUES (2, 'Coffee', 0.50, 'coffee');
+INSERT INTO Products (id, name, price, image) VALUES (3, 'Popcorn', 1.00, 'popcorn');
+INSERT INTO Products (id, name, price, image) VALUES (4, 'Soda Drink', 0.80, 'soda_drink');
+INSERT INTO Products (id, name, price, image) VALUES (5, 'Sandwich', 1.50, 'sandwich');
 
 /* --- SHOWS --- */
 

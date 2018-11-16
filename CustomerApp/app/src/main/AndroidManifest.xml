@@ -69,8 +69,11 @@
         <activity
             android:name=".cafeteria.ShoppingCartActivity"
             android:label="Shopping Cart"
-            android:parentActivityName=".cafeteria.CafeteriaActivity"
-            />
+            android:parentActivityName=".cafeteria.CafeteriaActivity" />
+        <activity
+            android:name=".cafeteria.SelectVoucherActivity"
+            android:label="Select Vouchers"
+            android:parentActivityName=".cafeteria.ShoppingCartActivity" />
     </application>
 
 </manifest>

@@ -1,6 +1,9 @@
 package org.feup.cmov.customerapp.utils;
 
 public class Constants {
+    public static final String SHARED_PREF = "shared_preferences";
+    public static final String PREF_PRODUCTS = "products";
+
     public static final int OK_RESPONSE = 200;
     public static final int NO_INTERNET = -1;
     public static final int SERVER_TIMEOUT = 2000;
@@ -34,6 +37,9 @@ public class Constants {
     public static final String CONFIRM_PURCHASE = "confirm_purchase";
     public static final String VALIDATE_TICKETS = "validate_tickets";
     public static final String VALIDATION_QR = "validation_qr";
+    public static final String SHOPPING_CART = "shopping_cart";
+    public static final String REQUESTED_VOUCHERS = "vouchers";
+    public static final String SELECTED_VOUCHERS = "selected_vouchers";
 
     public static final String BUY_FAILED = "Need to buy at least a ticket";
     public static final String DECREASE_FAILED = "Negative number of tickets not allowed";
@@ -46,5 +52,9 @@ public class Constants {
     public static final String INVALID_PASSWORD = "Invalid password";
 
     public static final String DECREASE_FAILED_PRODUCT = "Negative number of produts not allowed";
+    public static final String NO_PRODUCTS = "Need to select at least one product";
+
+    public static final String MAX_VOUCHERS = "Can't select more than two vouchers";
+    public static final String TWO_DISCOUNTS = "Only one 5% discount voucher allowed";
 
 }

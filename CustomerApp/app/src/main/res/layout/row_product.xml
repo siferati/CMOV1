@@ -11,7 +11,8 @@
         android:id="@+id/product_image"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:layout_margin="5dp"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -72,7 +73,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/default_tickets"/>
+                    android:text="@string/default_tickets"
+                    android:textStyle="bold"
+                    android:layout_margin="3dp"/>
 
                 <TextView
                     android:id="@+id/increase_product"
@@ -107,7 +110,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_gravity="center"
+        android:layout_gravity="center|right"
         android:layout_margin="5dp"
         style="@style/TitleStyle"
         />

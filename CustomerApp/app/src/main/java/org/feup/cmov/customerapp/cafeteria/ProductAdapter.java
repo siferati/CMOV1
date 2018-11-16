@@ -12,6 +12,7 @@ import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Product;
 import org.feup.cmov.customerapp.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,6 +50,10 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         TextView decreaseTickets = row.findViewById(R.id.decrease_product);
 
         TextView numberProduct = row.findViewById(R.id.number_product);
+
+        String no_products = Integer.toString(p.getQuantity());
+        numberProduct.setText(no_products);
+
         increaseTickets.setOnClickListener((View v)->increaseQuantity(p, numberProduct));
         decreaseTickets.setOnClickListener((View v)->decreaseQuantity(p, numberProduct));
 
@@ -71,10 +76,12 @@ public class ProductAdapter extends ArrayAdapter<Product> {
             quantity++;
 
             updateQuantity(product, quantity, numberProduct, true);
+            updateSelectedProducts(product, quantity, true);
         } else {
             int quant = 1;
 
             updateQuantity(product, quant, numberProduct, true);
+            updateSelectedProducts(product, quant, true);
         }
     }
 
@@ -86,6 +93,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
                 quantity--;
 
                 updateQuantity(product, quantity, numberProduct, true);
+                updateSelectedProducts(product, quantity, false);
             } else {
                 activity.showToast(Constants.DECREASE_FAILED_PRODUCT);
             }
@@ -101,11 +109,47 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
     private void updateQuantity(Product p, int quantity, TextView numberProduct, boolean changeAdapter) {
         productsQuantity.put(p, quantity);
-        numberProduct.setText(quantity);
+
+        String no_products = Integer.toString(quantity);
+        numberProduct.setText(no_products);
 
         if (changeAdapter) {
             p.setQuantity(quantity);
             notifyDataSetChanged();
         }
     }
+
+    private void updateSelectedProducts(Product product, int quantity, boolean increase) {
+        List<Product> selectedProducts = activity.getSelectedProducts();
+
+        if (selectedProducts.contains(product)) {
+            Product existingProduct = null;
+
+            // if list contains the product, then update it with the new quantity
+            for (Product p : selectedProducts) {
+                if (p.getId() == product.getId()) {
+                    p.setQuantity(quantity);
+                    existingProduct = p;
+
+                    break;
+                }
+            }
+
+            if (existingProduct != null) {
+                // if the product's quantity is zero, then remove it from the list
+                if (existingProduct.getQuantity() == 0) {
+                    selectedProducts.remove(existingProduct);
+                }
+            }
+
+        } else {
+            // if list doesn't contain product and the user has increased the product's quantity then add the product
+            if (increase) {
+                selectedProducts.add(product);
+            }
+        }
+
+        activity.setSelectedProducts(selectedProducts);
+    }
+
 }

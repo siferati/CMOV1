@@ -67,6 +67,9 @@
 
     <!-- PRODUCTS LAYOUT -->
     <string name="shopping_cart">Shopping Cart</string>
+    <string name="empty_SC">Empty shopping cart</string>
+    <string name="select_vouchers">Select Vouchers</string>
+    <string name="default_vouchers">0 vouchers selected</string>
     <string name="product_quantity">Quantity: </string>
 
 </resources>

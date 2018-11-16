@@ -2,9 +2,10 @@ package org.feup.cmov.customerapp.dataStructures;
 
 import org.feup.cmov.customerapp.utils.Constants;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Voucher {
+public class Voucher implements Serializable {
     private String id;
     private String type;
     private double discount;
@@ -82,5 +83,17 @@ public class Voucher {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof Voucher)) return false;
+        Voucher v = (Voucher)other;
+
+        if (v.getId().equals(this.getId()))
+            return true;
+        else return false;
     }
 }

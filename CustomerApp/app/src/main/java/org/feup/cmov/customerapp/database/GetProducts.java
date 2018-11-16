@@ -1,8 +1,10 @@
 package org.feup.cmov.customerapp.database;
 
+import android.app.Activity;
 import android.util.Log;
 
 import org.feup.cmov.customerapp.cafeteria.CafeteriaActivity;
+import org.feup.cmov.customerapp.cafeteria.ShoppingCartActivity;
 import org.feup.cmov.customerapp.dataStructures.Product;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.json.JSONArray;
@@ -17,9 +19,9 @@ import java.util.List;
 public class GetProducts  extends ServerConnection implements Runnable {
 
     // products' activity
-    private CafeteriaActivity activity;
+    private Activity activity;
 
-    public GetProducts(CafeteriaActivity activity) {
+    public GetProducts(Activity activity) {
         this.activity = activity;
     }
 
@@ -44,22 +46,42 @@ public class GetProducts  extends ServerConnection implements Runnable {
             String response;
 
             if (responseCode == Constants.OK_RESPONSE) {
-
-            } else {
                 response = readStream(urlConnection.getInputStream());
 
                 // get products from server
                 List<Product> products = jsonToArray(response);
 
-                // add new products to adapter
-                activity.productsAdapter.addAll(products);
+                // notifies activity that loading finished
+                if (activity instanceof CafeteriaActivity) {
+                    CafeteriaActivity act = (CafeteriaActivity) activity;
+                    act.handleResponse(responseCode, response, products);
+                } else {
+                    ShoppingCartActivity act = (ShoppingCartActivity) activity;
+                    act.handleResponse(responseCode, response, products);
+                }
+            } else {
+                response = readStream(urlConnection.getErrorStream());
+
+                if (activity instanceof CafeteriaActivity) {
+                    CafeteriaActivity act = (CafeteriaActivity) activity;
+                    act.handleResponse(responseCode, response, null);
+                } else {
+                    ShoppingCartActivity act = (ShoppingCartActivity) activity;
+                    act.handleResponse(responseCode, response, null);
+                }
             }
 
         } catch (Exception e) {
             if (responseCode == Constants.NO_INTERNET) {
                 String errorMessage = Constants.ERROR_CONNECTING;
 
-                // activity.handleResponse(responseCode, errorMessage);
+                if (activity instanceof CafeteriaActivity) {
+                    CafeteriaActivity act = (CafeteriaActivity) activity;
+                    act.handleResponse(responseCode, errorMessage, null);
+                } else {
+                    ShoppingCartActivity act = (ShoppingCartActivity) activity;
+                    act.handleResponse(responseCode, errorMessage, null);
+                }
             }
         } finally {
             if (urlConnection != null)
@@ -80,8 +102,9 @@ public class GetProducts  extends ServerConnection implements Runnable {
                 int id = product.getInt("id");
                 String name = product.getString("name");
                 double price = product.getDouble("price");
+                String image = product.getString("image");
 
-                Product p = new Product(id, name, price);
+                Product p = new Product(id, name, price, image);
                 products_list.add(p);
             }
         } catch(JSONException e) {
