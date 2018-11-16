@@ -27,6 +27,7 @@
 | GET | /shows?page=\<PAGE\>&limit=\<LIMIT\> | { } | [ { id, name, description, date, price } ] | Get the next airing shows. |
 | POST | /shows/:id/tickets | { userId, quantity } | { tickets: [ { id, name, date, seatNumber, price }, ... ], vouchers: [ { id, name, discount }, ... ] } | Buy tickets for a show. **(signed)** |
 | POST | /shows/:id/tickets/validation | { userId, [ ticketId, ... ] } | { valid: [ ticketId, ... ], invalid: [ ticketId, ... ] } | Validate tickets for a show. |
+| GET | /users/:id/tickets | { } | [ { id, available, name, date, seatNumber, price }, ... ] | Get all tickets belonging to a user. |
 | GET | /products | { } | [ { id, name, price }, ... ] | Get all products. |
 | GET | /products/:id | { } | { id, name, price } | Get a product. |
 | GET | /users/:id/vouchers | { } | [ { id, orderId, promotions: [ { productId, discount }, ... ] }, ... ] | Get all vouchers belonging to an user. |
