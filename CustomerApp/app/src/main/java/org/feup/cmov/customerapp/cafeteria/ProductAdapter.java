@@ -78,7 +78,7 @@ public class ProductAdapter extends ArrayAdapter<Product> {
             updateQuantity(product, quantity, numberProduct, true);
             updateSelectedProducts(product, quantity, true);
         } else {
-            int quant = 1;
+            int quant = product.getQuantity()+1;
 
             updateQuantity(product, quant, numberProduct, true);
             updateSelectedProducts(product, quant, true);
@@ -100,10 +100,12 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
         } else {
             int quant = 0;
+            if (product.getQuantity() > 0) {
+                quant = product.getQuantity() - 1;
+            } else activity.showToast(Constants.DECREASE_FAILED_PRODUCT);
 
             updateQuantity(product, quant, numberProduct, false);
-
-            activity.showToast(Constants.DECREASE_FAILED_PRODUCT);
+            updateSelectedProducts(product, quant, false);
         }
     }
 
