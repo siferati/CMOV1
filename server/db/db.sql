@@ -58,7 +58,6 @@ CREATE TABLE Orders (
 
 CREATE TABLE Vouchers (
 	id TEXT PRIMARY KEY,
-	available BOOLEAN NOT NULL DEFAULT TRUE,
 	userId INTEGER NOT NULL REFERENCES Users(id),
 	orderId INTEGER REFERENCES Orders(id)
 );
@@ -101,6 +100,15 @@ INSERT INTO Products (id, name, price, image) VALUES (2, 'Coffee', 0.50, 'coffee
 INSERT INTO Products (id, name, price, image) VALUES (3, 'Popcorn', 1.00, 'popcorn');
 INSERT INTO Products (id, name, price, image) VALUES (4, 'Soda Drink', 0.80, 'soda_drink');
 INSERT INTO Products (id, name, price, image) VALUES (5, 'Sandwich', 1.50, 'sandwich');
+
+/* --- Vouchers --- */
+
+INSERT INTO Vouchers (id, userId) VALUES ('one', 'one');
+INSERT INTO Vouchers (id, userId) VALUES ('two', 'one');
+INSERT INTO Vouchers (id, userId) VALUES ('three', 'one');
+
+INSERT INTO Promotions(voucherId, productId, discount) VALUES ('one', 1, 0.1);
+INSERT INTO Promotions(voucherId, productId, discount) VALUES ('one', 2, 0.1);
 
 /* --- SHOWS --- */
 

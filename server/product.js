@@ -4,6 +4,20 @@ const db = new sqlite3.cached.Database('db/db.sqlite3');
 
 module.exports = {
 
+	getMult: (ids, callback) => {
+
+		let sql = 'SELECT id, name, price FROM Products WHERE';
+
+		ids.forEach(() => {
+			sql += ' id = ? OR';
+		});
+		sql = sql.substr(0, sql.length - 3);
+
+		db.all(sql, ids, (err, rows) => {
+			return callback(err, rows);
+		});
+	},
+
 	get: (req, res) => {
 		
 		const id = req.params.id;
