@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp.cafeteria;
+package org.feup.cmov.validationcafeteria;
 
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -8,21 +8,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.feup.cmov.customerapp.R;
-import org.feup.cmov.customerapp.dataStructures.Product;
+import org.feup.cmov.validationcafeteria.dataStructures.Product;
 
 import java.util.ArrayList;
 
-public class ShoppingCartAdapter extends ArrayAdapter<Product> {
+public class ProductAdapter extends ArrayAdapter<Product> {
 
     // shopping cart activity
-    public ShoppingCartActivity activity;
+    public OrderActivity activity;
 
     // list of products
     public ArrayList<Product> products;
 
-    ShoppingCartAdapter(ShoppingCartActivity activity, ArrayList<Product> products) {
-        super(activity, R.layout.row_shopping_cart, products);
+    ProductAdapter(OrderActivity activity, ArrayList<Product> products) {
+        super(activity, R.layout.row_product, products);
 
         this.activity = activity;
         this.products = products;
@@ -34,19 +33,19 @@ public class ShoppingCartAdapter extends ArrayAdapter<Product> {
         View row = convertView;
         if (row == null) {
             LayoutInflater inflater = activity.getLayoutInflater();
-            row = inflater.inflate(R.layout.row_shopping_cart, parent, false);    // get our custom layout
+            row = inflater.inflate(R.layout.row_product, parent, false);    // get our custom layout
         }
         Product p = products.get(position);
 
-        ((TextView) row.findViewById(R.id.product_name_SC)).setText(p.getName());
+        ((TextView) row.findViewById(R.id.product_name)).setText(p.getName());
 
         String quantity = "Quantity: " + p.getQuantity();
-        ((TextView) row.findViewById(R.id.product_quantity_SC)).setText(quantity);
+        ((TextView) row.findViewById(R.id.product_quantity)).setText(quantity);
 
         String price = p.getTotalPriceRounded()  + " €";
-        ((TextView)row.findViewById(R.id.total_price_product)).setText(price);
+        ((TextView)row.findViewById(R.id.total_price)).setText(price);
 
-        ImageView image = row.findViewById(R.id.product_image_SC);
+        ImageView image = row.findViewById(R.id.product_image);
         int image_id = activity.getResources().getIdentifier(p.getImage() , "drawable", activity.getPackageName());
 
         if (image_id > 0) {
