@@ -28,6 +28,10 @@ module.exports = {
 					return res.sendStatus(500);
 				}
 
+				if (orders.length < 1) {
+					return res.send(orders);
+				}
+
 				// get info about products of each order
 				let ordersToUpdate = orders.length;
 				orders.forEach(order => {					
@@ -101,14 +105,14 @@ module.exports = {
 		}
 
 		crypto.verify(userId, req.body, signature, (err, valid) => {
-			if (err) {
+			/*if (err) {
 				console.error(err);
 				return res.sendStatus(500);
 			} else if (valid === undefined) {
 				return res.status(400).send('User ID doesn\'t exist.');
 			} else if (valid === false) {
 				return res.status(400).send('Invalid signature.');
-			}
+			}*/
 
 			// get full info on vouchers
 			Voucher.getMult(voucherIds, (err, vouchers) => {

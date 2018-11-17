@@ -149,5 +149,6 @@ INSERT INTO Shows (name, description, date, price) VALUES ("Festival Termómetro
 /* --- Tickets --- */
 
 INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('one', 99, 1, 'one');
-INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('two', 12, 1, 'one');
-INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('three', 45, 1, 'one');
+INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('ola', 13, 1, 'one');
+INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('two', 12, 2, 'one');
+INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES ('three', 45, 3, 'one');
