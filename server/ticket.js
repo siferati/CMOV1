@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const crypto = require('./crypto.js');
 const uuidv4 = require('uuid/v4');
+const User = require('./user.js');
 
 const db = new sqlite3.cached.Database('db/db.sqlite3');
 
@@ -155,6 +156,7 @@ module.exports = {
 				const name = row.name;
 				const date = row.date;
 				const price = row.price;
+				const totalPrice = row.price * quantity;
 
 				crypto.verify(userId, req.body, signature, (err, valid) => {
 					if (err) {
@@ -166,117 +168,146 @@ module.exports = {
 						return res.status(400).send('Invalid signature.');
 					}
 
-					// tickets
-					let sqlTickets = 'INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES';
-					let paramsTickets = [];
-					let tickets = [];
+					// get money user spent so far
+					User.getMoneySpent(userId, (err, moneySpent) => {
+						if (err) {
+							console.error(err);
+							return res.sendStatus(500);
+						}
 
-					// vouchers
-					let sqlVouchers = 'INSERT INTO Vouchers (id, userId) VALUES';
-					let paramsVouchers = [];
-					let vouchers = [];
-
-					// promotions
-					let sqlPromotions = 'INSERT INTO Promotions (voucherId, productId, discount) VALUES';
-					let paramsPromotions = [];
-
-					// create sql statement for N inserts
-					for (let i = 0; i < quantity; i++) {
+						// only interested in the hundreds place
+						const hdsMoneySpent = Math.floor(moneySpent / 100);
+						const hdsNewMoneySpent = Math.floor((moneySpent + totalPrice) / 100);
+						const newSpecialVoucher = hdsNewMoneySpent > hdsMoneySpent;
 
 						// tickets
-						const ticketId = uuidv4();
-						const seatNumber = getRandomInt(1, 100);
-						sqlTickets += ' (?, ?, ?, ?),';
-						paramsTickets.push(ticketId, seatNumber, showId, userId);
+						let sqlTickets = 'INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES';
+						let paramsTickets = [];
+						let tickets = [];
 
 						// vouchers
-						const voucherId = uuidv4();
-						sqlVouchers += ' (?, ?),';
-						paramsVouchers.push(voucherId, userId);
+						let sqlVouchers = 'INSERT INTO Vouchers (id, userId) VALUES';
+						let paramsVouchers = [];
+						let vouchers = [];
 
 						// promotions
-						const productId = getRandomInt(2, 4); // 2: coffee, 3: popcorn
-						let productName = productId === 2 ? 'Coffee' : 'Popcorn';
-						const discount = 1.0; // free
-						sqlPromotions += ' (?, ?, ?),';
-						paramsPromotions.push(voucherId, productId, discount);
+						let sqlPromotions = 'INSERT INTO Promotions (voucherId, productId, discount) VALUES';
+						let paramsPromotions = [];
 
-						// store for response
-						tickets.push({
-							id: ticketId,
-							name: name,
-							date: date,
-							seatNumber: seatNumber,
-							price: price
-						});
-						vouchers.push({
-							id: voucherId,
-							name: productName,
-							discount: discount
-						});
-					}
-		
-					// remove last comma
-					sqlTickets = sqlTickets.substr(0, sqlTickets.length - 1);
-					sqlVouchers = sqlVouchers.substr(0, sqlVouchers.length - 1);
-					sqlPromotions = sqlPromotions.substr(0, sqlPromotions.length - 1);
-		
-					// begin transaction in new serialized db connection
-					const transdb = new sqlite3.Database('db/db.sqlite3');
-					transdb.serialize();
-					transdb.run('BEGIN TRANSACTION');
+						// create sql statement for N inserts
+						for (let i = 0; i < quantity; i++) {
 
+							// tickets
+							const ticketId = uuidv4();
+							const seatNumber = getRandomInt(1, 100);
+							sqlTickets += ' (?, ?, ?, ?),';
+							paramsTickets.push(ticketId, seatNumber, showId, userId);
 
-					// create tickets
-					transdb.run(
-						sqlTickets,
-						paramsTickets,
-						(err) => {
-							if (err) {
-								console.error(err);
-								transdb.run('ROLLBACK');
-								transdb.close();
-								return res.sendStatus(500);
-							}
+							// vouchers (special voucher only created once)
+							if (!newSpecialVoucher || (newSpecialVoucher && i === 0)) {
+								const voucherId = uuidv4();
+								sqlVouchers += ' (?, ?),';
+								paramsVouchers.push(voucherId, userId);
 
-							// create vouchers
-							transdb.run(
-								sqlVouchers,
-								paramsVouchers,
-								(err) => {
-									if (err) {
-										console.error(err);
-										transdb.run('ROLLBACK');
-										transdb.close();
-										return res.sendStatus(500);
-									}
-
-									// create promotions
-									transdb.run(
-										sqlPromotions,
-										paramsPromotions,
-										(err) => {
-											if (err) {
-												console.error(err);
-												transdb.run('ROLLBACK');
-												transdb.close();
-												return res.sendStatus(500);
-											}
-
-											// commit transaction and close db connection
-											transdb.run('COMMIT');
-											transdb.close();
-
-											return res.send({
-												tickets: tickets,
-												vouchers: vouchers
-											});
-										}										
-									);
+								// promotions
+								let productId;
+								let productName;
+								let discount;
+								if (newSpecialVoucher) {
+									productId = 1;
+									productName = 'Total';
+									discount = 0.05;
+								} else {
+									productId = getRandomInt(2, 4); // 2: coffee, 3: popcorn
+									productName = productId === 2 ? 'Coffee' : 'Popcorn';
+									discount = 1.0; // free
 								}
-							);
+								sqlPromotions += ' (?, ?, ?),';
+								paramsPromotions.push(voucherId, productId, discount);
+								
+
+								// store for response
+								vouchers.push({
+									id: voucherId,
+									name: productName,
+									discount: discount
+								});
+							}							
+
+							// store for response
+							tickets.push({
+								id: ticketId,
+								name: name,
+								date: date,
+								seatNumber: seatNumber,
+								price: price
+							});
 						}
-					);					
+
+						// remove last comma
+						sqlTickets = sqlTickets.substr(0, sqlTickets.length - 1);
+						sqlVouchers = sqlVouchers.substr(0, sqlVouchers.length - 1);
+						sqlPromotions = sqlPromotions.substr(0, sqlPromotions.length - 1);
+
+						// begin transaction in new serialized db connection
+						const transdb = new sqlite3.Database('db/db.sqlite3');
+						transdb.serialize();
+						transdb.run('BEGIN TRANSACTION');
+
+
+						// create tickets
+						transdb.run(
+							sqlTickets,
+							paramsTickets,
+							(err) => {
+								if (err) {
+									console.error(err);
+									transdb.run('ROLLBACK');
+									transdb.close();
+									return res.sendStatus(500);
+								}
+
+								// create vouchers
+								transdb.run(
+									sqlVouchers,
+									paramsVouchers,
+									(err) => {
+										if (err) {
+											console.error(err);
+											transdb.run('ROLLBACK');
+											transdb.close();
+											return res.sendStatus(500);
+										}
+
+										// create promotions
+										transdb.run(
+											sqlPromotions,
+											paramsPromotions,
+											(err) => {
+												if (err) {
+													console.error(err);
+													transdb.run('ROLLBACK');
+													transdb.close();
+													return res.sendStatus(500);
+												}
+
+												// commit transaction and close db connection
+												transdb.run('COMMIT');
+												transdb.close();
+
+												return res.send({
+													tickets: tickets,
+													vouchers: vouchers
+												});
+											}
+										);
+									}
+								);
+							}
+						);
+					});
+
+										
 				});
 			}
 		);

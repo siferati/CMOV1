@@ -6,6 +6,36 @@ const db = new sqlite3.cached.Database('db/db.sqlite3');
 
 module.exports = {
 
+	getMoneySpent: (userId, callback) => {
+
+		db.get(
+			`SELECT SUM(price) AS price
+			FROM Shows, Tickets
+			WHERE userId = ?
+			AND showId = Shows.id`,
+			userId,
+			(err, tickets) => {
+				if (err) {
+					return callback(err, undefined);
+				}
+
+				db.get(
+					`SELECT SUM(price) AS price
+					FROM Orders
+					WHERE userId = ?`,
+					userId,
+					(err, orders) => {
+						if (err) {
+							return callback(err, undefined);
+						}
+
+						return callback(err, tickets.price + orders.price);
+					}
+				);
+			}
+		);
+	},
+
 	login: (req, res) => {
 
 		const {

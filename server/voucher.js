@@ -4,7 +4,7 @@ const db = new sqlite3.cached.Database('db/db.sqlite3');
 
 module.exports = {
 
-	updateMult: (orderId, ids, callback) => {
+	updateMult: (transdb, orderId, ids, callback) => {
 
 		if (!Array.isArray(ids) || ids.length < 1) {
 			return callback(null);
@@ -18,7 +18,7 @@ module.exports = {
 		sql = sql.substr(0, sql.length - 3);
 		ids.unshift(orderId);
 
-		db.run(sql, ids, (err) => {
+		transdb.run(sql, ids, (err) => {
 			ids.shift();
 			callback(err);
 		});
