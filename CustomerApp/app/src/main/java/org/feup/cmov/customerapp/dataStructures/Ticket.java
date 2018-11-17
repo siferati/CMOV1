@@ -9,6 +9,7 @@ public class Ticket implements Serializable {
     private int seatNumber;
     private double price;
     private boolean available;
+    public boolean selected;
 
     public Ticket(String id, String name, String date, int seatNumber, double price) {
         this.id = id;

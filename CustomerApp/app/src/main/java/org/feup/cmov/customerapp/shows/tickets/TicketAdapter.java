@@ -57,18 +57,28 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
         } else {
             row.setBackgroundColor(activity.getResources().getColor(R.color.white));
             selected.setClickable(true);
-            selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(activity, t, isCheck));
+            selected.setOnCheckedChangeListener((CompoundButton btnView, boolean isCheck)->checkListener(btnView, activity, t, isCheck));
             available.setImageResource(R.drawable.available_yes);
+        }
+
+        if(t.selected) {
+            selected.setChecked(true);
+        } else {
+            selected.setChecked(false);
         }
 
         return (row);
     }
 
-    private void checkListener(ShowsActivity activity, Ticket ticket, boolean isChecked) {
-        if (isChecked) {
-            activity.addTicket(ticket);
-        } else {
-            activity.removeTicket(ticket);
+    private void checkListener(CompoundButton btnView, ShowsActivity activity, Ticket ticket, boolean isChecked) {
+        if (btnView.isPressed()) {
+            if (isChecked) {
+                ticket.selected = true;
+                activity.addTicket(ticket);
+            } else {
+                ticket.selected = false;
+                activity.removeTicket(ticket);
+            }
         }
     }
 }
