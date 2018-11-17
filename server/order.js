@@ -2,6 +2,8 @@ const sqlite3 = require('sqlite3').verbose();
 const crypto = require('./crypto.js');
 const Product = require('./product.js');
 const Voucher = require('./voucher.js');
+const uuidv4 = require('uuid/v4');
+const User = require('./user.js');
 
 const db = new sqlite3.cached.Database('db/db.sqlite3');
 
@@ -181,29 +183,29 @@ module.exports = {
 					// 2 decimal places
 					price = price.toFixed(2);
 
-					// begin transaction in new serialized db connection
-					const transdb = new sqlite3.Database('db/db.sqlite3');
-					transdb.serialize();
-					transdb.run('BEGIN TRANSACTION');
+					// get money user spent so far
+					User.getMoneySpent(userId, (err, moneySpent) => {
+						if (err) {
+							console.error(err);
+							return res.sendStatus(500);
+						}
 
-					// create new order in db
-					transdb.run(
-						`INSERT INTO Orders (price, userId)
-						VALUES (?, ?)`,
-						[price, userId],
-						function (err) {
-							if (err) {
-								console.error(err);
-								transdb.run('ROLLBACK');
-								transdb.close();
-								return res.sendStatus(500);
-							}
+						// only interested in the hundreds place
+						const hdsMoneySpent = Math.floor(parseFloat(moneySpent) / 100);
+						const hdsNewMoneySpent = Math.floor((parseFloat(moneySpent) + parseFloat(price)) / 100);
+						const newSpecialVoucher = hdsNewMoneySpent > hdsMoneySpent;
 
-							const orderId = this.lastID;
-							const usedVoucherIds = usedVouchers.map(voucher => voucher.id);
+						// begin transaction in new serialized db connection
+						const transdb = new sqlite3.Database('db/db.sqlite3');
+						transdb.serialize();
+						transdb.run('BEGIN TRANSACTION');
 
-							// update tickets with new order
-							Voucher.updateMult(transdb, orderId, usedVoucherIds, (err) => {
+						// create new order in db
+						transdb.run(
+							`INSERT INTO Orders (price, userId)
+							VALUES (?, ?)`,
+							[price, userId],
+							function (err) {
 								if (err) {
 									console.error(err);
 									transdb.run('ROLLBACK');
@@ -211,8 +213,11 @@ module.exports = {
 									return res.sendStatus(500);
 								}
 
-								// add product to orders
-								Product.addOrder(transdb, orderId, products, (err) => {
+								const orderId = this.lastID;
+								const usedVoucherIds = usedVouchers.map(voucher => voucher.id);
+
+								// update tickets with new order
+								Voucher.updateMult(transdb, orderId, usedVoucherIds, (err) => {
 									if (err) {
 										console.error(err);
 										transdb.run('ROLLBACK');
@@ -220,15 +225,67 @@ module.exports = {
 										return res.sendStatus(500);
 									}
 
-									// commit transaction and close db connection
-									transdb.run('COMMIT');
-									transdb.close();
+									// add product to orders
+									Product.addOrder(transdb, orderId, products, (err) => {
+										if (err) {
+											console.error(err);
+											transdb.run('ROLLBACK');
+											transdb.close();
+											return res.sendStatus(500);
+										}
 
-									res.send({ id: orderId, price, products, usedVoucherIds });
+										// if there's a need for a new special voucher
+										if (newSpecialVoucher) {
+
+											// create special voucher
+											const voucherId = uuidv4();
+											transdb.run(
+												`INSERT INTO Vouchers (id, userId)
+												VALUES (?, ?)`,
+												[voucherId, userId],
+												(err) => {
+													if (err) {
+														console.error(err);
+														transdb.run('ROLLBACK');
+														transdb.close();
+														return res.sendStatus(500);
+													}
+
+													// create promotion
+													transdb.run(
+														`INSERT INTO Promotions (voucherId, productId, discount)
+														VALUES (?, ?, ?)`,
+														[voucherId, 1, 0.05],
+														(err) => {
+															if (err) {
+																console.error(err);
+																transdb.run('ROLLBACK');
+																transdb.close();
+																return res.sendStatus(500);
+															}
+
+															// commit transaction and close db connection
+															transdb.run('COMMIT');
+															transdb.close();
+
+															res.send({ id: orderId, price, products, usedVoucherIds });
+														}	
+													);
+												}
+											);
+										}
+										else {
+											// commit transaction and close db connection
+											transdb.run('COMMIT');
+											transdb.close();
+
+											res.send({ id: orderId, price, products, usedVoucherIds });
+										}
+									});
 								});
-							});
-						}
-					);
+							}
+						);
+					});					
 				});
 			});
 		});
