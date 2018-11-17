@@ -315,7 +315,7 @@ public class ShowsActivity extends AppCompatActivity implements TabLayout.OnTabS
         Intent intent = new Intent(this, TicketValidationActivity.class);
         Bundle argument = new Bundle();
 
-        argument.putSerializable(Constants.VALIDATION_QR, tickets);
+        argument.putSerializable(Constants.VALIDATE_TICKETS_QR, tickets);
 
         intent.putExtras(argument);
         startActivity(intent);

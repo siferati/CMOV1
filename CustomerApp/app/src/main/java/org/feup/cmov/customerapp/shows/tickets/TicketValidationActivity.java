@@ -1,14 +1,17 @@
 package org.feup.cmov.customerapp.shows.tickets;
 
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
+import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.utils.Constants;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -22,15 +25,39 @@ public class TicketValidationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_validation);
 
+        String json = getTicketsJson();
+        Log.d("jsonstuff", json);
+
+        ImageView qr_code = findViewById(R.id.qrCodeImageView);
+    }
+
+    public String getTicketsJson() {
         Bundle argument = getIntent().getExtras();
 
         tickets = new ArrayList<>();
         if (argument != null) {
-            tickets = (ArrayList<Ticket>) argument.getSerializable(Constants.VALIDATION_QR);
+            tickets = (ArrayList<Ticket>) argument.getSerializable(Constants.VALIDATE_TICKETS_QR);
         }
 
-        ImageView qr_code = findViewById(R.id.qrCodeImageView);
+        User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+        JSONObject ticketsJson = new JSONObject();
 
+        try {
+            ticketsJson.put("id", user.getId());
+            ticketsJson.put("tickets_size", tickets.size());
+            ticketsJson.put("date", tickets.get(0).getDate());
+
+            JSONArray ticketsId = new JSONArray();
+            for (int i = 0; i < tickets.size(); i++)
+            {
+                ticketsId.put(tickets.get(i).getId());
+            }
+            ticketsJson.put("tickets", ticketsId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return ticketsJson.toString();
     }
 
     /*@Override

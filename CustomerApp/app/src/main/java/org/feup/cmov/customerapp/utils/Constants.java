@@ -3,8 +3,6 @@ package org.feup.cmov.customerapp.utils;
 import android.app.Activity;
 import android.widget.Toast;
 
-import org.feup.cmov.customerapp.login.LoginActivity;
-
 public class Constants {
     public static final String SHARED_PREF = "shared_preferences";
     public static final String PREF_PRODUCTS = "products";
@@ -39,15 +37,16 @@ public class Constants {
     public static final String LOGIN_FAILED = "Login Failed";
     public static final String REGISTER_FAILED = "Register Failed";
 
-    public static final String CREDIT_CARD = "creditCard";
-    public static final String GET_SHOW = "get_show";
-    public static final String CONFIRM_PURCHASE = "confirm_purchase";
-    public static final String VALIDATE_TICKETS = "validate_tickets";
-    public static final String VALIDATION_QR = "validation_qr";
-    public static final String REQUESTED_VOUCHERS = "vouchers";
-    public static final String SELECTED_VOUCHERS = "selected_vouchers";
-    public static final String ORDER_VALIDATION = "order_validation";
-    public static final String VOUCHERS_VALIDATION = "vouchers_validation";
+    public static final String CREDIT_CARD = "creditCard";                  // start credit card fragment
+    public static final String CONFIRM_PURCHASE = "confirm_purchase";       // confirm purchase fragment
+    public static final String VALIDATE_TICKETS = "validate_tickets";       // validate tickets fragment
+
+    public static final String GET_SHOW = "get_show";                       // send show details to show activity
+    public static final String VALIDATE_TICKETS_QR = "validation_qr";       // send tickets to ticket Validation activity
+    public static final String REQUESTED_VOUCHERS = "vouchers";             // request selected vouchers from Select Vouchers activity
+    public static final String SELECTED_VOUCHERS = "selected_vouchers";     // if vouchers have been already been selected, show them in Select Voucher activity
+    public static final String ORDER_VALIDATION = "order_validation";       // send products to Order Validation activity
+    public static final String VOUCHERS_VALIDATION = "vouchers_validation"; // send selected vouchers to Order Validation activity
 
     public static final String BUY_FAILED = "Need to buy at least a ticket";
     public static final String DECREASE_FAILED = "Negative number of tickets not allowed";
@@ -59,7 +58,7 @@ public class Constants {
     public static final String LOCAL_LOGIN = "Local Login";
     public static final String INVALID_PASSWORD = "Invalid password";
 
-    public static final String DECREASE_FAILED_PRODUCT = "Negative number of produts not allowed";
+    public static final String DECREASE_FAILED_PRODUCT = "Negative number of products not allowed";
     public static final String NO_PRODUCTS = "Need to select at least one product";
 
     public static final String MAX_VOUCHERS = "Can't select more than two vouchers";
