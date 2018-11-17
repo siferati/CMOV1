@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OrderActivity"
+            android:name=".order.OrderActivity"
             android:label="Cafeteria Order"/>
     </application>
 

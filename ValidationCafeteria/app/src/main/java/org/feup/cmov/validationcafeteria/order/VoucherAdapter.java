@@ -1,4 +1,4 @@
-package org.feup.cmov.validationcafeteria;
+package org.feup.cmov.validationcafeteria.order;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.feup.cmov.validationcafeteria.Constants;
+import org.feup.cmov.validationcafeteria.R;
 import org.feup.cmov.validationcafeteria.dataStructures.Voucher;
 
 import java.util.ArrayList;

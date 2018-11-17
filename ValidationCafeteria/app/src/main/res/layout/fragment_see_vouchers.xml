@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".OrderActivity">
+    tools:context=".order.OrderActivity">
 
     <View
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         android:id="@+id/table_see_vouchers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="20dp">
 
         <TableRow
             android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:text="@string/close"
                 android:textColor="@color/white"
                 style="@style/Widget.AppCompat.Button.Colored"
-                android:theme="@style/Alt.Button"/>
+                android:theme="@style/AltPrimary.Button"/>
         </TableRow>
     </TableLayout>
 </FrameLayout>

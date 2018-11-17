@@ -11,22 +11,11 @@
         android:orientation="vertical"
         android:layout_margin="6dp"
         android:textAlignment="center"
-        android:textColor="@color/primary_dark"
+        android:textColor="@color/primary_darker"
         android:textAllCaps="true"
-        android:textSize="17sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:text="Order No. 1">
-    </TextView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="12dp"
-        android:textAllCaps="true"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:text="@string/products">
     </TextView>
 
     <ListView
