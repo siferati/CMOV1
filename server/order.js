@@ -177,14 +177,21 @@ module.exports = {
 					// 2 decimal places
 					price = price.toFixed(2);
 
+					// begin transaction in new serialized db connection
+					const transdb = new sqlite3.Database('db/db.sqlite3');
+					transdb.serialize();
+					transdb.run('BEGIN TRANSACTION');
+
 					// create new order in db
-					db.run(
+					transdb.run(
 						`INSERT INTO Orders (price, userId)
 						VALUES (?, ?)`,
 						[price, userId],
 						function (err) {
 							if (err) {
 								console.error(err);
+								transdb.run('ROLLBACK');
+								transdb.close();
 								return res.sendStatus(500);
 							}
 
@@ -192,18 +199,26 @@ module.exports = {
 							const usedVoucherIds = usedVouchers.map(voucher => voucher.id);
 
 							// update tickets with new order
-							Voucher.updateMult(orderId, usedVoucherIds, (err) => {
+							Voucher.updateMult(transdb, orderId, usedVoucherIds, (err) => {
 								if (err) {
 									console.error(err);
+									transdb.run('ROLLBACK');
+									transdb.close();
 									return res.sendStatus(500);
 								}
 
 								// add product to orders
-								Product.addOrder(orderId, products, (err) => {
+								Product.addOrder(transdb, orderId, products, (err) => {
 									if (err) {
 										console.error(err);
+										transdb.run('ROLLBACK');
+										transdb.close();
 										return res.sendStatus(500);
 									}
+
+									// commit transaction and close db connection
+									transdb.run('COMMIT');
+									transdb.close();
 
 									res.send({ id: orderId, price, products, usedVoucherIds });
 								});

@@ -4,7 +4,7 @@ const db = new sqlite3.cached.Database('db/db.sqlite3');
 
 module.exports = {
 
-	addOrder: (orderId, products, callback) => {
+	addOrder: (transdb, orderId, products, callback) => {
 
 		if (!Array.isArray(products) || products.length < 1) {
 			return callback(null);
@@ -19,7 +19,7 @@ module.exports = {
 		});
 		sql = sql.substring(0, sql.length - 1);
 
-		db.run(sql, params, (err) => callback(err));
+		transdb.run(sql, params, (err) => callback(err));
 	},
 
 	getMult: (ids, callback) => {
