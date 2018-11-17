@@ -178,7 +178,7 @@ module.exports = {
 						// only interested in the hundreds place
 						const hdsMoneySpent = Math.floor(moneySpent / 100);
 						const hdsNewMoneySpent = Math.floor((moneySpent + totalPrice) / 100);
-						const newSpecialVoucher = hdsNewMoneySpent > hdsMoneySpent;
+						const noSpecialVouchers = hdsNewMoneySpent - hdsMoneySpent;		// number of special vouchers
 
 						// tickets
 						let sqlTickets = 'INSERT INTO Tickets (id, seatNumber, showId, userId) VALUES';
@@ -204,35 +204,29 @@ module.exports = {
 							paramsTickets.push(ticketId, seatNumber, showId, userId);
 
 							// vouchers (special voucher only created once)
-							if (!newSpecialVoucher || (newSpecialVoucher && i === 0)) {
-								const voucherId = uuidv4();
-								sqlVouchers += ' (?, ?),';
-								paramsVouchers.push(voucherId, userId);
+							const voucherId = uuidv4();
+							sqlVouchers += ' (?, ?),';
+							paramsVouchers.push(voucherId, userId);
 
-								// promotions
-								let productId;
-								let productName;
-								let discount;
-								if (newSpecialVoucher) {
-									productId = 1;
-									productName = 'Total';
-									discount = 0.05;
-								} else {
-									productId = getRandomInt(2, 4); // 2: coffee, 3: popcorn
-									productName = productId === 2 ? 'Coffee' : 'Popcorn';
-									discount = 1.0; // free
-								}
-								sqlPromotions += ' (?, ?, ?),';
-								paramsPromotions.push(voucherId, productId, discount);
-								
+							// promotions
+							let productId;
+							let productName;
+							let discount;
+							productId = getRandomInt(2, 4); // 2: coffee, 3: popcorn
+							productName = productId === 2 ? 'Coffee' : 'Popcorn';
+							discount = 1.0; // free
+							
+							sqlPromotions += ' (?, ?, ?),';
+							paramsPromotions.push(voucherId, productId, discount);
+							
 
-								// store for response
-								vouchers.push({
-									id: voucherId,
-									name: productName,
-									discount: discount
-								});
-							}							
+							// store for response
+							vouchers.push({
+								id: voucherId,
+								name: productName,
+								discount: discount
+							});
+													
 
 							// store for response
 							tickets.push({
@@ -241,6 +235,31 @@ module.exports = {
 								date: date,
 								seatNumber: seatNumber,
 								price: price
+							});
+						}
+						
+						// creates noSpecialVouchers depending on the money spent by the user
+						for (let i = 0; i < noSpecialVouchers; i++) {
+							const voucherId = uuidv4();
+							sqlVouchers += ' (?, ?),';
+							paramsVouchers.push(voucherId, userId);
+
+							// special promotion
+							let productId;
+							let productName;
+							let discount;
+							productId = 1;
+							productName = 'Total';
+							discount = 0.05;
+							
+							sqlPromotions += ' (?, ?, ?),';
+							paramsPromotions.push(voucherId, productId, discount);
+							
+							// store special voucher
+							vouchers.push({
+								id: voucherId,
+								name: productName,
+								discount: discount
 							});
 						}
 

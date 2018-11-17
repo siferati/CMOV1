@@ -15,7 +15,7 @@ public class Constants {
 
     public static final String FREE_POPCORN = "Popcorn";
     public static final String FREE_COFFEE = "Coffee";
-    public static final String DISCOUNT = "Discount";
+    public static final String DISCOUNT = "Total";
 
     public static final double DEFAULT_DISCOUNT = 0.05;
 

@@ -111,6 +111,7 @@ public class User {
                     users.add(u);
                 }
 
+                reader.close();
                 fis.close();
             } else {
                 Log.d("http", "File doesn't yet exist");
@@ -162,6 +163,7 @@ public class User {
                     username = tmpLine;
                 }
 
+                reader.close();
                 fis.close();
             } else {
                 Log.d("http", "File doesn't yet exist");

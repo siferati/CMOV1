@@ -98,6 +98,8 @@ public class BuyTickets extends ServerConnection implements Runnable {
     }
 
     private ServerResponse jsonToArray(String jsonString) {
+        Log.d("responsehttp",  jsonString);
+
         ArrayList<Ticket> tickets_list = new ArrayList<>();
         ArrayList<Voucher> vouchers_list = new ArrayList<>();
 
@@ -122,6 +124,8 @@ public class BuyTickets extends ServerConnection implements Runnable {
 
             for(int i = 0; i < vouchers.length(); i++) {
                 JSONObject voucher = vouchers.getJSONObject(i);
+
+                Log.d("responsehttp",  vouchers.length() + " " + voucher.toString());
 
                 String id = voucher.getString("id");
                 String name = voucher.getString("name");

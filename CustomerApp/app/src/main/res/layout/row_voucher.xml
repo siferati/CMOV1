@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center"
-    android:padding="15dp">
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/symbol"
@@ -33,6 +33,7 @@
             android:id="@+id/voucher_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lines="2"
             />
     </LinearLayout>
 

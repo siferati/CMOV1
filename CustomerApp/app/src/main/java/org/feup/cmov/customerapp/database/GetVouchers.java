@@ -35,6 +35,7 @@ public class GetVouchers extends ServerConnection implements Runnable {
 
         try {
             String url = "http://" + address + ":" + port + "/users/" + userID + "/vouchers";
+            Log.d("responsehttp", url);
 
             urlConnection = setHeaders("GET", url);
 
