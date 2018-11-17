@@ -115,7 +115,7 @@ INSERT INTO Promotions(voucherId, productId, discount) VALUES ('three', 1, 0);
 
 /* --- SHOWS --- */
 
-INSERT INTO Shows (name, description, date, price) VALUES ("Dead Combo", "A deadly combo is gonna happen", "2019-10-25", 9.99);
+INSERT INTO Shows (name, description, date, price) VALUES ("Dead Combo", "A deadly combo is gonna happen", "2019-10-25", 100.99);
 INSERT INTO Shows (name, description, date, price) VALUES ("Jojo Mayer & Nerve", "Is that a jojo's reference!?", "2019-10-26", 4.99);
 INSERT INTO Shows (name, description, date, price) VALUES ("Anna von Hausswolff", "Reminds me of VanHelsing, the vampire slayer", "2019-11-04", 13.50);
 INSERT INTO Shows (name, description, date, price) VALUES ("Júlio Resende", "Also know as Julio Cesar of Rome", "2019-11-13", 27.50);
