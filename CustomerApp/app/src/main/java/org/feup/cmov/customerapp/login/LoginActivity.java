@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_SIGNUP) {
+        if (requestCode == REQUEST_SIGNUP && resultCode == RESULT_OK) {
             String username = data.getStringExtra("username");
             String password = data.getStringExtra("password");
 

@@ -189,7 +189,7 @@ public class ShoppingCartActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_VOUCHERS) {
+        if (requestCode == REQUEST_VOUCHERS && resultCode == RESULT_OK) {
             selectedVouchers = (ArrayList<Voucher>) data.getSerializableExtra(Constants.REQUESTED_VOUCHERS);
 
             TextView vouchersTV = findViewById(R.id.text_vouchers_selected);
@@ -213,10 +213,11 @@ public class ShoppingCartActivity extends AppCompatActivity {
             argument.putSerializable(Constants.ORDER_VALIDATION, products);
             argument.putSerializable(Constants.VOUCHERS_VALIDATION, selectedVouchers);
 
+            Constants.showToast(Constants.ORDER_IN_PROGRESS, this);
+
             intent.putExtras(argument);
             startActivity(intent);
-
-            Constants.showToast(Constants.ORDER_IN_PROGRESS, this);
+            finish();
         } else {
             Constants.showToast(Constants.ERROR_CONNECTING, this);
         }
