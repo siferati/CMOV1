@@ -70,18 +70,31 @@ public class GetVouchers extends ServerConnection implements Runnable {
             JSONArray jArray = new JSONArray(jsonString);
 
             for(int i=0; i<jArray.length(); i++){
-                JSONObject show = jArray.getJSONObject(i);
+                JSONObject voucher = jArray.getJSONObject(i);
 
-                String id = show.getString("id");
-                boolean available;
-                if (!show.has("orderId")) {
-                    available = false;
-                } else {
+                String id = voucher.getString("id");
+                boolean available = false;
+
+                if (voucher.isNull("orderId")) {
                     available = true;
                 }
 
+                String name = Constants.DISCOUNT;               // default is discount voucher
+                double discount = Constants.DEFAULT_DISCOUNT;   // default is discount voucher
+
+                if(voucher.has("promotions")) {
+                    JSONArray promotions = voucher.getJSONArray("promotions");
+
+                    if (promotions.length() < 2) {
+                        JSONObject promotion = promotions.getJSONObject(0);
+
+                        name = promotion.getString("name");
+                        discount = promotion.getDouble("discount");
+                    }
+                }
+
                 if (available) {
-                    Voucher v = new Voucher(id);
+                    Voucher v = new Voucher(id, name, discount);
                     vouchersList.add(v);
                 }
             }

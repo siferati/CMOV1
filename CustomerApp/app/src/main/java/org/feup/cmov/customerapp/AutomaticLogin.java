@@ -16,7 +16,7 @@ public class AutomaticLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // resetLocalFiles();
+        //resetLocalFiles();
 
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
 

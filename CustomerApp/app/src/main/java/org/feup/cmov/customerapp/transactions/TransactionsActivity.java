@@ -50,7 +50,7 @@ public class TransactionsActivity extends AppCompatActivity {
     public void handleResponseVouchers(int code, String response, List<Voucher> vouchers) {
         if (code == Constants.OK_RESPONSE) {
             availableVouchers = vouchers;
-
+            addLostVouchers(availableVouchers);
         } else {
             Constants.showToast(response, this);
         }
@@ -82,6 +82,28 @@ public class TransactionsActivity extends AppCompatActivity {
                         for(Ticket t : ticketList) {
                             t.setAvailable(true);
                             db.updateTicket(t);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public void addLostVouchers(List<Voucher> vouchers) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LocalDatabase db = LocalDatabase.getInstance(getApplicationContext());
+
+                if (LocalDatabase.checkDataBase(getApplicationContext())) {
+                    List<Voucher> localVouchers = db.getAllVouchers(getApplicationContext());
+
+                    List<Voucher> lostVouchers = new ArrayList<>(vouchers);
+                    lostVouchers.removeAll(localVouchers);
+
+                    if (lostVouchers.size() > 0) {
+                        for(Voucher voucher : lostVouchers) {
+                            db.addVoucher(getApplicationContext(), voucher);
                         }
                     }
                 }

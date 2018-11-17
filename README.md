@@ -52,7 +52,7 @@
 
 | Verb  | Endpoint | Req. Body | Res. Body | Description |
 | ----- | -------- | --------- | --------- | ----------- |
-| GET | /users/:id/vouchers | { } | [ { id, orderId, promotions: [ { productId, discount }, ... ] }, ... ] | Get all vouchers belonging to an user. |
+| GET | /users/:id/vouchers | { } | [ { id, orderId, promotions: [ { productId, name, discount }, ... ] }, ... ] | Get all vouchers belonging to an user. |
 | GET | /users/:userId/vouchers/:voucherId | { } | { id, orderId, promotions: [ { productId, discount }, ... ] } | Get a voucher belonging to an user. |
 
 #### Orders

@@ -126,9 +126,10 @@ module.exports = {
 				vouchers.forEach((voucher) => {
 
 					db.all(
-						`SELECT productId, discount
-						FROM Promotions
-						WHERE voucherId = ?`,
+						`SELECT productId, discount, name
+						FROM Promotions, Products
+						WHERE voucherId = ?
+						AND productId = Products.id`,
 						voucher.id,
 						(err, promotions) => {
 							if (err) {
