@@ -66,6 +66,8 @@ public class Constants {
     public static final String TWO_DISCOUNTS = "Only one 5% discount voucher allowed";
     public static final String ORDER_IN_PROGRESS = "Sending order to validation terminal";
 
+    public static final String UPDATED_V_T = "Updated vouchers & tickets";
+
     /**
      * Shows toast message
      * @param toast - message to show

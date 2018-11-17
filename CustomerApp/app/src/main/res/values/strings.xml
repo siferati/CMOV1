@@ -74,4 +74,7 @@
     <string name="product_quantity">Quantity: </string>
     <string name="qr_code_cafeteria">Show your QR Code at the cafeteria!</string>
 
+    <!-- TRANSACTIONS LAYOUT -->
+    <string name="empty_orders">No orders yet.</string>
+
 </resources>
