@@ -13,14 +13,13 @@
 
         <ImageView
             android:src="@drawable/order_food"
-            android:id="@+id/qrCodeImageView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:contentDescription="@null"
             />
 
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_init"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="24dp"

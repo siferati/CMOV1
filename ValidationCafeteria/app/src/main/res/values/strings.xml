@@ -4,6 +4,9 @@
     <string name="cafeteria_orders">Scan Cafeteria Orders</string>
     <string name="products">Products:</string>
     <string name="see_vouchers">See Vouchers</string>
+    <string name="default_vouchers">0 accepted vouchers</string>
     <string name="terminate_order">Terminate Order</string>
+
+    <string name="accepted_vouchers">Accepted Vouchers</string>
     <string name="close">Close</string>
 </resources>

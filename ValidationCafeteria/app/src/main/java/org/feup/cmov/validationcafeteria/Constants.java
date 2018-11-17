@@ -1,6 +1,21 @@
 package org.feup.cmov.validationcafeteria;
 
+import android.app.Activity;
+import android.widget.Toast;
+
 public class Constants {
+
+    /**
+     * Shows toast message
+     * @param toast - message to show
+     */
+    public static void showToast(final String toast, Activity activity) {
+        activity.runOnUiThread(() -> Toast.makeText(activity, toast, Toast.LENGTH_LONG).show());
+    }
+
+    public static final String SEE_VOUCHERS = "see_vouchers";
+    public static final String NO_VOUCHERS = "No vouchers to show";
+
     public static final String FREE_POPCORN = "Popcorn";
     public static final String FREE_COFFEE = "Coffee";
     public static final String DISCOUNT = "Discount";

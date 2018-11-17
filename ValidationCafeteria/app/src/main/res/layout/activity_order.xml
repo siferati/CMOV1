@@ -5,6 +5,7 @@
     android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/order_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -29,7 +30,7 @@
     </TextView>
 
     <ListView
-        android:id="@+id/list_shopping_cart"
+        android:id="@+id/list_products"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -48,22 +49,22 @@
             >
 
             <Button
-                android:id="@+id/btn_select_vouchers"
+                android:id="@+id/btn_see_vouchers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="See Vouchers"
+                android:text="@string/see_vouchers"
                 android:textColor="@color/white"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:theme="@style/Alt.Button"
                 />
             <TextView
-                android:layout_marginEnd="4dp"
-                android:id="@+id/text_vouchers_selected"
+                android:id="@+id/text_accepted_vouchers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="0 accepted vouchers"/>
+                android:layout_marginEnd="4dp"
+                android:text="@string/default_vouchers"/>
         </LinearLayout>
 
 

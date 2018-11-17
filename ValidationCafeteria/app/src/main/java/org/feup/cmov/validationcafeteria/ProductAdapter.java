@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class ProductAdapter extends ArrayAdapter<Product> {
 
-    // shopping cart activity
+    // order activity
     public OrderActivity activity;
 
     // list of products
