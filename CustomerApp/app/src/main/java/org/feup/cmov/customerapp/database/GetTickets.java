@@ -73,6 +73,7 @@ public class GetTickets extends ServerConnection implements Runnable {
                 JSONObject ticket = jArray.getJSONObject(i);
 
                 String id = ticket.getString("id");
+                int showId = ticket.getInt("showId");
                 int available = ticket.getInt("available");
                 String name = ticket.getString("name");
                 String date = ticket.getString("date");
@@ -81,7 +82,7 @@ public class GetTickets extends ServerConnection implements Runnable {
 
                 if (available == 0) // if not available
                 {
-                    Ticket t = new Ticket(id, name, date, seatNumber, price);
+                    Ticket t = new Ticket(id, showId, name, date, seatNumber, price);
                     ticketList.add(t);
                 }
             }

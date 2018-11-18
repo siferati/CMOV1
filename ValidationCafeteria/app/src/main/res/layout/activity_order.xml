@@ -56,20 +56,25 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/total_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="2.5dp"
+            android:layout_marginBottom="2.5dp"
+            android:textAllCaps="true"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+
+        <TextView
             android:id="@+id/nif"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:textAllCaps="true"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/total_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textAllCaps="true"
-            android:textSize="17sp"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
 
         <Button

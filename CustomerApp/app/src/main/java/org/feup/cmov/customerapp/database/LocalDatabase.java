@@ -39,6 +39,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
     private static final String USER_ID = "userid";
 
     private static final String TICKET_ID = "id";
+    private static final String TICKET_SHOW = "show";
     private static final String TICKET_NAME = "name";
     private static final String TICKET_DATE = "date";
     private static final String TICKET_SN = "seatnumber";
@@ -72,6 +73,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TICKETS_TABLE + " (" +
                 TICKET_ID + " TEXT unique, " +
                 USER_ID + " TEXT, " +
+                TICKET_SHOW + " INTEGER, " +
                 TICKET_NAME + " TEXT, " +
                 TICKET_DATE + " TEXT, " +
                 TICKET_SN + " INTEGER, " +
@@ -126,6 +128,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(TICKET_ID, ticket.getId());
             values.put(USER_ID, user.getId());
+            values.put(TICKET_SHOW, ticket.getShowId());
             values.put(TICKET_NAME, ticket.getName());
             values.put(TICKET_DATE, ticket.getDate());
             values.put(TICKET_SN, ticket.getSeatNumber());
@@ -160,13 +163,14 @@ public class LocalDatabase extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 do {
                     String id = cursor.getString(cursor.getColumnIndex(TICKET_ID));
+                    int showId = cursor.getInt(cursor.getColumnIndex(TICKET_SHOW));
                     String name = cursor.getString(cursor.getColumnIndex(TICKET_NAME));
                     String date = cursor.getString(cursor.getColumnIndex(TICKET_DATE));
                     int seatNumber = cursor.getInt(cursor.getColumnIndex(TICKET_SN));
                     double price = cursor.getDouble(cursor.getColumnIndex(TICKET_PRICE));
                     int used = cursor.getInt(cursor.getColumnIndex(TICKET_AVAILABLE));
 
-                    Ticket ticket = new Ticket(id, name, date, seatNumber, price);
+                    Ticket ticket = new Ticket(id, showId, name, date, seatNumber, price);
 
                     if (used == AVAILABLE_FALSE) {
                         ticket.setAvailable(false);

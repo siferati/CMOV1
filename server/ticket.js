@@ -234,6 +234,7 @@ module.exports = {
 								name: name,
 								date: date,
 								seatNumber: seatNumber,
+								showId: showId,
 								price: price
 							});
 						}

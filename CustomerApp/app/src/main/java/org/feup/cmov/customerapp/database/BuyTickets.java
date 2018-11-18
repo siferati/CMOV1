@@ -109,12 +109,13 @@ public class BuyTickets extends ServerConnection implements Runnable {
                 JSONObject ticket = tickets.getJSONObject(i);
 
                 String id = ticket.getString("id");
+                int showId = ticket.getInt("showId");
                 String name = ticket.getString("name");
                 String date = ticket.getString("date");
                 int seatNumber = ticket.getInt("seatNumber");
                 double price = ticket.getDouble("price");
 
-                Ticket t = new Ticket(id, name, date, seatNumber, price);
+                Ticket t = new Ticket(id, showId, name, date, seatNumber, price);
                 tickets_list.add(t);
             }
 

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.dataStructures.User;
+import org.feup.cmov.customerapp.database.ValidateTickets;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,13 +26,6 @@ public class TicketValidationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_validation);
 
-        String ticketsJson = getTicketsJson();
-        Log.d("jsonstuff", ticketsJson);
-
-        ImageView qr_code = findViewById(R.id.qrCodeImageView);
-    }
-
-    public String getTicketsJson() {
         Bundle argument = getIntent().getExtras();
 
         tickets = new ArrayList<>();
@@ -40,6 +34,19 @@ public class TicketValidationActivity extends AppCompatActivity {
         }
 
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+
+        String ticketsJson = getTicketsJson(user);
+        Log.d("jsonstuff", ticketsJson);
+
+        ImageView qr_code = findViewById(R.id.qrCodeImageView);
+
+        ValidateTickets validateTickets = new ValidateTickets(this, tickets.get(0).getShowId(), user.getId(), tickets);
+        Thread thr = new Thread(validateTickets);
+        thr.start();
+    }
+
+    public String getTicketsJson(User user) {
+
         JSONObject ticketsJson = new JSONObject();
 
         try {
