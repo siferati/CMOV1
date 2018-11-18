@@ -23,7 +23,7 @@ module.exports = {
 		const id = req.params.id;
 
 		db.all(
-			`SELECT Tickets.id, available, name, date, seatNumber, price
+			`SELECT Tickets.id, available, showId, name, date, seatNumber, price
 			FROM Tickets, Shows
 			WHERE userId = ?
 			AND showId = Shows.id`,

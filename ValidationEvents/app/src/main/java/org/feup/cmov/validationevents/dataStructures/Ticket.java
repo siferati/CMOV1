@@ -1,33 +1,38 @@
-package org.feup.cmov.customerapp.dataStructures;
+package org.feup.cmov.validationevents.dataStructures;
 
 import java.io.Serializable;
 
 public class Ticket implements Serializable {
-    private String id;
+    private String ticketId;
+    private String userid;
     private int showId;
     private String name;
     private String date;
     private int seatNumber;
     private double price;
     private boolean available;
-    public boolean selected;
 
     public Ticket(String id) {
-        this.id = id;
+        this.ticketId = id;
+    }
+
+    public Ticket(String id, String userid, int showId) {
+        this.ticketId = id;
+        this.userid = userid;
+        this.showId = showId;
     }
 
     public Ticket(String id, int showId, String name, String date, int seatNumber, double price) {
-        this.id = id;
+        this.ticketId = id;
         this.showId = showId;
         this.name = name;
         this.date = date;
         this.seatNumber = seatNumber;
         this.price = price;
-        this.available = true;
     }
 
-    public String getId() {
-        return id;
+    public String getUserid() {
+        return userid;
     }
 
     public int getShowId() {
@@ -58,6 +63,10 @@ public class Ticket implements Serializable {
         this.available = available;
     }
 
+    public String getTicketId() {
+        return ticketId;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;
@@ -65,7 +74,7 @@ public class Ticket implements Serializable {
         if (!(other instanceof Ticket)) return false;
         Ticket t = (Ticket)other;
 
-        if (t.getId().equals(this.getId()))
+        if (t.getTicketId().equals(this.getTicketId()))
             return true;
         else return false;
     }

@@ -12,6 +12,11 @@ public class Constants {
 
     public static final int SHOWS_PER_LOAD = 10;
     public static final String NO_SELECTED_SHOW = "No Selected Show";
+    public static final String INVALID_SHOW = "Tickets presented aren't for this show";
+
+    public static final String USER_ID = "user_id";
+    public static final String SHOW_ID = "show_id";
+    public static final String VALIDATE_TICKETS = "validate_tickets";
 
     /**
      * Shows toast message

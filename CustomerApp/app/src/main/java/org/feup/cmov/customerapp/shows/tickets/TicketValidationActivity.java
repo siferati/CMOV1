@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.dataStructures.User;
-import org.feup.cmov.customerapp.database.ValidateTickets;
 import org.feup.cmov.customerapp.utils.Constants;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,34 +38,6 @@ public class TicketValidationActivity extends AppCompatActivity {
         Log.d("jsonstuff", ticketsJson);
 
         ImageView qr_code = findViewById(R.id.qrCodeImageView);
-
-        ValidateTickets validateTickets = new ValidateTickets(this, tickets.get(0).getShowId(), user.getId(), tickets);
-        Thread thr = new Thread(validateTickets);
-        thr.start();
-    }
-
-    public void handleResponse(int code, String response, ArrayList<Ticket> valid, ArrayList<Ticket> invalid){
-        if (code == Constants.OK_RESPONSE) {
-            ArrayList<Ticket> validTickets = new ArrayList<>();
-            ArrayList<Ticket> invalidTickets = new ArrayList<>();
-
-            for(Ticket t : valid) {
-                if (tickets.indexOf(t) > -1) {
-                    Ticket ticket = tickets.get(tickets.indexOf(t));
-                    validTickets.add(ticket);
-                }
-            }
-
-            for(Ticket t : invalid) {
-                if (tickets.indexOf(t) > -1) {
-                    Ticket ticket = tickets.get(tickets.indexOf(t));
-                    invalidTickets.add(ticket);
-                }
-            }
-        } else {
-            // show error response
-            Constants.showToast(response, this);
-        }
     }
 
     public String getTicketsJson(User user) {
@@ -75,8 +46,8 @@ public class TicketValidationActivity extends AppCompatActivity {
 
         try {
             ticketsJson.put("id", user.getId());
-            ticketsJson.put("tickets_size", tickets.size());
-            ticketsJson.put("date", tickets.get(0).getDate());
+            ticketsJson.put("size", tickets.size());
+            ticketsJson.put("showid", tickets.get(0).getShowId());
 
             JSONArray ticketsId = new JSONArray();
             for (int i = 0; i < tickets.size(); i++)

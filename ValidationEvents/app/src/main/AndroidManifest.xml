@@ -25,7 +25,10 @@
         <activity
             android:name=".shows.ShowsActivity"
             android:label="Choose Show"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".shows.TicketsActivity"
+            android:label="Show Tickets"></activity>
     </application>
 
 </manifest>

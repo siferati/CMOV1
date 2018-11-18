@@ -13,7 +13,9 @@ public class Order implements Serializable {
     public Order() {}
 
     public Order(int orderId, String userId, double price, ArrayList<Product> products, ArrayList<Voucher> vouchers) {
+        this.orderId = orderId;
         this.userId = userId;
+        this.price = price;
         this.products = products;
         this.vouchers = vouchers;
     }

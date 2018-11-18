@@ -2,4 +2,10 @@
     <string name="app_name">ValidationEvents</string>
 
     <string name="choose_show">Choose Show</string>
+    <string name="terminate_validation">Terminate Validation</string>
+    <string name="validated_tickets">Tickets Validated</string>
+    <string name="not_validated_tickets">Tickets Not Validated</string>
+
+    <string name="empty_valid_tickets">No valid tickets.</string>
+    <string name="empty_invalid_tickets">No invalid tickets.</string>
 </resources>

@@ -1,16 +1,18 @@
-package org.feup.cmov.customerapp.database;
+package org.feup.cmov.validationevents.server;
 
 import android.util.Log;
 
-import org.feup.cmov.customerapp.dataStructures.Ticket;
-import org.feup.cmov.customerapp.shows.tickets.TicketValidationActivity;
-import org.feup.cmov.customerapp.utils.Constants;
+import org.feup.cmov.validationevents.Constants;
+import org.feup.cmov.validationevents.shows.ShowsActivity;
+import org.feup.cmov.validationevents.shows.TicketsActivity;
+import org.feup.cmov.validationevents.dataStructures.Ticket;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class ValidateTickets extends ServerConnection implements Runnable {
@@ -22,7 +24,7 @@ public class ValidateTickets extends ServerConnection implements Runnable {
         public ServerResponse() {}
     }
 
-    private TicketValidationActivity activity;
+    private TicketsActivity activity;
 
     private int showId;
 
@@ -30,7 +32,7 @@ public class ValidateTickets extends ServerConnection implements Runnable {
 
     private ArrayList<Ticket> tickets;
 
-    public ValidateTickets(TicketValidationActivity activity, int showId, String userId, ArrayList<Ticket> tickets) {
+    public ValidateTickets(TicketsActivity activity, int showId, String userId, ArrayList<Ticket> tickets) {
         this.activity = activity;
         this.showId = showId;
         this.userId = userId;
@@ -43,8 +45,14 @@ public class ValidateTickets extends ServerConnection implements Runnable {
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            String url = "http://" + address + ":" + port + "/shows/" + showId + "/tickets/validation";
-            urlConnection = setHeaders("POST", url);
+            String serverURL = "http://" + address + ":" + port + "/shows/" + showId + "/tickets/validation";
+            URL url = new URL(serverURL);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setUseCaches(false);
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestMethod("POST");
 
             JSONObject validationJson = getValidationJson();
 
@@ -59,30 +67,24 @@ public class ValidateTickets extends ServerConnection implements Runnable {
 
             if (responseCode == Constants.OK_RESPONSE) {
                 response = readStream(urlConnection.getInputStream());
-
                 Log.d("connection", response);
 
                 ServerResponse serverResponse = jsonToArray(response);
-
+                activity.handleResponse(responseCode, response, serverResponse.validTickets, serverResponse.invalidTickets);
             } else {
                 response = readStream(urlConnection.getErrorStream());
-                ServerResponse serverResponse = jsonToArray(response);
-
                 Log.d("connection", response);
 
+                activity.handleResponse(responseCode, response, null, null);
             }
-
-
-
-        } catch (Exception e) {
+        } catch(Exception e) {
             if (responseCode == Constants.NO_INTERNET) {
                 e.printStackTrace();
 
                 String errorMessage = Constants.ERROR_CONNECTING;
-                // activity.handleResponseOrder(responseCode, errorMessage, null);
+                activity.handleResponse(responseCode, errorMessage, null, null);
             }
-        }
-        finally {
+        } finally {
             if(urlConnection != null)
                 urlConnection.disconnect();
         }
@@ -95,7 +97,7 @@ public class ValidateTickets extends ServerConnection implements Runnable {
 
         JSONArray ticketsJson = new JSONArray();
         for(int i = 0; i < tickets.size(); i++) {
-            ticketsJson.put(tickets.get(i).getId());
+            ticketsJson.put(tickets.get(i).getTicketId());
         }
 
         validationJson.put("tickets", ticketsJson);
@@ -126,7 +128,7 @@ public class ValidateTickets extends ServerConnection implements Runnable {
             }
 
             serverResponse.validTickets = validTickets;
-            serverResponse.invalidTickets = validTickets;
+            serverResponse.invalidTickets = invalidTickets;
 
         } catch(JSONException e) {
             Log.e("ERROR", e.getMessage());

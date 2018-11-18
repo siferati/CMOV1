@@ -43,36 +43,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initScan() {
-        // TEST !!!!!!!!!!!!
 
-        String userId = "74490d30-6c6c-4049-b83f-13e7e54b4637";
-
-        Product p1 = new Product(2, "Coffee", 0.50, "coffee", 1);
-        Product p2 = new Product(3, "Popcorn", 1.00, "popcorn", 2);
-        Product p3 = new Product(4, "Soda Drink", 0.80, "soda_drink", 1);
-        Product p4 = new Product(5, "Sandwich", 1.50, "sandwich", 1);
-
-        products.add(p1);
-        products.add(p2);
-        products.add(p3);
-        products.add(p4);
-
-        Voucher v1 = new Voucher("e1748fd6-95f0-4799-82dd-a7ac90b2664f", Constants.FREE_COFFEE, 1.0);
-        Voucher v2 = new Voucher("071c9175-46f6-45fd-96a6-980f8063b69b", Constants.FREE_COFFEE, 1.0);
-
-        vouchers.add(v1);
-        vouchers.add(v2);
-
-        order.setUserId(userId);
-        order.setOrderId(1);
-        order.setPrice(20.22);
-        order.setProducts(products);
-        order.setVouchers(vouchers);
+        String data = "{\"orderid\":1,\"userid\":\"79b7dc38-9320-42e1-8c15-488e18cb5a3b\",\"price\":5.13,\"products\":[{\"id\":2,\"name\":\"Coffee\",\"quantity\":3,\"image\":\"coffee\",\"price\":1.5},{\"id\":3,\"name\":\"Popcorn\",\"quantity\":2,\"image\":\"popcorn\",\"price\":2},{\"id\":4,\"name\":\"Soda Drink\",\"quantity\":3,\"image\":\"soda_drink\",\"price\":2.4}],\"vouchers\":[{\"id\":\"62e833fb-9d47-4b43-8446-9f762a7a85cc\",\"type\":\"Coffee\",\"discount\":1},{\"id\":\"bf94fa90-3e5f-4097-810b-5a7535126542\",\"type\":\"Total\",\"discount\":0.05}]}";
+        Order order1 = getOrderJson(data);
 
         Intent intent = new Intent(this, OrderActivity.class);
         Bundle argument = new Bundle();
 
-        argument.putSerializable(Constants.SEND_ORDER, this.order);
+        argument.putSerializable(Constants.SEND_ORDER, order1);
 
         intent.putExtras(argument);
         startActivity(intent);

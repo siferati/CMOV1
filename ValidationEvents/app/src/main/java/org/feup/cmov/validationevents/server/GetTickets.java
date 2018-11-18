@@ -1,10 +1,11 @@
-package org.feup.cmov.customerapp.database;
+package org.feup.cmov.validationevents.server;
 
 import android.util.Log;
 
-import org.feup.cmov.customerapp.dataStructures.Ticket;
-import org.feup.cmov.customerapp.transactions.TransactionsActivity;
-import org.feup.cmov.customerapp.utils.Constants;
+import org.feup.cmov.validationevents.Constants;
+import org.feup.cmov.validationevents.dataStructures.Ticket;
+import org.feup.cmov.validationevents.shows.ShowsActivity;
+import org.feup.cmov.validationevents.shows.TicketsActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,17 +13,16 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GetTickets extends ServerConnection implements Runnable {
 
-    // transactions' activity
-    private TransactionsActivity activity;
+    // tickets activity
+    private ShowsActivity activity;
 
     // current user's id
     private String userID;
 
-    public GetTickets(TransactionsActivity activity, String userID) {
+    public GetTickets(ShowsActivity activity, String userID) {
         this.activity = activity;
         this.userID = userID;
     }
@@ -33,10 +33,13 @@ public class GetTickets extends ServerConnection implements Runnable {
         int responseCode = Constants.NO_INTERNET;
 
         try {
-            String url = "http://" + address + ":" + port + "/users/" + userID + "/tickets";
-            Log.d("responsehttp", url);
+            String serverURL = "http://" + address + ":" + port + "/users/" + userID + "/tickets";
 
-            urlConnection = setHeaders("GET", url);
+            URL url = new URL(serverURL);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(Constants.SERVER_TIMEOUT);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setUseCaches(false);
 
             urlConnection.connect();
 
@@ -46,7 +49,7 @@ public class GetTickets extends ServerConnection implements Runnable {
             if (responseCode == Constants.OK_RESPONSE) {
                 response = readStream(urlConnection.getInputStream());
 
-                List<Ticket> tickets = jsonToArray(response);
+                ArrayList<Ticket> tickets = jsonToArray(response);
                 activity.handleResponseTickets(responseCode, response, tickets);
             } else {
                 response = readStream(urlConnection.getErrorStream());
@@ -63,9 +66,9 @@ public class GetTickets extends ServerConnection implements Runnable {
         }
     }
 
-    private List<Ticket> jsonToArray(String jsonString) {
+    private ArrayList<Ticket> jsonToArray(String jsonString) {
 
-        List<Ticket> ticketList = new ArrayList<>();
+        ArrayList<Ticket> ticketList = new ArrayList<>();
 
         try {
             JSONArray jArray = new JSONArray(jsonString);
@@ -81,11 +84,13 @@ public class GetTickets extends ServerConnection implements Runnable {
                 int seatNumber = ticket.getInt("seatNumber");
                 double price = ticket.getDouble("price");
 
-                if (available == 0) // if not available
-                {
-                    Ticket t = new Ticket(id, showId, name, date, seatNumber, price);
-                    ticketList.add(t);
-                }
+
+                Ticket t = new Ticket(id, showId, name, date, seatNumber, price);
+                if (available == 0) {
+                    t.setAvailable(false);
+                } else t.setAvailable(true);
+
+                ticketList.add(t);
             }
         } catch(JSONException e) {
             Log.e("ERROR", e.getMessage());
