@@ -1,4 +1,4 @@
-package org.feup.cmov.validationevents;
+package org.feup.cmov.validationevents.dataStructures;
 
 public class Show {
     private int id;
@@ -6,6 +6,7 @@ public class Show {
     private String description;
     private String date;
     private double price;
+    public boolean selected = false;
 
     public Show() {}
 

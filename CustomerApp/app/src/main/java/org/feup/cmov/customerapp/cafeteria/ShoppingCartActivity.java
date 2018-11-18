@@ -240,23 +240,17 @@ public class ShoppingCartActivity extends AppCompatActivity {
      */
     private void buyOrder() {
         if (products.size() > 0) {
-            Log.d("responsehttp", "1");
             order.setProducts(products);
             order.setVouchers(selectedVouchers);
-            Log.d("responsehttp", "2");
-
 
             CafeteriaActivity.resetSharedPrefs(this);
             deleteVouchersDatabase();
-            Log.d("responsehttp", "3");
 
             User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
-            Log.d("responsehttp", "4");
 
             MakeOrder makeOrder = new MakeOrder(this, user, products, selectedVouchers);
             Thread thr = new Thread(makeOrder);
             thr.start();
-            Log.d("responsehttp", "5");
         } else {
             Constants.showToast(Constants.ERROR_CONNECTING, this);
         }

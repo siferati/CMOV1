@@ -45,6 +45,30 @@ public class TicketValidationActivity extends AppCompatActivity {
         thr.start();
     }
 
+    public void handleResponse(int code, String response, ArrayList<Ticket> valid, ArrayList<Ticket> invalid){
+        if (code == Constants.OK_RESPONSE) {
+            ArrayList<Ticket> validTickets = new ArrayList<>();
+            ArrayList<Ticket> invalidTickets = new ArrayList<>();
+
+            for(Ticket t : valid) {
+                if (tickets.indexOf(t) > -1) {
+                    Ticket ticket = tickets.get(tickets.indexOf(t));
+                    validTickets.add(ticket);
+                }
+            }
+
+            for(Ticket t : invalid) {
+                if (tickets.indexOf(t) > -1) {
+                    Ticket ticket = tickets.get(tickets.indexOf(t));
+                    invalidTickets.add(ticket);
+                }
+            }
+        } else {
+            // show error response
+            Constants.showToast(response, this);
+        }
+    }
+
     public String getTicketsJson(User user) {
 
         JSONObject ticketsJson = new JSONObject();
