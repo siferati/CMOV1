@@ -25,8 +25,8 @@ public class TicketValidationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_validation);
 
-        String json = getTicketsJson();
-        Log.d("jsonstuff", json);
+        String ticketsJson = getTicketsJson();
+        Log.d("jsonstuff", ticketsJson);
 
         ImageView qr_code = findViewById(R.id.qrCodeImageView);
     }

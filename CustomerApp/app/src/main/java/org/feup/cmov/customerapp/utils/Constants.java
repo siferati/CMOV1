@@ -45,8 +45,7 @@ public class Constants {
     public static final String VALIDATE_TICKETS_QR = "validation_qr";       // send tickets to ticket Validation activity
     public static final String REQUESTED_VOUCHERS = "vouchers";             // request selected vouchers from Select Vouchers activity
     public static final String SELECTED_VOUCHERS = "selected_vouchers";     // if vouchers have been already been selected, show them in Select Voucher activity
-    public static final String ORDER_VALIDATION = "order_validation";       // send products to Order Validation activity
-    public static final String VOUCHERS_VALIDATION = "vouchers_validation"; // send selected vouchers to Order Validation activity
+    public static final String ORDER_VALIDATION = "order_validation";       // send order to Order Validation activity
 
     public static final String BUY_FAILED = "Need to buy at least a ticket";
     public static final String DECREASE_FAILED = "Negative number of tickets not allowed";

@@ -10,6 +10,10 @@ public class Voucher implements Serializable {
     private double discount;
     private boolean used;
 
+    public Voucher(String id) {
+        this.id = id;
+    }
+
     public Voucher(String id, String type, double discount) {
         this.id = id;
         this.type = type;
@@ -54,5 +58,17 @@ public class Voucher implements Serializable {
 
     public void setUsed(boolean used) {
         this.used = used;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof Voucher)) return false;
+        Voucher v = (Voucher)other;
+
+        if (v.getId().equals(this.getId()))
+            return true;
+        else return false;
     }
 }

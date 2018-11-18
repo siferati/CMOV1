@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import org.feup.cmov.customerapp.R;
+import org.feup.cmov.customerapp.dataStructures.Order;
 import org.feup.cmov.customerapp.dataStructures.Product;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.dataStructures.Voucher;
@@ -19,38 +20,43 @@ import java.util.ArrayList;
 public class OrderValidationActivity extends AppCompatActivity {
 
     // tickets to validate
-    ArrayList<Product> products;
+    ArrayList<Product> products = new ArrayList<>();
 
     // vouchers to validate
-    ArrayList<Voucher> vouchers;
+    ArrayList<Voucher> vouchers = new ArrayList<>();
+
+    // order
+    Order order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_validation);
 
-        String json = getTicketsJson();
-        Log.d("jsonstuff", json);
+        String orderJson = getOrderJson();
+        Log.d("jsonstuff", orderJson);
 
         ImageView qr_code = findViewById(R.id.qrCodeCafeteria);
     }
 
 
-    public String getTicketsJson() {
+    public String getOrderJson() {
         Bundle argument = getIntent().getExtras();
 
-        products = new ArrayList<>();
-        vouchers = new ArrayList<>();
         if (argument != null) {
-            products = (ArrayList<Product>) argument.getSerializable(Constants.ORDER_VALIDATION);
-            vouchers = (ArrayList<Voucher>) argument.getSerializable(Constants.VOUCHERS_VALIDATION);
+            order = (Order) argument.getSerializable(Constants.ORDER_VALIDATION);
         }
+
+        products = order.getProducts();
+        vouchers = order.getVouchers();
 
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
         JSONObject orderJson = new JSONObject();
 
         try {
-            orderJson.put("id", user.getId());
+            orderJson.put("orderid", order.getId());
+            orderJson.put("userid", user.getId());
+            orderJson.put("price", order.getPrice());
 
             JSONArray productsJson = new JSONArray();
             for (int i = 0; i < products.size(); i++)
@@ -58,7 +64,10 @@ public class OrderValidationActivity extends AppCompatActivity {
                 JSONObject product = new JSONObject();
 
                 product.put("id", products.get(i).getId());
+                product.put("name", products.get(i).getName());
                 product.put("quantity", products.get(i).getQuantity());
+                product.put("image", products.get(i).getImage());
+                product.put("price", products.get(i).getTotalPriceRounded());
 
                 productsJson.put(product);
             }

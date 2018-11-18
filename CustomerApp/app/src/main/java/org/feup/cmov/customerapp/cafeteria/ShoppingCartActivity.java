@@ -5,18 +5,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.feup.cmov.customerapp.R;
+import org.feup.cmov.customerapp.dataStructures.Order;
 import org.feup.cmov.customerapp.dataStructures.Product;
+import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.dataStructures.Voucher;
 import org.feup.cmov.customerapp.database.GetProducts;
 import org.feup.cmov.customerapp.database.LocalDatabase;
+import org.feup.cmov.customerapp.database.MakeOrder;
 import org.feup.cmov.customerapp.utils.Constants;
 
 import java.util.ArrayList;
@@ -39,6 +42,9 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
     // selected vouchers
     ArrayList<Voucher> selectedVouchers = new ArrayList<>();
+
+    // current order
+    Order order = new Order();
 
     // text view displaying total price
     TextView totalPrice;
@@ -91,6 +97,36 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
             // set price text
             setPriceText();
+        } else {
+            // show error response
+            Constants.showToast(response, this);
+        }
+    }
+
+    /**
+     * Handles response from server
+     * @param code - response code from server
+     * @param response - response message given by server
+     * @param orderResponse - order that we got from the server
+     */
+    public void handleResponseOrder(int code, String response, Order orderResponse) {
+        if (code == Constants.OK_RESPONSE) {
+            order.setId(orderResponse.getId());
+            order.setPrice(orderResponse.getPrice());
+
+            ArrayList<Voucher> validVouchers = orderResponse.getVouchers();
+            order.deleteInvalidVouchers(validVouchers);
+
+            Intent intent = new Intent(this, OrderValidationActivity.class);
+            Bundle argument = new Bundle();
+
+            argument.putSerializable(Constants.ORDER_VALIDATION, order);
+
+            Constants.showToast(Constants.ORDER_IN_PROGRESS, this);
+
+            intent.putExtras(argument);
+            startActivity(intent);
+            finish();
         } else {
             // show error response
             Constants.showToast(response, this);
@@ -204,25 +240,26 @@ public class ShoppingCartActivity extends AppCompatActivity {
      */
     private void buyOrder() {
         if (products.size() > 0) {
+            Log.d("responsehttp", "1");
+            order.setProducts(products);
+            order.setVouchers(selectedVouchers);
+            Log.d("responsehttp", "2");
+
+
             CafeteriaActivity.resetSharedPrefs(this);
             deleteVouchersDatabase();
+            Log.d("responsehttp", "3");
 
-            Intent intent = new Intent(this, OrderValidationActivity.class);
-            Bundle argument = new Bundle();
+            User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+            Log.d("responsehttp", "4");
 
-            argument.putSerializable(Constants.ORDER_VALIDATION, products);
-            argument.putSerializable(Constants.VOUCHERS_VALIDATION, selectedVouchers);
-
-            Constants.showToast(Constants.ORDER_IN_PROGRESS, this);
-
-            intent.putExtras(argument);
-            startActivity(intent);
-            finish();
+            MakeOrder makeOrder = new MakeOrder(this, user, products, selectedVouchers);
+            Thread thr = new Thread(makeOrder);
+            thr.start();
+            Log.d("responsehttp", "5");
         } else {
             Constants.showToast(Constants.ERROR_CONNECTING, this);
         }
-
-        // TODO: send order to validation terminal!!!!!!!!!!
     }
 
     /**
