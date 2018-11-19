@@ -36,6 +36,7 @@ public class Constants {
 
     public static final String LOGIN_FAILED = "Login Failed";
     public static final String REGISTER_FAILED = "Register Failed";
+    public static final String LOGIN_ERROR = "User doesn't exist!";
 
     public static final String CREDIT_CARD = "creditCard";                  // start credit card fragment
     public static final String CONFIRM_PURCHASE = "confirm_purchase";       // confirm purchase fragment

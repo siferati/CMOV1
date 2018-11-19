@@ -9,11 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GetTickets extends ServerConnection implements Runnable {
 
@@ -85,7 +82,6 @@ public class GetTickets extends ServerConnection implements Runnable {
                 if (available == 0) // if not available
                 {
                     Ticket t = new Ticket(id, showId, name, date, seatNumber, price);
-                    Log.d("jsonstuff", "API: " + t.getName() + " " + t.getSeatNumber() + " " + t.getDate());
                     ticketList.add(t);
                 }
             }

@@ -14,6 +14,7 @@ import org.feup.cmov.customerapp.dataStructures.Order;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.dataStructures.Voucher;
+import org.feup.cmov.customerapp.database.GetOrders;
 import org.feup.cmov.customerapp.database.GetTickets;
 import org.feup.cmov.customerapp.database.GetVouchers;
 import org.feup.cmov.customerapp.database.LocalDatabase;
@@ -29,6 +30,9 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
 
     // API to get available tickets from server
     GetTickets ticketsAPI;
+
+    // API to get available orders from server
+    GetOrders ordersAPI;
 
     // checks if vouchers were updated
     boolean updatedVouchers = false;
@@ -54,6 +58,9 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
     // tab1 - orders' list, tab2 - bought tickets' list
     View tab1, tab2;
 
+    // user's id
+    String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +70,19 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
         ticketsAdapter = new TicketAdapter(this, tickets);
         list_tickets.setAdapter(ticketsAdapter);
 
+        ListView list_orders = findViewById(R.id.list_orders_transactions);
+        ordersAdapter = new OrderAdapter(this, orders);
+        list_orders.setAdapter(ordersAdapter);
+
+        User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+        userId = user.getId();
+
         setTabsTransactions();
         updateTickets();
+
+        ordersAPI = new GetOrders(this, userId);
+        Thread thrOrders = new Thread(ordersAPI);
+        thrOrders.start();
     }
 
     /**
@@ -99,9 +117,8 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
     }
 
     private void updateTickets() {
-        User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
-
-        ticketsAPI = new GetTickets(this, user.getId());
+        Log.d("responsehttp", "here");
+        ticketsAPI = new GetTickets(this, userId);
         Thread thrTickets = new Thread(ticketsAPI);
         thrTickets.start();
     }
@@ -119,16 +136,24 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
         if (code == Constants.OK_RESPONSE) {
             for(Ticket t : tickets) {
                 ticketsAdapter.add(t);
-                Log.d("jsonstuff", t.getName() + " " + t.getSeatNumber());
             }
             ticketsAdapter.notifyDataSetChanged();
-
-            Log.d("jsonstuff", "big mmodoooodoodoodod");
             deleteUsedTickets(tickets, this);
 
-            User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+            vouchersAPI = new GetVouchers(this, userId);
+            Thread thrVouchers = new Thread(vouchersAPI);
+            thrVouchers.start();
+        } else {
+            Constants.showToast(response, this);
+        }
+    }
 
-            vouchersAPI = new GetVouchers(this, user.getId());
+    public void handleResponseOrders(int code, String response, ArrayList<Order> orders) {
+        if (code == Constants.OK_RESPONSE) {
+            ordersAdapter.addAll(orders);
+            ordersAdapter.notifyDataSetChanged();
+
+            vouchersAPI = new GetVouchers(this, userId);
             Thread thrVouchers = new Thread(vouchersAPI);
             thrVouchers.start();
         } else {
@@ -145,7 +170,6 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
                 if (LocalDatabase.checkDataBase(getApplicationContext())) {
                     if(tickets.size() > 0) {
                         for(Ticket t : tickets) {
-                            Log.d("jsonstuff", t.getName() + " " + t.getDate());
                             db.deleteTicket(getApplicationContext(), t);
                         }
 

@@ -78,10 +78,16 @@ public class LoginActivity extends AppCompatActivity {
             String username = text_username.getText().toString();
             String password = text_password.getText().toString();
 
-            // connect to server
-            Login login = new Login(username, password, this, null);
-            Thread thr = new Thread(login);
-            thr.start();
+            User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+
+            if (user == null) {
+                Constants.showToast(Constants.LOGIN_ERROR, this);
+            } else {
+                // connect to server
+                Login login = new Login(username, password, this, null);
+                Thread thr = new Thread(login);
+                thr.start();
+            }
         }
 
     }
@@ -93,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void handleResponse(int code, String response) {
         if (code == Constants.OK_RESPONSE) {
+
             String username = text_username.getText().toString();
             User.setLoggedinUser(username, User.LOGGEDIN_USER_PATH, getApplicationContext());
 
@@ -102,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
             // start main activity
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
         } else {
             // show error response
             Constants.showToast(response, this);
