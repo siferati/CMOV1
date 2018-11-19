@@ -45,7 +45,6 @@ public class GetOrders extends ServerConnection implements Runnable {
 
             if (responseCode == Constants.OK_RESPONSE) {
                 response = readStream(urlConnection.getInputStream());
-                Log.d("jsonstuff", response);
 
                 ArrayList<Order> orders = jsonToArray(response);
                 activity.handleResponseOrders(responseCode, response, orders);
@@ -105,7 +104,6 @@ public class GetOrders extends ServerConnection implements Runnable {
                 }
 
                 Order order = new Order(orderId, date, price, products_list, vouchers_list);
-                Log.d("jsonstuff", order.getId() + " " + order.getDate() + " " + order.getPrice());
 
                 orders.add(order);
             }
