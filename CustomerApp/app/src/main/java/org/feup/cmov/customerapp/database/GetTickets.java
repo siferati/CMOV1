@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class GetTickets extends ServerConnection implements Runnable {
             if (responseCode == Constants.OK_RESPONSE) {
                 response = readStream(urlConnection.getInputStream());
 
-                List<Ticket> tickets = jsonToArray(response);
+                ArrayList<Ticket> tickets = jsonToArray(response);
                 activity.handleResponseTickets(responseCode, response, tickets);
             } else {
                 response = readStream(urlConnection.getErrorStream());
@@ -63,9 +64,9 @@ public class GetTickets extends ServerConnection implements Runnable {
         }
     }
 
-    private List<Ticket> jsonToArray(String jsonString) {
+    private ArrayList<Ticket> jsonToArray(String jsonString) {
 
-        List<Ticket> ticketList = new ArrayList<>();
+        ArrayList<Ticket> ticketList = new ArrayList<>();
 
         try {
             JSONArray jArray = new JSONArray(jsonString);
@@ -84,6 +85,7 @@ public class GetTickets extends ServerConnection implements Runnable {
                 if (available == 0) // if not available
                 {
                     Ticket t = new Ticket(id, showId, name, date, seatNumber, price);
+                    Log.d("jsonstuff", "API: " + t.getName() + " " + t.getSeatNumber() + " " + t.getDate());
                     ticketList.add(t);
                 }
             }

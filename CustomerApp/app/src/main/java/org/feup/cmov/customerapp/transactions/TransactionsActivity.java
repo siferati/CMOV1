@@ -3,6 +3,7 @@ package org.feup.cmov.customerapp.transactions;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -58,8 +59,12 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions);
 
+        ListView list_tickets = findViewById(R.id.list_tickets_transactions);
+        ticketsAdapter = new TicketAdapter(this, tickets);
+        list_tickets.setAdapter(ticketsAdapter);
+
         setTabsTransactions();
-        updateVouchersAndTickets();
+        updateTickets();
     }
 
     /**
@@ -93,12 +98,8 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
         tabs.addOnTabSelectedListener(this);
     }
 
-    private void updateVouchersAndTickets() {
+    private void updateTickets() {
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
-
-        vouchersAPI = new GetVouchers(this, user.getId());
-        Thread thrVouchers = new Thread(vouchersAPI);
-        thrVouchers.start();
 
         ticketsAPI = new GetTickets(this, user.getId());
         Thread thrTickets = new Thread(ticketsAPI);
@@ -114,9 +115,22 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
         }
     }
 
-    public void handleResponseTickets(int code, String response, List<Ticket> tickets) {
+    public void handleResponseTickets(int code, String response, ArrayList<Ticket> tickets) {
         if (code == Constants.OK_RESPONSE) {
+            for(Ticket t : tickets) {
+                ticketsAdapter.add(t);
+                Log.d("jsonstuff", t.getName() + " " + t.getSeatNumber());
+            }
+            ticketsAdapter.notifyDataSetChanged();
+
+            Log.d("jsonstuff", "big mmodoooodoodoodod");
             deleteUsedTickets(tickets, this);
+
+            User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+
+            vouchersAPI = new GetVouchers(this, user.getId());
+            Thread thrVouchers = new Thread(vouchersAPI);
+            thrVouchers.start();
         } else {
             Constants.showToast(response, this);
         }
@@ -131,6 +145,7 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
                 if (LocalDatabase.checkDataBase(getApplicationContext())) {
                     if(tickets.size() > 0) {
                         for(Ticket t : tickets) {
+                            Log.d("jsonstuff", t.getName() + " " + t.getDate());
                             db.deleteTicket(getApplicationContext(), t);
                         }
 

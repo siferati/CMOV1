@@ -115,7 +115,7 @@ public class ShowsActivity extends AppCompatActivity {
                 Show show = showsAdapter.getItem(selectedShow);
                 showSelected = show;
 
-                String data = "{\"id\":\"79b7dc38-9320-42e1-8c15-488e18cb5a3b\",\"size\":2,\"showid\":1,\"tickets\":[\"8f7b282c-b76c-4d34-bbec-28ab9613166f\", \"3b8ef6d4-cea9-456d-92fb-580de4bb14d9\",\"fba88ebe-f9b4-4b60-b3b6-8a4c68df93b8\",\"446b1b83-7a8f-44aa-a1f2-ca912858ef69\"]}";
+                String data = "{\"id\":\"79b7dc38-9320-42e1-8c15-488e18cb5a3b\",\"size\":2,\"showid\":4,\"tickets\":[\"be18da16-c717-45c0-8ae8-bc4528981bd2\",\"be925f13-0eb0-4aa5-b9a0-d5c9a6a5743c\"]}";
 
                 validateTickets(data);
 
