@@ -1,10 +1,8 @@
 package org.feup.cmov.validationevents.shows;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,7 +14,6 @@ import android.widget.Button;
 
 import org.feup.cmov.validationevents.utils.Constants;
 import org.feup.cmov.validationevents.R;
-import org.feup.cmov.validationevents.dataStructures.Show;
 import org.feup.cmov.validationevents.dataStructures.Ticket;
 import org.feup.cmov.validationevents.server.GetShows;
 import org.feup.cmov.validationevents.server.GetTickets;
@@ -68,7 +65,7 @@ public class ShowsActivity extends AppCompatActivity {
     private ArrayList<Ticket> tickets = new ArrayList<>();
 
     // show selected by the user
-    private Show showSelected;
+    private int showSelected;
 
     // tickets api
     private GetTickets ticketsAPI;
@@ -113,8 +110,11 @@ public class ShowsActivity extends AppCompatActivity {
 
         if (selectedShow > -1) {
             if(showsAdapter.getItemCount() > selectedShow) {
-                Show show = showsAdapter.getItem(selectedShow);
-                showSelected = show;
+                showSelected = showsAdapter.getItem(selectedShow).getId();
+
+                SharedPreferences.Editor prefEditor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                prefEditor.putInt("SELECTED_SHOW", showSelected);
+                prefEditor.apply();
 
                 MyQRCode.scan(this);
 
@@ -127,8 +127,6 @@ public class ShowsActivity extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("qrstuff", "aqui");
-
         String jsonResult = MyQRCode.onScanResult(requestCode, resultCode, data);
 
         validateTickets(jsonResult);
@@ -138,13 +136,16 @@ public class ShowsActivity extends AppCompatActivity {
         try {
             JSONObject response = new JSONObject(data);
             userId = response.getString("id");
-            // ticketSize = response.getInt("size");
             showId = response.getInt("showid");
 
-            if (showId != showSelected.getId()) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            int selected = prefs.getInt("SELECTED_SHOW", 1);
+
+            if (showId != selected) {
                 Constants.showToast(Constants.INVALID_SHOW, this);
             } else {
 
+                tickets = new ArrayList<>();
                 JSONArray ticketsJson = response.getJSONArray("tickets");
 
                 for (int i = 0; i < ticketsJson.length(); i++) {

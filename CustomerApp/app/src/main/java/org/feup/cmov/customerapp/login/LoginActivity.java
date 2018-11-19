@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             String username = text_username.getText().toString();
             String password = text_password.getText().toString();
 
+            User.setLoggedinUser(username, User.LOGGEDIN_USER_PATH, getApplicationContext());
             User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
 
             if (user == null) {

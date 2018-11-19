@@ -66,7 +66,6 @@ public class GetTickets extends ServerConnection implements Runnable {
     }
 
     private ArrayList<Ticket> jsonToArray(String jsonString) {
-
         ArrayList<Ticket> ticketList = new ArrayList<>();
 
         try {

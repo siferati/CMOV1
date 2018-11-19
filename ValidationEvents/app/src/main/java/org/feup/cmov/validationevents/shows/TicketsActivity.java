@@ -3,6 +3,7 @@ package org.feup.cmov.validationevents.shows;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -40,7 +41,7 @@ public class TicketsActivity extends AppCompatActivity {
     ValidateTickets ticketsAPI;
 
     // adapter to tickets' list
-    ArrayAdapter<Ticket> validAdapter;
+    ArrayAdapter<Ticket> ticketsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,11 @@ public class TicketsActivity extends AppCompatActivity {
 
         Button terminateBtn = findViewById(R.id.btn_close);
         terminateBtn.setOnClickListener((View v)->terminate());
+
+        ArrayList<Ticket> ticketArrayList = new ArrayList<>();
+        ListView list_valid_tickets = findViewById(R.id.list_tickets);
+        ticketsAdapter = new TicketAdapter(this, ticketArrayList);
+        list_valid_tickets.setAdapter(ticketsAdapter);
 
         ticketsAPI = new ValidateTickets(this, showId, userId, tickets);
         Thread thr1 = new Thread(ticketsAPI);
@@ -86,6 +92,7 @@ public class TicketsActivity extends AppCompatActivity {
             for(Ticket t : valid) {
                 if (tickets.indexOf(t) > -1) {
                     Ticket ticket = tickets.get(tickets.indexOf(t));
+
                     ticket.setAvailable(true);
                     validTickets.add(ticket);
                 }
@@ -94,19 +101,19 @@ public class TicketsActivity extends AppCompatActivity {
             for(Ticket t : invalid) {
                 if (tickets.indexOf(t) > -1) {
                     Ticket ticket = tickets.get(tickets.indexOf(t));
+
                     ticket.setAvailable(false);
                     invalidTickets.add(ticket);
                 }
             }
 
-            ArrayList<Ticket> ticketList = new ArrayList<>();
+            for (Ticket t : validTickets) {
+                ticketsAdapter.add(t);
+            }
 
-            ticketList.addAll(validTickets);
-            ticketList.addAll(invalidTickets);
-
-            ListView list_valid_tickets = findViewById(R.id.list_tickets);
-            validAdapter = new TicketAdapter(this, ticketList);
-            list_valid_tickets.setAdapter(validAdapter);
+            for (Ticket t : invalidTickets) {
+                ticketsAdapter.add(t);
+            }
         } else {
             // show error response
             Constants.showToast(response, this);
