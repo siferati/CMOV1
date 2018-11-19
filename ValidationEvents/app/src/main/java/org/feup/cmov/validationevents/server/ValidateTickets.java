@@ -2,8 +2,7 @@ package org.feup.cmov.validationevents.server;
 
 import android.util.Log;
 
-import org.feup.cmov.validationevents.Constants;
-import org.feup.cmov.validationevents.shows.ShowsActivity;
+import org.feup.cmov.validationevents.utils.Constants;
 import org.feup.cmov.validationevents.shows.TicketsActivity;
 import org.feup.cmov.validationevents.dataStructures.Ticket;
 import org.json.JSONArray;
@@ -60,6 +59,7 @@ public class ValidateTickets extends ServerConnection implements Runnable {
 
             OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
             out.write(validationJson.toString());
+            Log.d("qrstuff", validationJson.toString());
             out.close();
 
             responseCode = urlConnection.getResponseCode();

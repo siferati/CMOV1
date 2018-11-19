@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initScan() {
 
-        String data = "{\"orderid\":1,\"userid\":\"79b7dc38-9320-42e1-8c15-488e18cb5a3b\",\"price\":5.13,\"products\":[{\"id\":2,\"name\":\"Coffee\",\"quantity\":3,\"image\":\"coffee\",\"price\":1.5},{\"id\":3,\"name\":\"Popcorn\",\"quantity\":2,\"image\":\"popcorn\",\"price\":2},{\"id\":4,\"name\":\"Soda Drink\",\"quantity\":3,\"image\":\"soda_drink\",\"price\":2.4}],\"vouchers\":[{\"id\":\"62e833fb-9d47-4b43-8446-9f762a7a85cc\",\"type\":\"Coffee\",\"discount\":1},{\"id\":\"bf94fa90-3e5f-4097-810b-5a7535126542\",\"type\":\"Total\",\"discount\":0.05}]}";
+        String data = "{\"orderid\":1,\"userid\":\"3b2735a4-03ee-45c1-87f8-1481a7820cbc\",\"price\":5.13,\"products\":[{\"id\":2,\"name\":\"Coffee\",\"quantity\":3,\"image\":\"coffee\",\"price\":1.5},{\"id\":3,\"name\":\"Popcorn\",\"quantity\":2,\"image\":\"popcorn\",\"price\":2},{\"id\":4,\"name\":\"Soda Drink\",\"quantity\":3,\"image\":\"soda_drink\",\"price\":2.4}],\"vouchers\":[{\"id\":\"62e833fb-9d47-4b43-8446-9f762a7a85cc\",\"type\":\"Coffee\",\"discount\":1},{\"id\":\"bf94fa90-3e5f-4097-810b-5a7535126542\",\"type\":\"Total\",\"discount\":0.05}]}";
         Order order1 = getOrderJson(data);
 
         Intent intent = new Intent(this, OrderActivity.class);

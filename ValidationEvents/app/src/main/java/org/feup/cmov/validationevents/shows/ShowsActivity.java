@@ -14,12 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import org.feup.cmov.validationevents.Constants;
+import org.feup.cmov.validationevents.utils.Constants;
 import org.feup.cmov.validationevents.R;
 import org.feup.cmov.validationevents.dataStructures.Show;
 import org.feup.cmov.validationevents.dataStructures.Ticket;
 import org.feup.cmov.validationevents.server.GetShows;
 import org.feup.cmov.validationevents.server.GetTickets;
+import org.feup.cmov.validationevents.utils.MyQRCode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -115,18 +116,8 @@ public class ShowsActivity extends AppCompatActivity {
                 Show show = showsAdapter.getItem(selectedShow);
                 showSelected = show;
 
-                String data = "{\"id\":\"3b2735a4-03ee-45c1-87f8-1481a7820cbc\",\"size\":2,\"showid\":1,\"tickets\":[\"95eda0cf-5b0b-43ee-b94f-55eb40a24311\",\"bb638d35-6f47-4f23-803d-d250466038f1\"]}";
+                MyQRCode.scan(this);
 
-                validateTickets(data);
-
-                /*try {
-                    Intent intent = new Intent(ACTION_SCAN);
-                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                    startActivityForResult(intent, 0);
-                }
-                catch (ActivityNotFoundException anfe) {
-                    showDialog(this, "No Scanner Found", "Download a scanner code activity?", "Yes", "No").show();
-                }*/
             } else {
                 Constants.showToast(Constants.NO_SELECTED_SHOW, this);
             }
@@ -135,30 +126,12 @@ public class ShowsActivity extends AppCompatActivity {
         }
     }
 
-    private static AlertDialog showDialog(final Activity act, CharSequence title, CharSequence message, CharSequence buttonYes, CharSequence buttonNo) {
-        AlertDialog.Builder downloadDialog = new AlertDialog.Builder(act);
-        downloadDialog.setTitle(title);
-        downloadDialog.setMessage(message);
-        downloadDialog.setPositiveButton(buttonYes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Uri uri = Uri.parse("market://search?q=pname:" + "com.google.zxing.client.android");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                act.startActivity(intent);
-            }
-        });
-        downloadDialog.setNegativeButton(buttonNo, null);
-        return downloadDialog.show();
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contents = data.getStringExtra("SCAN_RESULT");
-                String format = data.getStringExtra("SCAN_RESULT_FORMAT");
+        Log.d("qrstuff", "aqui");
 
-                validateTickets(contents);
-            }
-        }
+        String jsonResult = MyQRCode.onScanResult(requestCode, resultCode, data);
+
+        validateTickets(jsonResult);
     }
 
     public void validateTickets(String data) {

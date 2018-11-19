@@ -1,4 +1,4 @@
-package org.feup.cmov.validationevents;
+package org.feup.cmov.validationevents.utils;
 
 import android.app.Activity;
 import android.widget.Toast;

@@ -1,4 +1,4 @@
-package org.feup.cmov.customerapp.utils;
+package org.feup.cmov.validationevents.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;

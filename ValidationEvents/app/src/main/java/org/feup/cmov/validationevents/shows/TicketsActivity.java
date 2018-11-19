@@ -3,14 +3,13 @@ package org.feup.cmov.validationevents.shows;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.feup.cmov.validationevents.Constants;
+import org.feup.cmov.validationevents.utils.Constants;
 import org.feup.cmov.validationevents.MainActivity;
 import org.feup.cmov.validationevents.R;
 import org.feup.cmov.validationevents.dataStructures.Ticket;

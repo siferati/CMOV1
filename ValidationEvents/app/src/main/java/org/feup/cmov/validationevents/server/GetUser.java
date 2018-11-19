@@ -2,7 +2,7 @@ package org.feup.cmov.validationevents.server;
 
 import android.util.Log;
 
-import org.feup.cmov.validationevents.Constants;
+import org.feup.cmov.validationevents.utils.Constants;
 import org.feup.cmov.validationevents.dataStructures.User;
 import org.feup.cmov.validationevents.shows.TicketsActivity;
 import org.json.JSONException;
