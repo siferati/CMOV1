@@ -2,7 +2,8 @@
     <string name="app_name">ValidationEvents</string>
 
     <string name="choose_show">Choose Show</string>
-    <string name="terminate_validation">Terminate Validation</string>
+    <string name="terminate_validation">Terminate</string>
+    <string name="this_show">Continue</string>
     <string name="validated_tickets">Tickets Validated</string>
     <string name="not_validated_tickets">Tickets Not Validated</string>
 

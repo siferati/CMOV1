@@ -1,6 +1,8 @@
 package org.feup.cmov.validationevents.shows;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.feup.cmov.validationevents.server.GetTickets;
 import org.feup.cmov.validationevents.utils.Constants;
 import org.feup.cmov.validationevents.MainActivity;
 import org.feup.cmov.validationevents.R;
@@ -17,6 +20,10 @@ import org.feup.cmov.validationevents.dataStructures.Ticket;
 import org.feup.cmov.validationevents.dataStructures.User;
 import org.feup.cmov.validationevents.server.GetUser;
 import org.feup.cmov.validationevents.server.ValidateTickets;
+import org.feup.cmov.validationevents.utils.MyQRCode;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -59,6 +66,9 @@ public class TicketsActivity extends AppCompatActivity {
 
         if(tickets.size() > 0) setTitle("Tickets for " + tickets.get(0).getName());
 
+        Button same = findViewById(R.id.btn_again);
+        same.setOnClickListener((View v)->sameShow());
+
         Button terminateBtn = findViewById(R.id.btn_close);
         terminateBtn.setOnClickListener((View v)->terminate());
 
@@ -77,9 +87,78 @@ public class TicketsActivity extends AppCompatActivity {
     }
 
     public void terminate() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ShowsActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void sameShow() {
+        MyQRCode.scan(this);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            String jsonResult = MyQRCode.onScanResult(requestCode, resultCode, data);
+            validateTickets(jsonResult);
+        }
+    }
+
+    public void validateTickets(String data) {
+        try {
+            JSONObject response = new JSONObject(data);
+            userId = response.getString("id");
+            showId = response.getInt("showid");
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            int selected = prefs.getInt("SELECTED_SHOW", 1);
+
+            if (showId != selected) {
+                Constants.showToast(Constants.INVALID_SHOW, this);
+            } else {
+
+                tickets = new ArrayList<>();
+                JSONArray ticketsJson = response.getJSONArray("tickets");
+
+                for (int i = 0; i < ticketsJson.length(); i++) {
+                    Ticket ticket = new Ticket(ticketsJson.get(i).toString());
+                    tickets.add(ticket);
+                }
+
+                GetTickets ticketsAPI = new GetTickets(this, userId);
+                Thread thrTickets = new Thread(ticketsAPI);
+                thrTickets.start();
+            }
+        } catch(JSONException e) {
+            Log.e("ERROR", e.getMessage());
+        }
+    }
+
+    public void handleResponseTickets(int code, String response, ArrayList<Ticket> allTickets) {
+        if (code == Constants.OK_RESPONSE) {
+            ArrayList<Ticket> completeTickets = new ArrayList<>();
+
+            for(Ticket t : tickets) {
+                if (allTickets.indexOf(t) > -1) {
+                    Ticket ticket = allTickets.get(allTickets.indexOf(t));
+                    completeTickets.add(ticket);
+                }
+            }
+
+            Intent intent = new Intent(getApplicationContext(), TicketsActivity.class);
+
+            Bundle argument = new Bundle();
+
+            argument.putString(Constants.USER_ID, userId);
+            argument.putInt(Constants.SHOW_ID, showId);
+            argument.putSerializable(Constants.VALIDATE_TICKETS, completeTickets);
+
+            intent.putExtras(argument);
+            startActivity(intent);
+            finish();
+        } else {
+            // show error response
+            Constants.showToast(response, this);
+        }
     }
 
     /**

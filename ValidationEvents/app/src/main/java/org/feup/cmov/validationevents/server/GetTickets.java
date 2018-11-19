@@ -1,7 +1,9 @@
 package org.feup.cmov.validationevents.server;
 
+import android.app.Activity;
 import android.util.Log;
 
+import org.feup.cmov.validationevents.shows.TicketsActivity;
 import org.feup.cmov.validationevents.utils.Constants;
 import org.feup.cmov.validationevents.dataStructures.Ticket;
 import org.feup.cmov.validationevents.shows.ShowsActivity;
@@ -16,12 +18,12 @@ import java.util.ArrayList;
 public class GetTickets extends ServerConnection implements Runnable {
 
     // tickets activity
-    private ShowsActivity activity;
+    private Activity activity;
 
     // current user's id
     private String userID;
 
-    public GetTickets(ShowsActivity activity, String userID) {
+    public GetTickets(Activity activity, String userID) {
         this.activity = activity;
         this.userID = userID;
     }
@@ -49,15 +51,33 @@ public class GetTickets extends ServerConnection implements Runnable {
                 response = readStream(urlConnection.getInputStream());
 
                 ArrayList<Ticket> tickets = jsonToArray(response);
-                activity.handleResponseTickets(responseCode, response, tickets);
+                if (activity instanceof ShowsActivity) {
+                    ShowsActivity act = (ShowsActivity)activity;
+                    act.handleResponseTickets(responseCode, response, tickets);
+                } else {
+                    TicketsActivity act = (TicketsActivity)activity;
+                    act.handleResponseTickets(responseCode, response, tickets);
+                }
             } else {
                 response = readStream(urlConnection.getErrorStream());
-                activity.handleResponseTickets(responseCode, response, null);
+                if (activity instanceof ShowsActivity) {
+                    ShowsActivity act = (ShowsActivity)activity;
+                    act.handleResponseTickets(responseCode, response, null);
+                } else {
+                    TicketsActivity act = (TicketsActivity)activity;
+                    act.handleResponseTickets(responseCode, response, null);
+                }
             }
         } catch (Exception e) {
             if (responseCode == Constants.NO_INTERNET) {
                 String errorMessage = Constants.ERROR_CONNECTING;
-                activity.handleResponseTickets(responseCode, errorMessage, null);
+                if (activity instanceof ShowsActivity) {
+                    ShowsActivity act = (ShowsActivity)activity;
+                    act.handleResponseTickets(responseCode, errorMessage, null);
+                } else {
+                    TicketsActivity act = (TicketsActivity)activity;
+                    act.handleResponseTickets(responseCode, errorMessage, null);
+                }
             }
         } finally {
             if (urlConnection != null)

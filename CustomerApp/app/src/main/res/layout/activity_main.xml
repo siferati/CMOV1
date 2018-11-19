@@ -143,71 +143,35 @@
         </LinearLayout>
     </LinearLayout>
 
+
     <LinearLayout
+        android:id="@+id/logout_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:id="@+id/settings_layout"
-            android:layout_width="0dp"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            style="@style/IconStyle"
+            android:id="@+id/logout_icon"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:orientation="vertical"
+            android:textAlignment="center"
+            android:text="@string/logout_icon"
+            android:layout_marginBottom="5dp"/>
 
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-
-            <TextView
-                style="@style/IconStyle"
-                android:id="@+id/settings_icon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="@string/settings_icon"
-                android:layout_marginBottom="5dp"/>
-
-            <TextView
-                style="@style/TitleStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="@string/settings"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/logout_layout"
-            android:layout_width="0dp"
+        <TextView
+            style="@style/TitleStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-
-            <TextView
-                style="@style/IconStyle"
-                android:id="@+id/logout_icon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="@string/logout_icon"
-                android:layout_marginBottom="5dp"/>
-
-            <TextView
-                style="@style/TitleStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="@string/logout"/>
-        </LinearLayout>
+            android:textAlignment="center"
+            android:text="@string/logout"/>
     </LinearLayout>
 
 </LinearLayout>

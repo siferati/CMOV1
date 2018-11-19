@@ -32,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
     TextView history_icon;
     LinearLayout history_layout;
 
-    TextView settings_icon;
-    LinearLayout settings_layout;
-
     TextView logout_icon;
     LinearLayout logout_layout;
 
@@ -64,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
         this.history_icon = findViewById(R.id.history_icon);
         this.history_layout = findViewById(R.id.history_layout);
 
-        this.settings_icon = findViewById(R.id.settings_icon);
-        this.settings_layout = findViewById(R.id.settings_layout);
-
         this.logout_icon = findViewById(R.id.logout_icon);
         this.logout_layout = findViewById(R.id.logout_layout);
     }
@@ -78,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         this.cafeteria_icon.setTypeface(iconFont);
         this.vouchers_icon.setTypeface(iconFont);
         this.history_icon.setTypeface(iconFont);
-        this.settings_icon.setTypeface(iconFont);
         this.logout_icon.setTypeface(iconFont);
     }
 
@@ -87,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         this.cafeteria_layout.setOnClickListener((View v)->init_cafeteria());
         this.vouchers_layout.setOnClickListener((View v)->init_vouchers());
         this.history_layout.setOnClickListener((View v)->init_history());
-        this.settings_layout.setOnClickListener((View v)->init_settings());
         this.logout_layout.setOnClickListener((View v)->init_logout());
     }
 
@@ -108,11 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void init_history() {
         Intent intent = new Intent(this, TransactionsActivity.class);
-        startActivity(intent);
-    }
-
-    private void init_settings() {
-        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
