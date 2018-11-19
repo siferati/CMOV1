@@ -1,19 +1,13 @@
 package org.feup.cmov.customerapp.utils;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
+import android.util.Base64;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Contains utilities for creating and scanning QR Codes.
@@ -31,6 +25,8 @@ public class MyQRCode {
      * @throws WriterException
      */
     public static Bitmap create(String string, int dimensions) throws WriterException {
+
+        string = Base64.encodeToString(string.getBytes(), Base64.DEFAULT | Base64.NO_WRAP);
 
         // encode string
         BitMatrix bitMatrix = new QRCodeWriter().encode(string, BarcodeFormat.QR_CODE, dimensions, dimensions);

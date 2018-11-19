@@ -1,10 +1,6 @@
 package org.feup.cmov.validationcafeteria;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,18 +45,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String jsonResult = MyQRCode.onScanResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String jsonResult = MyQRCode.onScanResult(requestCode, resultCode, data);
 
-        order = getOrderJson(jsonResult);
+            order = getOrderJson(jsonResult);
 
-        Intent intent = new Intent(this, OrderActivity.class);
-        Bundle argument = new Bundle();
+            Intent intent = new Intent(this, OrderActivity.class);
+            Bundle argument = new Bundle();
 
-        argument.putSerializable(Constants.SEND_ORDER, this.order);
+            argument.putSerializable(Constants.SEND_ORDER, this.order);
 
-        intent.putExtras(argument);
-        startActivity(intent);
-        finish();
+            intent.putExtras(argument);
+            startActivity(intent);
+        }
     }
 
     public Order getOrderJson(String data) {

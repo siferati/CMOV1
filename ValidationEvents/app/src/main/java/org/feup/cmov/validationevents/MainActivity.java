@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     public void initShows() {
         Intent intent = new Intent(this, ShowsActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }

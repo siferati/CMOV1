@@ -80,16 +80,18 @@ public class CafeteriaActivity extends AppCompatActivity {
      * @param products - products that we got from the server
      */
     public void handleResponse(int code, String response, List<Product> products) {
-        if (code == Constants.OK_RESPONSE) {
-            List<Product> productsList = restoreSelectedProducts(products);
+        runOnUiThread(() -> {
+            if (code == Constants.OK_RESPONSE) {
+                List<Product> productsList = restoreSelectedProducts(products);
 
-            ListView list_products = findViewById(R.id.list_products);
-            productsAdapter = new ProductAdapter(this, productsList);
-            list_products.setAdapter(productsAdapter);
-        } else {
-            // show error response
-            Constants.showToast(response, this);
-        }
+                ListView list_products = findViewById(R.id.list_products);
+                productsAdapter = new ProductAdapter(this, productsList);
+                list_products.setAdapter(productsAdapter);
+            } else {
+                // show error response
+                Constants.showToast(response, this);
+            }
+        });
     }
 
     /**

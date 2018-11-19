@@ -88,36 +88,37 @@ public class TicketsActivity extends AppCompatActivity {
      * @param response - response message given by server
      */
     public void handleResponse(int code, String response, ArrayList<Ticket> valid, ArrayList<Ticket> invalid) {
-        if (code == Constants.OK_RESPONSE) {
-            for(Ticket t : valid) {
-                if (tickets.indexOf(t) > -1) {
-                    Ticket ticket = tickets.get(tickets.indexOf(t));
+        runOnUiThread(() -> {
+            if (code == Constants.OK_RESPONSE) {
+                for (Ticket t : valid) {
+                    if (tickets.indexOf(t) > -1) {
+                        Ticket ticket = tickets.get(tickets.indexOf(t));
 
-                    ticket.setAvailable(true);
-                    validTickets.add(ticket);
+                        ticket.setAvailable(true);
+                        validTickets.add(ticket);
+                    }
                 }
-            }
 
-            for(Ticket t : invalid) {
-                if (tickets.indexOf(t) > -1) {
-                    Ticket ticket = tickets.get(tickets.indexOf(t));
+                for (Ticket t : invalid) {
+                    if (tickets.indexOf(t) > -1) {
+                        Ticket ticket = tickets.get(tickets.indexOf(t));
 
-                    ticket.setAvailable(false);
-                    invalidTickets.add(ticket);
+                        ticket.setAvailable(false);
+                        invalidTickets.add(ticket);
+                    }
                 }
-            }
 
-            for (Ticket t : validTickets) {
-                ticketsAdapter.add(t);
-            }
+                ArrayList<Ticket> ticketArrayList = new ArrayList<>(validTickets);
+                ticketArrayList.addAll(invalidTickets);
 
-            for (Ticket t : invalidTickets) {
-                ticketsAdapter.add(t);
+                for (Ticket t : ticketArrayList) {
+                    ticketsAdapter.add(t);
+                }
+            } else {
+                // show error response
+                Constants.showToast(response, this);
             }
-        } else {
-            // show error response
-            Constants.showToast(response, this);
-        }
+        });
     }
 
     public void handleResponseUser(int code, String response, User user) {

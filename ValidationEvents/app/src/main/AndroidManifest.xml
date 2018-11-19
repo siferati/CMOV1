@@ -15,7 +15,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.Dark">
+            android:theme="@style/AppTheme.Dark"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,10 +26,12 @@
         <activity
             android:name=".shows.ShowsActivity"
             android:label="Choose Show"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".shows.TicketsActivity"
-            android:label="Show Tickets"></activity>
+            android:label="Show Tickets"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

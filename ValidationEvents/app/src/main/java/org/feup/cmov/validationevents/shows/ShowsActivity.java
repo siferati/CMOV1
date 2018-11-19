@@ -127,9 +127,10 @@ public class ShowsActivity extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String jsonResult = MyQRCode.onScanResult(requestCode, resultCode, data);
-
-        validateTickets(jsonResult);
+        if (resultCode == RESULT_OK) {
+            String jsonResult = MyQRCode.onScanResult(requestCode, resultCode, data);
+            validateTickets(jsonResult);
+        }
     }
 
     public void validateTickets(String data) {

@@ -7,7 +7,7 @@ public class Constants {
 
     public static final int OK_RESPONSE = 200;
     public static final int NO_INTERNET = -1;
-    public static final int SERVER_TIMEOUT = 2000;
+    public static final int SERVER_TIMEOUT = 5000;
     public static final String ERROR_CONNECTING = "Error connecting";
 
     public static final int SHOWS_PER_LOAD = 10;

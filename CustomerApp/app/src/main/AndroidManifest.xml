@@ -19,39 +19,49 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".login.LoginActivity"
-            android:theme="@style/AppTheme.Dark" />
+            android:theme="@style/AppTheme.Dark"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".login.RegisterActivity"
             android:label="Register"
-            android:parentActivityName=".login.LoginActivity">
+            android:parentActivityName=".login.LoginActivity"
+            android:screenOrientation="portrait">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".login.LoginActivity" />
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".shows.ShowsActivity"
             android:label="Shows"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".cafeteria.CafeteriaActivity"
             android:label="Cafeteria"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".transactions.TransactionsActivity"
             android:label="Transactions"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".transactions.SettingsActivity"
             android:label="Settings"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".cafeteria.VouchersActivity"
             android:label="Vouchers"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".AutomaticLogin">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AutomaticLogin"
+            android:theme="@style/AppTheme.Dark"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,26 +71,32 @@
         <activity
             android:name=".shows.ShowActivity"
             android:label="Show Details"
-            android:parentActivityName=".shows.ShowsActivity" />
+            android:parentActivityName=".shows.ShowsActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".shows.tickets.TicketValidationActivity"
             android:label="Ticket Validation"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".cafeteria.ShoppingCartActivity"
             android:label="Shopping Cart"
-            android:parentActivityName=".cafeteria.CafeteriaActivity" />
+            android:parentActivityName=".cafeteria.CafeteriaActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".cafeteria.SelectVoucherActivity"
             android:label="Select Vouchers"
-            android:parentActivityName=".cafeteria.ShoppingCartActivity" />
+            android:parentActivityName=".cafeteria.ShoppingCartActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".cafeteria.OrderValidationActivity"
             android:label="Order Validation"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".transactions.OrderActivity"
-            android:parentActivityName=".transactions.TransactionsActivity"></activity>
+            android:parentActivityName=".transactions.TransactionsActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

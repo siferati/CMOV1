@@ -51,14 +51,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        runOnUiThread(()-> {
+            if (requestCode == REQUEST_SIGNUP && resultCode == RESULT_OK) {
+                enableLoginBtn(true);
+                String username = data.getStringExtra("username");
+                String password = data.getStringExtra("password");
 
-        if (requestCode == REQUEST_SIGNUP && resultCode == RESULT_OK) {
-            String username = data.getStringExtra("username");
-            String password = data.getStringExtra("password");
-
-            text_username.setText(username, TextView.BufferType.EDITABLE);
-            text_password.setText(password, TextView.BufferType.EDITABLE);
-        }
+                text_username.setText(username, TextView.BufferType.EDITABLE);
+                text_password.setText(password, TextView.BufferType.EDITABLE);
+            }
+        });
     }
 
     /**

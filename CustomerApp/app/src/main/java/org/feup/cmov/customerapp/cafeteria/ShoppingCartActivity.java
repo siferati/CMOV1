@@ -84,20 +84,23 @@ public class ShoppingCartActivity extends AppCompatActivity {
      * @param prods - products that we got from the server
      */
     public void handleResponse(int code, String response, List<Product> prods) {
-        ArrayList<Product> productsList = new ArrayList<>(prods);
-        if (code == Constants.OK_RESPONSE) {
-            products = restoreSelectedProducts(productsList);
+        runOnUiThread(() -> {
 
-            ListView list_products = findViewById(R.id.list_shopping_cart);
-            productsAdapter = new ShoppingCartAdapter(this, products);
-            list_products.setAdapter(productsAdapter);
+            ArrayList<Product> productsList = new ArrayList<>(prods);
+            if (code == Constants.OK_RESPONSE) {
+                products = restoreSelectedProducts(productsList);
 
-            // set price text
-            setPriceText();
-        } else {
-            // show error response
-            Constants.showToast(response, this);
-        }
+                ListView list_products = findViewById(R.id.list_shopping_cart);
+                productsAdapter = new ShoppingCartAdapter(this, products);
+                list_products.setAdapter(productsAdapter);
+
+                // set price text
+                setPriceText();
+            } else {
+                // show error response
+                Constants.showToast(response, this);
+            }
+        });
     }
 
     /**

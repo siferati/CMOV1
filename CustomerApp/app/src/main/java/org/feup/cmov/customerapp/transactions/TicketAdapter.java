@@ -43,4 +43,10 @@ public class TicketAdapter extends ArrayAdapter<Ticket> {
 
         return (row);
     }
+
+    @Override
+    public void add(Ticket item) {
+        tickets.add(item);
+        notifyDataSetChanged();
+    }
 }

@@ -148,34 +148,38 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
     }
 
     public void handleResponseTickets(int code, String response, ArrayList<Ticket> tickets) {
-        if (code == Constants.OK_RESPONSE) {
-            for(Ticket t : tickets) {
-                ticketsAdapter.add(t);
-            }
-            ticketsAdapter.notifyDataSetChanged();
-            deleteUsedTickets(tickets, this);
+        runOnUiThread(() -> {
+            if (code == Constants.OK_RESPONSE) {
+                for (Ticket t : tickets) {
+                    ticketsAdapter.add(t);
+                }
+                deleteUsedTickets(tickets, this);
 
-            vouchersAPI = new GetVouchers(this, userId);
-            Thread thrVouchers = new Thread(vouchersAPI);
-            thrVouchers.start();
-        } else {
-            Constants.showToast(response, this);
-        }
+                vouchersAPI = new GetVouchers(this, userId);
+                Thread thrVouchers = new Thread(vouchersAPI);
+                thrVouchers.start();
+            } else {
+                Constants.showToast(response, this);
+            }
+        });
     }
 
     public void handleResponseOrders(int code, String response, ArrayList<Order> orders) {
-        if (code == Constants.OK_RESPONSE) {
-            for(Order o : orders) {
-                ordersAdapter.add(o);
-            }
-            ordersAdapter.notifyDataSetChanged();
+        runOnUiThread(() -> {
 
-            vouchersAPI = new GetVouchers(this, userId);
-            Thread thrVouchers = new Thread(vouchersAPI);
-            thrVouchers.start();
-        } else {
-            Constants.showToast(response, this);
-        }
+            if (code == Constants.OK_RESPONSE) {
+                for (Order o : orders) {
+                    ordersAdapter.add(o);
+                }
+                ordersAdapter.notifyDataSetChanged();
+
+                vouchersAPI = new GetVouchers(this, userId);
+                Thread thrVouchers = new Thread(vouchersAPI);
+                thrVouchers.start();
+            } else {
+                Constants.showToast(response, this);
+            }
+        });
     }
 
     public void deleteUsedTickets(List<Ticket> tickets, TransactionsActivity activity) {
