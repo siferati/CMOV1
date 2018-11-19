@@ -2,7 +2,7 @@ package org.feup.cmov.validationcafeteria.server;
 
 import android.util.Log;
 
-import org.feup.cmov.validationcafeteria.Constants;
+import org.feup.cmov.validationcafeteria.util.Constants;
 import org.feup.cmov.validationcafeteria.dataStructures.User;
 import org.feup.cmov.validationcafeteria.order.OrderActivity;
 import org.json.JSONException;

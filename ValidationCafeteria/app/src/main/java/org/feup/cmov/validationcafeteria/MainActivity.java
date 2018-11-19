@@ -15,6 +15,8 @@ import org.feup.cmov.validationcafeteria.dataStructures.Order;
 import org.feup.cmov.validationcafeteria.dataStructures.Product;
 import org.feup.cmov.validationcafeteria.dataStructures.Voucher;
 import org.feup.cmov.validationcafeteria.order.OrderActivity;
+import org.feup.cmov.validationcafeteria.util.Constants;
+import org.feup.cmov.validationcafeteria.util.MyQRCode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,79 +45,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initScan() {
+        MyQRCode.scan(this);
+    }
 
-        String data = "{\"orderid\":1,\"userid\":\"3b2735a4-03ee-45c1-87f8-1481a7820cbc\",\"price\":5.13,\"products\":[{\"id\":2,\"name\":\"Coffee\",\"quantity\":3,\"image\":\"coffee\",\"price\":1.5},{\"id\":3,\"name\":\"Popcorn\",\"quantity\":2,\"image\":\"popcorn\",\"price\":2},{\"id\":4,\"name\":\"Soda Drink\",\"quantity\":3,\"image\":\"soda_drink\",\"price\":2.4}],\"vouchers\":[{\"id\":\"62e833fb-9d47-4b43-8446-9f762a7a85cc\",\"type\":\"Coffee\",\"discount\":1},{\"id\":\"bf94fa90-3e5f-4097-810b-5a7535126542\",\"type\":\"Total\",\"discount\":0.05}]}";
-        Order order1 = getOrderJson(data);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String jsonResult = MyQRCode.onScanResult(requestCode, resultCode, data);
+
+        order = getOrderJson(jsonResult);
 
         Intent intent = new Intent(this, OrderActivity.class);
         Bundle argument = new Bundle();
 
-        argument.putSerializable(Constants.SEND_ORDER, order1);
+        argument.putSerializable(Constants.SEND_ORDER, this.order);
 
         intent.putExtras(argument);
         startActivity(intent);
         finish();
-
-
-        // TEST !!!!!!!!!!!! END!!
-
-        /*try {
-            Intent intent = new Intent(ACTION_SCAN);
-            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-            startActivityForResult(intent, 0);
-        }
-        catch (ActivityNotFoundException anfe) {
-            showDialog(this, "No Scanner Found", "Download a scanner code activity?", "Yes", "No").show();
-        }*/
-    }
-
-    private static AlertDialog showDialog(final Activity act, CharSequence title, CharSequence message, CharSequence buttonYes, CharSequence buttonNo) {
-        AlertDialog.Builder downloadDialog = new AlertDialog.Builder(act);
-        downloadDialog.setTitle(title);
-        downloadDialog.setMessage(message);
-        downloadDialog.setPositiveButton(buttonYes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Uri uri = Uri.parse("market://search?q=pname:" + "com.google.zxing.client.android");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                act.startActivity(intent);
-            }
-        });
-        downloadDialog.setNegativeButton(buttonNo, null);
-        return downloadDialog.show();
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contents = data.getStringExtra("SCAN_RESULT");
-                String format = data.getStringExtra("SCAN_RESULT_FORMAT");
-
-                order = getOrderJson(contents);
-
-                Intent intent = new Intent(this, OrderActivity.class);
-                Bundle argument = new Bundle();
-
-                argument.putSerializable(Constants.SEND_ORDER, this.order);
-
-                intent.putExtras(argument);
-                startActivity(intent);
-                finish();
-            }
-        }
     }
 
     public Order getOrderJson(String data) {
-        int orderId = -1;
         String userId = "";
-        double orderPrice = 0.0;
+        String signedMessage = "";
         ArrayList<Product> productsList = new ArrayList<>();
         ArrayList<Voucher> vouchersList = new ArrayList<>();
+        String makeOrderJson = "";
 
         try {
             JSONObject response = new JSONObject(data);
-            orderId = response.getInt("orderid");
-            userId = response.getString("userid");
-            orderPrice = response.getDouble("price");
+            userId = response.getString("userId");
+            signedMessage = response.getString("signature");
 
             JSONArray productsJson = response.getJSONArray("products");
 
@@ -133,9 +91,14 @@ public class MainActivity extends AppCompatActivity {
                 productsList.add(p);
             }
 
-            JSONArray vouchersJson = response.getJSONArray("vouchers");
-            for(int i = 0; i < vouchersJson.length(); i++) {
-                JSONObject voucher = vouchersJson.getJSONObject(i);
+            JSONObject makeOrder = new JSONObject();
+            makeOrder.put("products", response.getJSONArray("products"));
+            makeOrder.put("vouchers", response.get("vouchers"));
+            makeOrderJson = makeOrder.toString();
+
+            JSONArray voucherInfoJson = response.getJSONArray("voucherInfo");
+            for(int i = 0; i < voucherInfoJson.length(); i++) {
+                JSONObject voucher = voucherInfoJson.getJSONObject(i);
 
                 String voucherId = voucher.getString("id");
                 String type = voucher.getString("type");
@@ -149,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("ERROR", e.getMessage());
         }
 
-        order = new Order(orderId, userId, orderPrice, productsList, vouchersList);
+        order = new Order(userId, signedMessage, makeOrderJson, productsList, vouchersList);
 
         return order;
     }

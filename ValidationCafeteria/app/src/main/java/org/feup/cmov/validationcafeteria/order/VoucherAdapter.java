@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.feup.cmov.validationcafeteria.Constants;
+import org.feup.cmov.validationcafeteria.util.Constants;
 import org.feup.cmov.validationcafeteria.R;
 import org.feup.cmov.validationcafeteria.dataStructures.Voucher;
 

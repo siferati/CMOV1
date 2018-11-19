@@ -1,6 +1,6 @@
 package org.feup.cmov.validationcafeteria.dataStructures;
 
-import org.feup.cmov.validationcafeteria.Constants;
+import org.feup.cmov.validationcafeteria.util.Constants;
 
 import java.io.Serializable;
 

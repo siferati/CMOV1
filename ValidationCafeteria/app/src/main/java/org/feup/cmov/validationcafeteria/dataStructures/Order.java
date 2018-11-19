@@ -2,6 +2,8 @@ package org.feup.cmov.validationcafeteria.dataStructures;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class Order implements Serializable {
     private int orderId = -1;
@@ -9,15 +11,40 @@ public class Order implements Serializable {
     private double price;
     private ArrayList<Product> products;
     private ArrayList<Voucher> vouchers;
+    private String signature;
+    private String jsonString;
 
     public Order() {}
 
-    public Order(int orderId, String userId, double price, ArrayList<Product> products, ArrayList<Voucher> vouchers) {
-        this.orderId = orderId;
+    public Order(String userId, String signature, String jsonString, ArrayList<Product> products, ArrayList<Voucher> vouchers) {
         this.userId = userId;
-        this.price = price;
+        this.signature = signature;
+        this.jsonString = jsonString;
         this.products = products;
         this.vouchers = vouchers;
+    }
+
+    public Order(int orderId, double price, ArrayList<Voucher> vouchersList) {
+        this.orderId = orderId;
+        this.price = price;
+        this.vouchers = vouchersList;
+    }
+
+    public void deleteInvalidVouchers(ArrayList<Voucher> validVouchers) {
+        List<Voucher> invalidVouchers = new ArrayList<>(vouchers);
+        invalidVouchers.removeAll(validVouchers);
+
+        if (invalidVouchers.size() > 0) {
+            Iterator it = vouchers.iterator();
+
+            while(it.hasNext())
+            {
+                Voucher v = (Voucher) it.next();
+                if (invalidVouchers.contains(v)) {
+                    it.remove();
+                }
+            }
+        }
     }
 
     public void setUserId(String userId) {
@@ -58,5 +85,13 @@ public class Order implements Serializable {
 
     public void setVouchers(ArrayList<Voucher> vouchers) {
         this.vouchers = vouchers;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public String getJsonString() {
+        return jsonString;
     }
 }

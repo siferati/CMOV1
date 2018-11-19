@@ -43,9 +43,6 @@ public class ShoppingCartActivity extends AppCompatActivity {
     // selected vouchers
     ArrayList<Voucher> selectedVouchers = new ArrayList<>();
 
-    // current order
-    Order order = new Order();
-
     // text view displaying total price
     TextView totalPrice;
 
@@ -97,36 +94,6 @@ public class ShoppingCartActivity extends AppCompatActivity {
 
             // set price text
             setPriceText();
-        } else {
-            // show error response
-            Constants.showToast(response, this);
-        }
-    }
-
-    /**
-     * Handles response from server
-     * @param code - response code from server
-     * @param response - response message given by server
-     * @param orderResponse - order that we got from the server
-     */
-    public void handleResponseOrder(int code, String response, Order orderResponse) {
-        if (code == Constants.OK_RESPONSE) {
-            order.setId(orderResponse.getId());
-            order.setPrice(orderResponse.getPrice());
-
-            ArrayList<Voucher> validVouchers = orderResponse.getVouchers();
-            order.deleteInvalidVouchers(validVouchers);
-
-            Intent intent = new Intent(this, OrderValidationActivity.class);
-            Bundle argument = new Bundle();
-
-            argument.putSerializable(Constants.ORDER_VALIDATION, order);
-
-            Constants.showToast(Constants.ORDER_IN_PROGRESS, this);
-
-            intent.putExtras(argument);
-            startActivity(intent);
-            finish();
         } else {
             // show error response
             Constants.showToast(response, this);
@@ -240,17 +207,24 @@ public class ShoppingCartActivity extends AppCompatActivity {
      */
     private void buyOrder() {
         if (products.size() > 0) {
-            order.setProducts(products);
-            order.setVouchers(selectedVouchers);
-
             CafeteriaActivity.resetSharedPrefs(this);
             deleteVouchersDatabase();
 
             User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
 
             MakeOrder makeOrder = new MakeOrder(this, user, products, selectedVouchers);
-            Thread thr = new Thread(makeOrder);
-            thr.start();
+            String signedMessage = makeOrder.getSignedOrder();
+
+            Intent intent = new Intent(this, OrderValidationActivity.class);
+            Bundle argument = new Bundle();
+
+            argument.putString(Constants.ORDER_VALIDATION, signedMessage);
+
+            Constants.showToast(Constants.ORDER_IN_PROGRESS, this);
+
+            intent.putExtras(argument);
+            startActivity(intent);
+            finish();
         } else {
             Constants.showToast(Constants.ERROR_CONNECTING, this);
         }

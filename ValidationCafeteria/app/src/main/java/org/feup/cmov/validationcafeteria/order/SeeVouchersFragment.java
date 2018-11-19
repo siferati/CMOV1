@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-import org.feup.cmov.validationcafeteria.Constants;
+import org.feup.cmov.validationcafeteria.util.Constants;
 import org.feup.cmov.validationcafeteria.dataStructures.Voucher;
 
 import java.util.ArrayList;
