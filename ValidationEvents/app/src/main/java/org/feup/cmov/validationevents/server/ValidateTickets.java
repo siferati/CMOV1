@@ -59,7 +59,6 @@ public class ValidateTickets extends ServerConnection implements Runnable {
 
             OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
             out.write(validationJson.toString());
-            Log.d("qrstuff", validationJson.toString());
             out.close();
 
             responseCode = urlConnection.getResponseCode();
