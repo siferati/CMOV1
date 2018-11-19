@@ -1,14 +1,18 @@
 package org.feup.cmov.customerapp.shows.tickets;
 
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.google.zxing.WriterException;
+
 import org.feup.cmov.customerapp.R;
 import org.feup.cmov.customerapp.dataStructures.Ticket;
 import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.utils.Constants;
+import org.feup.cmov.customerapp.utils.MyQRCode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +41,15 @@ public class TicketValidationActivity extends AppCompatActivity {
         String ticketsJson = getTicketsJson(user);
         Log.d("jsonstuff", ticketsJson);
 
-        ImageView qr_code = findViewById(R.id.qrCodeImageView);
+        ImageView qrQode = findViewById(R.id.qrCodeImageView);
+        new Thread(() -> {
+            try {
+                Bitmap bitmap = MyQRCode.create(ticketsJson, 500);
+                runOnUiThread(() -> qrQode.setImageBitmap(bitmap));
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public String getTicketsJson(User user) {

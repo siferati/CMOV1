@@ -1,5 +1,6 @@
 package org.feup.cmov.customerapp.cafeteria;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +16,13 @@ import java.util.ArrayList;
 
 public class ShoppingCartAdapter extends ArrayAdapter<Product> {
 
-    // shopping cart activity
-    public ShoppingCartActivity activity;
+    // activity
+    public Activity activity;
 
     // list of products
     public ArrayList<Product> products;
 
-    ShoppingCartAdapter(ShoppingCartActivity activity, ArrayList<Product> products) {
+    public ShoppingCartAdapter(Activity activity, ArrayList<Product> products) {
         super(activity, R.layout.row_shopping_cart, products);
 
         this.activity = activity;

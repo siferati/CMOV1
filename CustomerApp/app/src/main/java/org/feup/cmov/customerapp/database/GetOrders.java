@@ -91,8 +91,9 @@ public class GetOrders extends ServerConnection implements Runnable {
                     String name = product.getString("name");
                     int quantity = product.getInt("quantity");
                     String image = product.getString("image");
+                    double priceProduct = product.getDouble("price");
 
-                    Product p = new Product(id, quantity, name, image);
+                    Product p = new Product(id, quantity, priceProduct, name, image);
                     products_list.add(p);
                 }
 

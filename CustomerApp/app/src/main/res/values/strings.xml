@@ -76,5 +76,6 @@
 
     <!-- TRANSACTIONS LAYOUT -->
     <string name="empty_orders">No orders yet.</string>
+    <string name="default_used_vouchers">0 vouchers used</string>
 
 </resources>

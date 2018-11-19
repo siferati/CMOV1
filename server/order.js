@@ -38,7 +38,7 @@ module.exports = {
 				let ordersToUpdate = orders.length;
 				orders.forEach(order => {					
 					db.all(
-						`SELECT id, name, image, quantity
+						`SELECT id, name, image, quantity, price
 						FROM ProductOrders, Products
 						WHERE orderId = ?
 						AND productId = id`,

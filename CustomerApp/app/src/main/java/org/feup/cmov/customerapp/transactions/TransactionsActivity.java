@@ -1,10 +1,12 @@
 package org.feup.cmov.customerapp.transactions;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -73,6 +75,7 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
         ListView list_orders = findViewById(R.id.list_orders_transactions);
         ordersAdapter = new OrderAdapter(this, orders);
         list_orders.setAdapter(ordersAdapter);
+        list_orders.setOnItemClickListener((AdapterView<?> adapterView, View view, int pos, long id)->showOrder(pos));
 
         User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
         userId = user.getId();
@@ -83,6 +86,18 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
         ordersAPI = new GetOrders(this, userId);
         Thread thrOrders = new Thread(ordersAPI);
         thrOrders.start();
+    }
+
+    private void showOrder(int pos) {
+        Order order = orders.get(pos);
+
+        Intent intent = new Intent(this, OrderActivity.class);
+        Bundle argument = new Bundle();
+
+        argument.putSerializable(Constants.SHOW_ORDER, order);
+
+        intent.putExtras(argument);
+        startActivity(intent);
     }
 
     /**
@@ -173,6 +188,13 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
                             db.deleteTicket(getApplicationContext(), t);
                         }
 
+                        List<Ticket> ticketList = db.getAllTickets(getApplicationContext());
+
+                        for(Ticket t : ticketList) {
+                            t.setAvailable(true);
+                            db.updateTicket(t);
+                        }
+                    } else {
                         List<Ticket> ticketList = db.getAllTickets(getApplicationContext());
 
                         for(Ticket t : ticketList) {

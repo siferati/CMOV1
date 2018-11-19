@@ -77,7 +77,10 @@
         <activity
             android:name=".cafeteria.OrderValidationActivity"
             android:label="Order Validation"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".transactions.OrderActivity"
+            android:parentActivityName=".transactions.TransactionsActivity"></activity>
     </application>
 
 </manifest>
