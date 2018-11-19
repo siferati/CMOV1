@@ -9,7 +9,7 @@ public class Constants {
 
     public static final int OK_RESPONSE = 200;
     public static final int NO_INTERNET = -1;
-    public static final int SERVER_TIMEOUT = 5000;
+    public static final int SERVER_TIMEOUT = 3000;
 
     public static final String FREE_POPCORN = "Popcorn";
     public static final String FREE_COFFEE = "Coffee";

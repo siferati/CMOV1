@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
             makeOrder.put("vouchers", response.get("vouchers"));
             makeOrderJson = makeOrder.toString();
 
+            Log.d("claudia", makeOrderJson);
+
             JSONArray voucherInfoJson = response.getJSONArray("voucherInfo");
             for(int i = 0; i < voucherInfoJson.length(); i++) {
                 JSONObject voucher = voucherInfoJson.getJSONObject(i);

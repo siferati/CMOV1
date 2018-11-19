@@ -143,35 +143,50 @@
         </LinearLayout>
     </LinearLayout>
 
-
     <LinearLayout
-        android:id="@+id/logout_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
+        <LinearLayout
+            android:id="@+id/logout_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                style="@style/IconStyle"
+                android:id="@+id/logout_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="@string/logout_icon"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                style="@style/TitleStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="@string/logout"/>
+        </LinearLayout>
 
         <TextView
-            style="@style/IconStyle"
-            android:id="@+id/logout_icon"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/logout_icon"
-            android:layout_marginBottom="5dp"/>
-
-        <TextView
-            style="@style/TitleStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/logout"/>
+            android:layout_weight="1"/>
     </LinearLayout>
 
 </LinearLayout>

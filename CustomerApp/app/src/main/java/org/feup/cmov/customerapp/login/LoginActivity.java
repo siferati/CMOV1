@@ -17,6 +17,8 @@ import org.feup.cmov.customerapp.dataStructures.User;
 import org.feup.cmov.customerapp.database.Login;
 import org.feup.cmov.customerapp.utils.Constants;
 
+import java.util.List;
+
 public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
 
@@ -80,10 +82,9 @@ public class LoginActivity extends AppCompatActivity {
             String username = text_username.getText().toString();
             String password = text_password.getText().toString();
 
-            User.setLoggedinUser(username, User.LOGGEDIN_USER_PATH, getApplicationContext());
-            User user = User.loadLoggedinUser(User.LOGGEDIN_USER_PATH, getApplicationContext());
+            List<User> users = User.loadUsers(User.USER_PATH, getApplicationContext());
 
-            if (user == null) {
+            if (User.getUser(username, users) == null) {
                 Constants.showToast(Constants.LOGIN_ERROR, this);
             } else {
                 // connect to server

@@ -201,13 +201,15 @@ public class TicketsActivity extends AppCompatActivity {
     }
 
     public void handleResponseUser(int code, String response, User user) {
-        if (code == Constants.OK_RESPONSE) {
-            TextView user_tickets = findViewById(R.id.user);
-            String username = user.getUsername() + "'s Tickets";
-            user_tickets.setText(username);
-        } else {
-            // show error response
-            Constants.showToast(response, this);
-        }
+        runOnUiThread(() -> {
+            if (code == Constants.OK_RESPONSE) {
+                TextView user_tickets = findViewById(R.id.user);
+                String username = user.getUsername() + "'s Tickets";
+                user_tickets.setText(username);
+            } else {
+                // show error response
+                Constants.showToast(response, this);
+            }
+        });
     }
 }
