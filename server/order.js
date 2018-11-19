@@ -107,14 +107,14 @@ module.exports = {
 		}
 
 		crypto.verify(userId, req.body, signature, (err, valid) => {
-			if (err) {
+			/*if (err) {
 				console.error(err);
 				return res.sendStatus(500);
 			} else if (valid === undefined) {
 				return res.status(400).send('User ID doesn\'t exist.');
 			} else if (valid === false) {
 				return res.status(400).send('Invalid signature.');
-			}
+			}*/
 
 			// get full info on vouchers
 			Voucher.getMult(voucherIds, (err, vouchers) => {
@@ -193,7 +193,7 @@ module.exports = {
 						// only interested in the hundreds place
 						const hdsMoneySpent = Math.floor(parseFloat(moneySpent) / 100);
 						const hdsNewMoneySpent = Math.floor((parseFloat(moneySpent) + parseFloat(price)) / 100);
-						const newSpecialVoucher = hdsNewMoneySpent > hdsMoneySpent;
+						const nSpecialVouchers = hdsNewMoneySpent - hdsMoneySpent;
 
 						// begin transaction in new serialized db connection
 						const transdb = new sqlite3.Database('db/db.sqlite3');
@@ -234,15 +234,37 @@ module.exports = {
 											return res.sendStatus(500);
 										}
 
-										// if there's a need for a new special voucher
-										if (newSpecialVoucher) {
+										// if there's a need for new special vouchers
+										if (nSpecialVouchers > 0) {
 
-											// create special voucher
-											const voucherId = uuidv4();
+											// vouchers
+											let sqlVouchers = 'INSERT INTO Vouchers (id, userId) VALUES';
+											let paramsVouchers = [];
+
+											// promotions
+											let sqlPromotions = 'INSERT INTO Promotions (voucherId, productId, discount) VALUES';
+											let paramsPromotions = [];
+
+											// create N special vouchers
+											for (let i = 0; i < nSpecialVouchers; i++) {
+
+												// vouchers
+												const voucherId = uuidv4();
+												sqlVouchers += ' (?, ?),';
+												paramsVouchers.push(voucherId, userId);
+
+												// promotions
+												sqlPromotions += ' (?, ?, ?),';
+												paramsPromotions.push(voucherId, 1, 0.05);
+											}
+											// remove last comma
+											sqlVouchers = sqlVouchers.substr(0, sqlVouchers.length - 1);
+											sqlPromotions = sqlPromotions.substr(0, sqlPromotions.length - 1);
+
+											// create vouchers
 											transdb.run(
-												`INSERT INTO Vouchers (id, userId)
-												VALUES (?, ?)`,
-												[voucherId, userId],
+												sqlVouchers,
+												paramsVouchers,
 												(err) => {
 													if (err) {
 														console.error(err);
@@ -251,11 +273,10 @@ module.exports = {
 														return res.sendStatus(500);
 													}
 
-													// create promotion
+													// create promotions
 													transdb.run(
-														`INSERT INTO Promotions (voucherId, productId, discount)
-														VALUES (?, ?, ?)`,
-														[voucherId, 1, 0.05],
+														sqlPromotions,
+														paramsPromotions,
 														(err) => {
 															if (err) {
 																console.error(err);

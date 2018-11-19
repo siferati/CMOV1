@@ -203,7 +203,7 @@ module.exports = {
 							sqlTickets += ' (?, ?, ?, ?),';
 							paramsTickets.push(ticketId, seatNumber, showId, userId);
 
-							// vouchers (special voucher only created once)
+							// vouchers
 							const voucherId = uuidv4();
 							sqlVouchers += ' (?, ?),';
 							paramsVouchers.push(voucherId, userId);
