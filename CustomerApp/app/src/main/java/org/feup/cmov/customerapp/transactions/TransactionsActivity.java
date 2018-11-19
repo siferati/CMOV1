@@ -165,7 +165,9 @@ public class TransactionsActivity extends AppCompatActivity implements TabLayout
 
     public void handleResponseOrders(int code, String response, ArrayList<Order> orders) {
         if (code == Constants.OK_RESPONSE) {
-            ordersAdapter.addAll(orders);
+            for(Order o : orders) {
+                ordersAdapter.add(o);
+            }
             ordersAdapter.notifyDataSetChanged();
 
             vouchersAPI = new GetVouchers(this, userId);

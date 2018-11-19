@@ -43,4 +43,10 @@ public class OrderAdapter extends ArrayAdapter<Order> {
 
         return (row);
     }
+
+    @Override
+    public void add(Order item) {
+        orders.add(item);
+        notifyDataSetChanged();
+    }
 }
