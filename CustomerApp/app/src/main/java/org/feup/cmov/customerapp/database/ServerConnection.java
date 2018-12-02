@@ -10,7 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ServerConnection {
-    protected final String address = "10.227.155.147";
+    protected final String address = "10.0.2.2";
     protected final int port = 8080;
 
     protected String readStream(InputStream in) {

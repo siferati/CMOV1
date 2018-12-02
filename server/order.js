@@ -91,21 +91,21 @@ module.exports = {
 	},
 
 	create: (req, res) => {
-		
+				
 		// read provided info
 		const userId = req.params.id;
 		const productIds = req.body.products.map(product => product.id);
 		const productQts = req.body.products.map(product => product.quantity);
 		const voucherIds = req.body.vouchers;
 		const signature = req.headers.signature || '';
-
+		
 		// check for bad request
 		if (!Array.isArray(voucherIds) || hasDuplicates(voucherIds) ||
 			!Array.isArray(productIds) || productIds.length < 1 || hasDuplicates(productIds) ||
 			productIds.some(isNaN) || productIds.includes(1) || productQts.some(isNaN)) {
 			return res.status(400).send('Invalid list of vouchers and/or products.');
 		}
-
+		
 		crypto.verify(userId, req.body, signature, (err, valid) => {
 			if (err) {
 				console.error(err);
@@ -115,7 +115,7 @@ module.exports = {
 			} else if (valid === false) {
 				return res.status(400).send('Invalid signature.');
 			}
-
+			
 			// get full info on vouchers
 			Voucher.getMult(voucherIds, (err, vouchers) => {
 				if (err) {
@@ -129,7 +129,7 @@ module.exports = {
 						console.error(err);
 						return res.sendStatus(500);
 					}
-					
+										
 					// append order quantity to each product info
 					for (let i = 0; i < products.length; i++) {
 						products[i] = Object.assign(products[i], {quantity: productQts[i]});
@@ -164,7 +164,7 @@ module.exports = {
 
 					// remove duplicates
 					usedVouchers = Array.from(new Set(usedVouchers).values());
-
+					
 					// check of special voucher
 					vouchers.forEach(voucher => {
 						if (voucher.orderId !== null) {
@@ -179,7 +179,7 @@ module.exports = {
 							}
 						}
 					});
-
+					
 					// 2 decimal places
 					price = price.toFixed(2);
 
@@ -194,10 +194,11 @@ module.exports = {
 						const hdsMoneySpent = Math.floor(parseFloat(moneySpent) / 100);
 						const hdsNewMoneySpent = Math.floor((parseFloat(moneySpent) + parseFloat(price)) / 100);
 						const nSpecialVouchers = hdsNewMoneySpent - hdsMoneySpent;
-
+						
 						// begin transaction in new serialized db connection
 						const transdb = new sqlite3.Database('db/db.sqlite3');
 						transdb.serialize();
+						transdb.run('PRAGMA journal_mode = WAL;');
 						transdb.run('BEGIN TRANSACTION');
 
 						// create new order in db
@@ -244,7 +245,7 @@ module.exports = {
 											// promotions
 											let sqlPromotions = 'INSERT INTO Promotions (voucherId, productId, discount) VALUES';
 											let paramsPromotions = [];
-
+											
 											// create N special vouchers
 											for (let i = 0; i < nSpecialVouchers; i++) {
 
@@ -257,10 +258,11 @@ module.exports = {
 												sqlPromotions += ' (?, ?, ?),';
 												paramsPromotions.push(voucherId, 1, 0.05);
 											}
+																						
 											// remove last comma
 											sqlVouchers = sqlVouchers.substr(0, sqlVouchers.length - 1);
 											sqlPromotions = sqlPromotions.substr(0, sqlPromotions.length - 1);
-
+											
 											// create vouchers
 											transdb.run(
 												sqlVouchers,
@@ -288,7 +290,7 @@ module.exports = {
 															// commit transaction and close db connection
 															transdb.run('COMMIT');
 															transdb.close();
-
+															
 															res.send({ id: orderId, price, products, usedVoucherIds });
 														}	
 													);
@@ -299,7 +301,7 @@ module.exports = {
 											// commit transaction and close db connection
 											transdb.run('COMMIT');
 											transdb.close();
-
+											
 											res.send({ id: orderId, price, products, usedVoucherIds });
 										}
 									});
