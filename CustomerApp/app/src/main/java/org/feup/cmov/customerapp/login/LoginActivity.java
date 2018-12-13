@@ -86,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (User.getUser(username, users) == null) {
                 Constants.showToast(Constants.LOGIN_ERROR, this);
+                btn_login.setEnabled(true);
             } else {
                 // connect to server
                 Login login = new Login(username, password, this, null);

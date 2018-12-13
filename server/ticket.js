@@ -272,6 +272,7 @@ module.exports = {
 						// begin transaction in new serialized db connection
 						const transdb = new sqlite3.Database('db/db.sqlite3');
 						transdb.serialize();
+						transdb.run('PRAGMA journal_mode = WAL;');
 						transdb.run('BEGIN TRANSACTION');
 
 

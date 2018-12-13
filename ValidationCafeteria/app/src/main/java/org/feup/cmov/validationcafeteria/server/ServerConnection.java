@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class ServerConnection {
-    protected final String address = "192.168.1.6";
+    protected final String address = "10.227.159.38";
     protected final int port = 8080;
 
     protected String readStream(InputStream in) {
